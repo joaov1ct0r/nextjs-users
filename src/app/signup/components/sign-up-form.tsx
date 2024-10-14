@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, useState, MouseEvent } from "react";
+import React, { ChangeEvent, useState, MouseEvent, useEffect } from "react";
 import InputForm from "@/app/components/input-form";
 import ButtonForm from "@/app/components/button-form";
 import { useSignUpCtx } from "@/app/signup/hooks/use-sign-up";
@@ -47,13 +47,17 @@ export default function SignUpForm() {
     clearUser();
   };
 
-  if (error !== null) {
-    toast.error(error);
-  }
+  useEffect(() => {
+    if (error !== null) {
+      toast.error(error);
+    }
+  }, [error]);
 
-  if (success !== null && success === true && error === null) {
-    toast.success("User signed up with success!");
-  }
+  useEffect(() => {
+    if (success !== null && success === true && error === null) {
+      toast.success("User signed up with success!");
+    }
+  }, [error, success]);
 
   return (
     <div className="w-full max-w-xs">
@@ -94,7 +98,7 @@ export default function SignUpForm() {
         <div className="flex items-center justify-between">
           <ButtonForm
             handleOnClick={handleFormSubmit}
-            type="submit"
+            type="button"
             model="success"
             placeholder="Sign up"
           />
