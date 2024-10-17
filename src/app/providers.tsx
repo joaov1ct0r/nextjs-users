@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { SignUpProvider } from "@/app/signup/contexts/sign-up-context";
 import { SignInProvider } from "@/app/signin/contexts/sign-in-context";
+import { AboutProvider } from "@/app/about/contexts/about-context";
 
 interface ProvidersProps {
   children: ReactNode;
@@ -9,7 +10,9 @@ interface ProvidersProps {
 export default function Providers({ children }: ProvidersProps) {
   return (
     <SignInProvider>
-      <SignUpProvider>{children}</SignUpProvider>
+      <SignUpProvider>
+        <AboutProvider>{children}</AboutProvider>
+      </SignUpProvider>
     </SignInProvider>
   );
 }
