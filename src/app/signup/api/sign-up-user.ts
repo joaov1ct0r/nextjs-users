@@ -16,7 +16,8 @@ export default async function signUpUser(
     }
 
     dispatch({ type: "fetch_success" });
-  } catch (error) {
+  } catch (e) {
+    console.error(e);
     dispatch({ type: "fetch_error", error: "Failed to sign up user" });
   }
 }

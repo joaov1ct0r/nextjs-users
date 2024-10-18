@@ -14,6 +14,7 @@ export async function updateUser(dispatch: Dispatch<Action>, user: User) {
 
     dispatch({ type: "fetch_success", user: response.data.resource });
   } catch (error) {
+    console.error(error);
     dispatch({ type: "fetch_error", error: "Failed to update user" });
   }
 }

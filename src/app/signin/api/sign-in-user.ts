@@ -14,6 +14,7 @@ export async function signInUser(dispatch: Dispatch<Action>, user: SignInUser) {
 
     dispatch({ type: "fetch_success", user: response.data.resource });
   } catch (error) {
+    console.error(error);
     dispatch({ type: "fetch_error", error: "Failed to sign in user" });
   }
 }
