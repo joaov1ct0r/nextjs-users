@@ -11,7 +11,11 @@ export default function middleware(request: NextRequest) {
 
   const cookieNotFound = !authorization || !user;
 
-  if (cookieNotFound && request.nextUrl.pathname !== "/") {
+  if (
+    cookieNotFound &&
+    request.nextUrl.pathname !== "/" &&
+    request.nextUrl.pathname !== "/signup"
+  ) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
@@ -19,5 +23,6 @@ export default function middleware(request: NextRequest) {
 }
 
 export const config = {
+  //matcher: ["/about", "/", "/signup", "/signin", "/(.*)"], // Garante que o middleware funcione nessas rotas
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
