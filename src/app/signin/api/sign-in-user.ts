@@ -7,6 +7,7 @@ export async function signInUser(dispatch: Dispatch<Action>, user: SignInUser) {
   dispatch({ type: "fetch_start" });
   try {
     const response = await api.post("/signin/", user);
+    console.log(process.env.NEXT_PUBLIC_API_URL);
 
     if (response.status !== 200) {
       dispatch({ type: "fetch_error", error: "Failed to sign in user" });
