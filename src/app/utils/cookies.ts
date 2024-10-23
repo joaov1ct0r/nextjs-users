@@ -15,7 +15,7 @@ export async function setCookie({ name, value }: setCookieProps) {
     name,
     value,
     expires: expiresDate,
-    maxAge: new Date().getTime() + 24 * 60 * 60 * 1000,
+    maxAge: 24 * 60 * 60 * 1000,
     httpOnly: true,
     path: "/",
     secure: true,

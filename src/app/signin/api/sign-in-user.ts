@@ -12,10 +12,11 @@ export async function signInUser(dispatch: Dispatch<Action>, user: SignInUser) {
     if (response.status !== 200) {
       dispatch({ type: "fetch_error", error: "Failed to sign in user" });
     }
-    console.log(response.headers.getAuthorization);
-    const authenticatedUser = response.data.resource;
-    setCookie({ name: "user", value: JSON.stringify(authenticatedUser) });
-    dispatch({ type: "fetch_success", user: authenticatedUser });
+
+    console.log(document.cookie);
+    const authenticatedUserId = response.data.resource.id;
+    setCookie({ name: "user", value: JSON.stringify(authenticatedUserId) });
+    dispatch({ type: "fetch_success", user: authenticatedUserId });
   } catch (error) {
     console.error(error);
     dispatch({ type: "fetch_error", error: "Failed to sign in user" });
