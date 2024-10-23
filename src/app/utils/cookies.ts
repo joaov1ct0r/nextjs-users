@@ -19,7 +19,7 @@ export async function setCookie({ name, value }: setCookieProps) {
     httpOnly: true,
     path: "/",
     secure: true,
-    domain: "api.crud.shop",
+    domain: "crud.shop",
     sameSite: "none",
     priority: "high",
     partitioned: false,
