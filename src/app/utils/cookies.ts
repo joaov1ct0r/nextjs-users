@@ -7,7 +7,10 @@ export interface setCookieProps {
   value: string;
 }
 
-export async function setCookie({ name, value }: setCookieProps) {
+export async function setCookie({
+  name,
+  value,
+}: setCookieProps): Promise<void> {
   const cookieStore = cookies();
   const expiresDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
 
@@ -24,4 +27,13 @@ export async function setCookie({ name, value }: setCookieProps) {
     priority: "high",
     partitioned: false,
   });
+}
+
+export interface hasCookieProps {
+  name: string;
+}
+export async function hasCookie({ name }: hasCookieProps): Promise<boolean> {
+  const cookieStore = cookies();
+  const isCookiePresent = cookieStore.has(name);
+  return isCookiePresent;
 }

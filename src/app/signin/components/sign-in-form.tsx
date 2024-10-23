@@ -14,6 +14,7 @@ import { useSignInCtx } from "@/app/signin/hooks/use-sign-in";
 import { useSignInDispatch } from "@/app/signin/hooks/use-sign-in-dispatch";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { hasCookie } from "@/app/utils/cookies";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -64,6 +65,7 @@ export default function LoginForm() {
   useEffect(() => {
     if (success !== null && success === true && error === null) {
       console.log("Cookies: ", document.cookie);
+      console.log(hasCookie({ name: "authorization" }));
       toast.success("User signed in with success!");
       memoizedHandleSignIn();
     }
