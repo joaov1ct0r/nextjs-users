@@ -57,14 +57,12 @@ export default function LoginForm() {
 
   useEffect(() => {
     if (error !== null) {
-      console.log(process.env.NEXT_PUBLIC_API_URL);
       toast.error(error);
     }
   }, [error]);
 
   useEffect(() => {
     if (success !== null && success === true && error === null) {
-      console.log(process.env.NEXT_PUBLIC_API_URL);
       toast.success("User signed in with success!");
       memoizedHandleSignIn();
     }
