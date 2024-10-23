@@ -63,6 +63,7 @@ export default function LoginForm() {
 
   useEffect(() => {
     if (success !== null && success === true && error === null) {
+      console.log("Cookies: ", document.cookie);
       toast.success("User signed in with success!");
       memoizedHandleSignIn();
     }
