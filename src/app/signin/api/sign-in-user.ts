@@ -20,6 +20,14 @@ export async function signInUser(dispatch: Dispatch<Action>, user: SignInUser) {
       name: "authorization",
       value: JSON.stringify(authenticatedUser),
     });
+    setCookie({
+      name: "teste",
+      value: "any",
+    });
+    setCookie({
+      name: "teste1",
+      value: "anyOther",
+    });
     dispatch({ type: "fetch_success", user: authenticatedUser });
   } catch (error) {
     console.error(error);
