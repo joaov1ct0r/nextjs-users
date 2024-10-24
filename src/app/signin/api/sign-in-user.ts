@@ -15,11 +15,11 @@ export async function signInUser(dispatch: Dispatch<Action>, user: SignInUser) {
 
     console.log("request", response.request);
     const authenticatedUser = response.data.resource;
-    setCookie({ name: "user", value: JSON.stringify(authenticatedUser) });
+    //setCookie({ name: "user", value: JSON.stringify(authenticatedUser) });
     console.log("setou user");
     setCookie({
       name: "authorization",
-      value: JSON.stringify(authenticatedUser),
+      value: "auth",
     });
     console.log("setou authorization");
     setCookie({
