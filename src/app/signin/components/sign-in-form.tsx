@@ -65,6 +65,7 @@ export default function LoginForm() {
     if (success !== null && success === true && error === null) {
       toast.success("User signed in with success!");
       memoizedHandleSignIn();
+      memoizedHandleSignIn();
     }
   }, [memoizedHandleSignIn, error, success]);
 
