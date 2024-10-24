@@ -3,20 +3,20 @@
 import { cookies } from "next/headers";
 
 export interface setCookieProps {
-  name: string;
-  value: string;
+  user: string;
+  authorization: string;
 }
 
 export async function setCookie({
-  name,
-  value,
+  user,
+  authorization,
 }: setCookieProps): Promise<void> {
   const cookieStore = cookies();
   const expiresDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
 
   cookieStore.set({
-    name,
-    value,
+    name: "user",
+    value: user,
     expires: expiresDate,
     maxAge: 24 * 60 * 60 * 1000,
     httpOnly: true,
@@ -27,6 +27,21 @@ export async function setCookie({
     priority: "high",
     partitioned: false,
   });
+  console.log("setou user");
+  cookieStore.set({
+    name: "authentication",
+    value: authorization,
+    expires: expiresDate,
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    path: "/",
+    secure: true,
+    domain: "crud.shop",
+    sameSite: "none",
+    priority: "high",
+    partitioned: false,
+  });
+  console.log("setou authorization");
 }
 
 export interface hasCookieProps {
