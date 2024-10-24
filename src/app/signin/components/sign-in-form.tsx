@@ -13,7 +13,7 @@ import SignInUser from "@/app/signin/interfaces/sign-in-user";
 import { useSignInCtx } from "@/app/signin/hooks/use-sign-in";
 import { useSignInDispatch } from "@/app/signin/hooks/use-sign-in-dispatch";
 import { toast } from "react-toastify";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -34,8 +34,9 @@ export default function LoginForm() {
     });
   };
 
-  const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+  //const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
+  const handleFormSubmit = () => {
+    //event.preventDefault();
     signInUser(credentials);
     clearCredentials();
   };
@@ -64,8 +65,8 @@ export default function LoginForm() {
   useEffect(() => {
     if (success !== null && success === true && error === null) {
       toast.success("User signed in with success!");
-      router.push("/about");
-      memoizedHandleSignIn();
+      //router.push("/about");
+      //memoizedHandleSignIn();
     }
   }, [router, memoizedHandleSignIn, error, success]);
 
@@ -91,12 +92,14 @@ export default function LoginForm() {
 
         <div className="flex items-center justify-between">
           <ButtonForm
+            href="/about"
             model="success"
             placeholder="Sign in"
             type="button"
             handleOnClick={handleFormSubmit}
           />
           <ButtonForm
+            href="/signup"
             type="button"
             model="warning"
             placeholder="Sign up"
