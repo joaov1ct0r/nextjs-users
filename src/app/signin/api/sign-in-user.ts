@@ -18,7 +18,7 @@ export async function signInUser(dispatch: Dispatch<Action>, user: SignInUser) {
     setCookie({ name: "user", value: JSON.stringify(authenticatedUser) });
     setCookie({
       name: "authorization",
-      value: JSON.stringify({ name: "user" }),
+      value: JSON.stringify(authenticatedUser),
     });
     dispatch({ type: "fetch_success", user: authenticatedUser });
   } catch (error) {
