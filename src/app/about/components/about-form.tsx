@@ -95,7 +95,6 @@ export default function AboutForm() {
 
         <div className="flex items-center justify-between">
           <ButtonForm
-            href="/about"
             type="submit"
             model="success"
             placeholder="Update"

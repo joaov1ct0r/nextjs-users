@@ -1,11 +1,9 @@
 import React, { ButtonHTMLAttributes, MouseEvent } from "react";
-import Link from "next/link";
 
 interface ButtonLinkProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   model: "danger" | "warning" | "success";
   placeholder: string;
   handleOnClick: (event: MouseEvent<HTMLButtonElement>) => void;
-  href: string;
 }
 
 const buttonTypeClass = {
@@ -27,7 +25,6 @@ export default function ButtonForm({
   model,
   placeholder,
   type,
-  href = "",
   handleOnClick,
   ...rest
 }: ButtonLinkProps) {
@@ -50,7 +47,7 @@ export default function ButtonForm({
             focus:shadow-outline
           `}
     >
-      <Link href={href}>{placeholder}</Link>
+      {placeholder}
     </button>
   );
 }

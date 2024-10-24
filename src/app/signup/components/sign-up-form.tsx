@@ -97,14 +97,12 @@ export default function SignUpForm() {
 
         <div className="flex items-center justify-between">
           <ButtonForm
-            href="/"
             handleOnClick={handleFormSubmit}
             type="button"
             model="success"
             placeholder="Sign up"
           />
           <ButtonForm
-            href="/"
             handleOnClick={handleCancelSignUp}
             type="button"
             model="danger"

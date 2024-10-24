@@ -3,7 +3,7 @@
 import React, {
   ChangeEvent,
   useState,
-  //MouseEvent,
+  MouseEvent,
   useEffect,
   useCallback,
 } from "react";
@@ -34,9 +34,8 @@ export default function LoginForm() {
     });
   };
 
-  //const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
-  const handleFormSubmit = () => {
-    //event.preventDefault();
+  const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     signInUser(credentials);
     clearCredentials();
   };
@@ -65,8 +64,7 @@ export default function LoginForm() {
   useEffect(() => {
     if (success !== null && success === true && error === null) {
       toast.success("User signed in with success!");
-      //router.push("/about");
-      //memoizedHandleSignIn();
+      memoizedHandleSignIn();
     }
   }, [router, memoizedHandleSignIn, error, success]);
 
@@ -92,14 +90,12 @@ export default function LoginForm() {
 
         <div className="flex items-center justify-between">
           <ButtonForm
-            href="/about"
             model="success"
             placeholder="Sign in"
             type="button"
             handleOnClick={handleFormSubmit}
           />
           <ButtonForm
-            href="/signup"
             type="button"
             model="warning"
             placeholder="Sign up"

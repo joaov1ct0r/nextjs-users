@@ -6,7 +6,7 @@ export default function middleware(request: NextRequest) {
   const user = request.cookies.get("user");
 
   if (authorization && user) {
-    return NextResponse.next();
+    return NextResponse.redirect(new URL("/about", request.url));
   }
 
   const cookieNotFound = !authorization || !user;
