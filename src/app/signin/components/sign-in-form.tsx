@@ -65,14 +65,13 @@ export default function LoginForm() {
   useEffect(() => {
     if (success !== null && success === true && error === null) {
       console.log("Cookies: ", document.cookie);
+      console.log(
+        hasCookie({ name: "authorization" }).then((resp) => console.log(resp)),
+      );
       toast.success("User signed in with success!");
       memoizedHandleSignIn();
     }
   }, [memoizedHandleSignIn, error, success]);
-
-  console.log(
-    hasCookie({ name: "authorization" }).then((resp) => console.log(resp)),
-  );
 
   return (
     <div className="w-full max-w-xs">
