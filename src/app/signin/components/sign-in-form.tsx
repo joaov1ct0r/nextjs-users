@@ -13,7 +13,7 @@ import SignInUser from "@/app/signin/interfaces/sign-in-user";
 import { useSignInCtx } from "@/app/signin/hooks/use-sign-in";
 import { useSignInDispatch } from "@/app/signin/hooks/use-sign-in-dispatch";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -38,7 +38,6 @@ export default function LoginForm() {
     event.preventDefault();
     signInUser(credentials);
     clearCredentials();
-    router.push("/about");
   };
 
   const clearCredentials = () => {
@@ -65,9 +64,10 @@ export default function LoginForm() {
   useEffect(() => {
     if (success !== null && success === true && error === null) {
       toast.success("User signed in with success!");
+      router.push("/about");
       memoizedHandleSignIn();
     }
-  }, [memoizedHandleSignIn, error, success]);
+  }, [router, memoizedHandleSignIn, error, success]);
 
   return (
     <div className="w-full max-w-xs">
