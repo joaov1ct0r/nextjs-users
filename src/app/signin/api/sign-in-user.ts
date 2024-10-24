@@ -13,9 +13,10 @@ export async function signInUser(dispatch: Dispatch<Action>, user: SignInUser) {
       dispatch({ type: "fetch_error", error: "Failed to sign in user" });
     }
 
-    console.log(document.cookie);
+    console.log("request", response.request);
     const authenticatedUserId = response.data.resource.id;
     setCookie({ name: "user", value: JSON.stringify(authenticatedUserId) });
+    setCookie({ name: "authorization", value: JSON.stringify("") });
     dispatch({ type: "fetch_success", user: authenticatedUserId });
   } catch (error) {
     console.error(error);
