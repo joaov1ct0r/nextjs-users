@@ -2,7 +2,8 @@ import { Dispatch } from "react";
 import { Action } from "@/app/signin/interfaces/action";
 import SignInUser from "@/app/signin/interfaces/sign-in-user";
 import { api } from "@/app/lib/axios";
-import { setCookie } from "@/app/utils/cookies";
+//import { setCookie } from "@/app/utils/cookies";
+import { cookies } from "next/headers";
 
 export async function signInUser(dispatch: Dispatch<Action>, user: SignInUser) {
   dispatch({ type: "fetch_start" });
@@ -13,25 +14,38 @@ export async function signInUser(dispatch: Dispatch<Action>, user: SignInUser) {
       dispatch({ type: "fetch_error", error: "Failed to sign in user" });
     }
 
-    console.log("request", response.request);
     const authenticatedUser = response.data.resource;
-    //setCookie({ name: "user", value: JSON.stringify(authenticatedUser) });
+    const expiresDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+    const cookieStore = cookies();
+
+    cookieStore.set({
+      name: "user",
+      value: JSON.stringify(authenticatedUser),
+      expires: expiresDate,
+      maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      path: "/",
+      secure: true,
+      domain: "crud.shop",
+      sameSite: "none",
+      priority: "high",
+      partitioned: false,
+    });
     console.log("setou user");
-    setCookie({
-      name: "authorization",
-      value: "auth",
+    cookieStore.set({
+      name: "authentication",
+      value: JSON.stringify(authenticatedUser),
+      expires: expiresDate,
+      maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      path: "/",
+      secure: true,
+      domain: "crud.shop",
+      sameSite: "none",
+      priority: "high",
+      partitioned: false,
     });
     console.log("setou authorization");
-    setCookie({
-      name: "teste",
-      value: "any",
-    });
-    console.log("setou teste");
-    setCookie({
-      name: "teste1",
-      value: "anyOther",
-    });
-    console.log("setou teste1");
     dispatch({ type: "fetch_success", user: authenticatedUser });
   } catch (error) {
     console.error(error);
