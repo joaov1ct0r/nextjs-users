@@ -27,7 +27,7 @@ export default function ButtonForm({
   model,
   placeholder,
   type,
-  href,
+  href = "",
   handleOnClick,
   ...rest
 }: ButtonLinkProps) {
