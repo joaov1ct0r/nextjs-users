@@ -27,9 +27,8 @@ export async function setCookie({
     priority: "high",
     partitioned: false,
   });
-  console.log("setou user");
   cookieStore.set({
-    name: "authentication",
+    name: "authorization",
     value: authorization,
     expires: expiresDate,
     maxAge: 24 * 60 * 60 * 1000,
@@ -41,7 +40,6 @@ export async function setCookie({
     priority: "high",
     partitioned: false,
   });
-  console.log("setou authorization");
 }
 
 export interface hasCookieProps {

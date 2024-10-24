@@ -16,7 +16,6 @@ export async function signInUser(dispatch: Dispatch<Action>, user: SignInUser) {
     const authenticatedUser = response.data.resource;
 
     setCookie({ user: authenticatedUser, authorization: "auth" });
-
     dispatch({ type: "fetch_success", user: authenticatedUser });
   } catch (error) {
     console.error(error);
