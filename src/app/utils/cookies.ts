@@ -1,8 +1,9 @@
 "use server";
 
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { cookies } from "next/headers";
 
-export interface setCookieProps {
+interface setCookieProps {
   user: string;
   authorization: string;
 }
@@ -42,11 +43,23 @@ export async function setCookie({
   });
 }
 
-export interface hasCookieProps {
+interface hasCookieProps {
   name: string;
 }
 export async function hasCookie({ name }: hasCookieProps): Promise<boolean> {
   const cookieStore = cookies();
   const isCookiePresent = cookieStore.has(name);
   return isCookiePresent;
+}
+
+interface getCookiesProps {
+  name: string;
+}
+
+export async function getCookie({
+  name,
+}: getCookiesProps): Promise<undefined | RequestCookie> {
+  const cookieStore = cookies();
+  const cookie = cookieStore.get(name);
+  return cookie;
 }

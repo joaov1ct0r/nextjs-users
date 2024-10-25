@@ -5,6 +5,7 @@ import SignInUser from "@/app/signin/interfaces/sign-in-user";
 import { State } from "@/app/signin/interfaces/state";
 import { Action } from "@/app/signin/interfaces/action";
 import { signInUser } from "@/app/signin/api/sign-in-user";
+import User from "@/app/interfaces/user";
 
 const initialState: State = {
   user: null,
@@ -43,10 +44,12 @@ const SignInDispatchContext = createContext<
 
 interface SignInProviderProps {
   children: ReactNode;
+  user: User | null;
 }
 
-export function SignInProvider({ children }: SignInProviderProps) {
+export function SignInProvider({ children, user }: SignInProviderProps) {
   const [state, dispatch] = useReducer(signInReducer, initialState);
+  state.user = user;
 
   const handleSignInUser = (user: SignInUser) => signInUser(dispatch, user);
 

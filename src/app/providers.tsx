@@ -2,14 +2,18 @@ import { ReactNode } from "react";
 import { SignUpProvider } from "@/app/signup/contexts/sign-up-context";
 import { SignInProvider } from "@/app/signin/contexts/sign-in-context";
 import { AboutProvider } from "@/app/about/contexts/about-context";
+import { getCookie } from "@/app/utils/cookies";
 
 interface ProvidersProps {
   children: ReactNode;
 }
 
-export default function Providers({ children }: ProvidersProps) {
+export default async function Providers({ children }: ProvidersProps) {
+  let user = null;
+  const userCookie = await getCookie({ name: "user" });
+  if (userCookie !== undefined) user = JSON.parse(userCookie.value);
   return (
-    <SignInProvider>
+    <SignInProvider user={user}>
       <SignUpProvider>
         <AboutProvider>{children}</AboutProvider>
       </SignUpProvider>
