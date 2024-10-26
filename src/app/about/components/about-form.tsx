@@ -12,6 +12,7 @@ import { User } from "@/app/about/interfaces/user";
 export default function AboutForm() {
   const { user } = useSignInCtx();
   const [updatedUser, setUpdatedUser] = useState<User>({
+    id: user?.id || "",
     name: user?.name || "",
     username: user?.username || "",
     password: "",
@@ -23,6 +24,7 @@ export default function AboutForm() {
 
   const clearUpdatedUser = () => {
     setUpdatedUser({
+      id: "",
       name: "",
       username: "",
       password: "",
@@ -60,6 +62,15 @@ export default function AboutForm() {
   return (
     <div className="w-full max-w-xs">
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <InputForm
+          placeholder={`${user?.id}`}
+          id="id"
+          type="text"
+          handleOnChange={handleFormChange}
+          name="id"
+          value={updatedUser.id}
+          disabled
+        />
         <InputForm
           placeholder={`${user?.name}`}
           id="name"
