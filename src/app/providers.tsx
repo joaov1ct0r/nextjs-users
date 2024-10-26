@@ -10,7 +10,7 @@ interface ProvidersProps {
 
 export default async function Providers({ children }: ProvidersProps) {
   let user = null;
-  const userCookie = await getCookie({ name: "user" });
+  const userCookie = await getCookie({ name: "userObj" });
   if (userCookie !== undefined) user = JSON.parse(userCookie.value);
   return (
     <SignInProvider user={user}>
