@@ -6,6 +6,7 @@ import { State } from "@/app/signin/interfaces/state";
 import { Action } from "@/app/signin/interfaces/action";
 import { signInUser } from "@/app/signin/api/sign-in-user";
 import User from "@/app/interfaces/user";
+import { clearCookies } from "@/app/utils/cookies";
 
 const initialState: State = {
   user: null,
@@ -38,6 +39,7 @@ const SignInDispatchContext = createContext<
   | {
       dispatch: Dispatch<Action>;
       signInUser: (user: SignInUser) => void;
+      handleSignOut: () => void;
     }
   | undefined
 >(undefined);
@@ -53,10 +55,12 @@ export function SignInProvider({ children, user }: SignInProviderProps) {
 
   const handleSignInUser = (user: SignInUser) => signInUser(dispatch, user);
 
+  const handleSignOut = async () => clearCookies();
+
   return (
     <SignInContext.Provider value={state}>
       <SignInDispatchContext.Provider
-        value={{ dispatch, signInUser: handleSignInUser }}
+        value={{ dispatch, signInUser: handleSignInUser, handleSignOut }}
       >
         {children}
       </SignInDispatchContext.Provider>

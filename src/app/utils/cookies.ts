@@ -46,3 +46,10 @@ export async function getCookie({
   const cookie = cookieStore.get(name);
   return cookie;
 }
+
+export async function clearCookies() {
+  const cookieStore = cookies();
+  cookieStore.delete("userObj");
+  cookieStore.delete("user");
+  cookieStore.delete("authorization");
+}

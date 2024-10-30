@@ -1,3 +1,5 @@
+import SignOutButton from "@/app/components/sign-out-button";
+
 export default function Header() {
   return (
     <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-gray-50 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
@@ -37,6 +39,7 @@ export default function Header() {
         >
           <span className="sr-only">Dismiss</span>
         </button>
+        <SignOutButton />
       </div>
     </div>
   );
