@@ -55,7 +55,7 @@ export function SignInProvider({ children, user }: SignInProviderProps) {
 
   const handleSignInUser = (user: SignInUser) => signInUser(dispatch, user);
 
-  const handleSignOut = async () => clearCookies();
+  const handleSignOut = async () => await clearCookies();
 
   return (
     <SignInContext.Provider value={state}>
