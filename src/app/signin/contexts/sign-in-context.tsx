@@ -29,6 +29,14 @@ function signInReducer(state: State, action: Action): State {
       };
     case "fetch_error":
       return { ...state, loading: false, error: action.error, success: false };
+    case "fetch_reset":
+      return {
+        ...state,
+        loading: false,
+        success: null,
+        error: null,
+        user: null,
+      };
     default:
       throw new Error("Unknown action type");
   }

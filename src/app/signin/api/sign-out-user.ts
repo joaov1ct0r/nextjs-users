@@ -14,13 +14,13 @@ export async function signOutUser(dispatch: Dispatch<Action>) {
     //}
 
     await clearCookies();
-    //dispatch({
-    //type: "fetch_reset",
-    //user: null,
-    //error: null,
-    //loading: false,
-    //success: null,
-    //});
+    dispatch({
+      type: "fetch_reset",
+      user: null,
+      error: null,
+      loading: false,
+      success: null,
+    });
   } catch (error) {
     console.error(error);
     dispatch({ type: "fetch_error", error: "Failed to sign out user" });
