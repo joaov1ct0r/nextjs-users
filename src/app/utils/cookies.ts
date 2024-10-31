@@ -53,15 +53,30 @@ export async function clearCookies() {
     name: "userObj",
     value: "",
     maxAge: 0,
+    domain: ".crud.shop",
+    path: "/",
+    secure: true,
+    httpOnly: true,
+    sameSite: "none",
   });
   cookieStore.set({
     name: "user",
     value: "",
     maxAge: 0,
+    domain: ".crud.shop",
+    path: "/",
+    secure: true,
+    httpOnly: true,
+    sameSite: "none",
   });
   cookieStore.set({
     name: "authorization",
     value: "",
     maxAge: 0,
+    domain: ".crud.shop",
+    path: "/",
+    secure: true,
+    httpOnly: true,
+    sameSite: "none",
   });
 }
