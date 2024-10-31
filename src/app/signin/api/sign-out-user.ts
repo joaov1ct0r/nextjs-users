@@ -1,17 +1,17 @@
 import { Dispatch } from "react";
 import { Action } from "@/app/signin/interfaces/action";
-//import { api } from "@/app/lib/axios";
+import { api } from "@/app/lib/axios";
 import { clearCookies } from "@/app/utils/cookies";
 
 export async function signOutUser(dispatch: Dispatch<Action>) {
-  //dispatch({ type: "fetch_start" });
+  dispatch({ type: "fetch_start" });
 
   try {
-    //const response = await api.get("/signout/");
+    const response = await api.get("/signout/");
 
-    //if (response.status !== 200) {
-    //dispatch({ type: "fetch_error", error: "Failed to sign out user" });
-    //}
+    if (response.status !== 200) {
+      dispatch({ type: "fetch_error", error: "Failed to sign out user" });
+    }
 
     await clearCookies();
     dispatch({
