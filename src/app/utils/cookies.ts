@@ -49,7 +49,19 @@ export async function getCookie({
 
 export async function clearCookies() {
   const cookieStore = cookies();
-  cookieStore.delete("userObj");
-  cookieStore.delete("user");
-  cookieStore.delete("authorization");
+  cookieStore.set({
+    name: "userObj",
+    value: "",
+    maxAge: 0,
+  });
+  cookieStore.set({
+    name: "user",
+    value: "",
+    maxAge: 0,
+  });
+  cookieStore.set({
+    name: "authorization",
+    value: "",
+    maxAge: 0,
+  });
 }
