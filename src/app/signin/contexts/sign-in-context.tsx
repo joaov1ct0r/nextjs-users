@@ -5,8 +5,8 @@ import SignInUser from "@/app/signin/interfaces/sign-in-user";
 import { State } from "@/app/signin/interfaces/state";
 import { Action } from "@/app/signin/interfaces/action";
 import { signInUser } from "@/app/signin/api/sign-in-user";
+import { signOutUser } from "@/app/signin/api/sign-out-user";
 import User from "@/app/interfaces/user";
-import { clearCookies } from "@/app/utils/cookies";
 
 const initialState: State = {
   user: null,
@@ -54,8 +54,7 @@ export function SignInProvider({ children, user }: SignInProviderProps) {
   state.user = user;
 
   const handleSignInUser = (user: SignInUser) => signInUser(dispatch, user);
-
-  const handleSignOut = async () => await clearCookies();
+  const handleSignOut = () => signOutUser(dispatch);
 
   return (
     <SignInContext.Provider value={state}>

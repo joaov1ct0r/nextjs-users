@@ -8,6 +8,7 @@ export default function SignOutButton() {
   const router = useRouter();
   const { user } = useSignInCtx();
   const { handleSignOut } = useSignInDispatch();
+
   const onSignOut = () => {
     handleSignOut();
     router.push("/");
