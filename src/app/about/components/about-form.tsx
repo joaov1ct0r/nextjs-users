@@ -63,7 +63,7 @@ export default function AboutForm() {
     <div className="w-full max-w-xs">
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <InputForm
-          placeholder={`${user?.id}`}
+          placeholder="User id"
           id="id"
           type="text"
           handleOnChange={handleFormChange}
@@ -72,7 +72,7 @@ export default function AboutForm() {
           disabled
         />
         <InputForm
-          placeholder={`${user?.name}`}
+          placeholder="User name"
           id="name"
           type="text"
           handleOnChange={handleFormChange}
@@ -80,7 +80,7 @@ export default function AboutForm() {
           value={updatedUser.name}
         />
         <InputForm
-          placeholder={`${user?.email}`}
+          placeholder="User email"
           id="email"
           type="email"
           handleOnChange={handleFormChange}
@@ -88,7 +88,7 @@ export default function AboutForm() {
           value={updatedUser.email}
         />
         <InputForm
-          placeholder={`${user?.username}`}
+          placeholder="User username"
           id="username"
           type="text"
           handleOnChange={handleFormChange}
@@ -96,7 +96,7 @@ export default function AboutForm() {
           value={updatedUser.username}
         />
         <InputForm
-          placeholder="Password"
+          placeholder="User password"
           id="password"
           type="password"
           handleOnChange={handleFormChange}
