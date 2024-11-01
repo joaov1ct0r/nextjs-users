@@ -43,8 +43,8 @@ export default function AboutForm() {
 
   const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    updateUser(updatedUser);
     clearUpdatedUser();
+    updateUser(updatedUser);
   };
 
   useEffect(() => {
