@@ -5,6 +5,7 @@ import { User } from "@/app/about/interfaces/user";
 import { Action } from "@/app/about/interfaces/action";
 import { State } from "@/app/about/interfaces/state";
 import { useApi } from "@/app/hooks/use-api";
+import { setCookie } from "@/app/utils/cookies";
 
 interface UserData {
   name: string;
@@ -76,7 +77,12 @@ export function AboutProvider({ children }: AboutProviderProps) {
       const response = await api.put("/user/", data);
 
       if (response?.status === 204) {
-        dispatch({ type: "fetch_success", user: response?.data.resource });
+        const updatedUser = response.data.resource;
+
+        setCookie({
+          user: JSON.stringify(updatedUser),
+        });
+        dispatch({ type: "fetch_success", user: updatedUser });
       }
     } catch (error) {
       console.error(error);
