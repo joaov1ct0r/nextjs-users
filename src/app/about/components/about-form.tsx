@@ -12,11 +12,11 @@ import { User } from "@/app/about/interfaces/user";
 export default function AboutForm() {
   const { user } = useSignInCtx();
   const [updatedUser, setUpdatedUser] = useState<User>({
-    id: user?.id || "",
-    name: user?.name || "",
-    username: user?.username || "",
+    id: "",
+    name: "",
+    username: "",
     password: "",
-    email: user?.email || "",
+    email: "",
   });
 
   const { updateUser } = useAboutDispatch();
@@ -57,7 +57,7 @@ export default function AboutForm() {
           type="text"
           handleOnChange={handleFormChange}
           name="id"
-          value={updatedUser.id}
+          value={user?.id}
           disabled
         />
         <InputForm
@@ -66,7 +66,7 @@ export default function AboutForm() {
           type="text"
           handleOnChange={handleFormChange}
           name="name"
-          value={updatedUser.name}
+          value={user?.name}
         />
         <InputForm
           placeholder="User email"
@@ -74,7 +74,7 @@ export default function AboutForm() {
           type="email"
           handleOnChange={handleFormChange}
           name="email"
-          value={updatedUser.email}
+          value={user?.email}
         />
         <InputForm
           placeholder="User username"
@@ -82,7 +82,7 @@ export default function AboutForm() {
           type="text"
           handleOnChange={handleFormChange}
           name="username"
-          value={updatedUser.username}
+          value={user?.username}
         />
         <InputForm
           placeholder="User password"
