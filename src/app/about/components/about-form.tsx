@@ -22,16 +22,6 @@ export default function AboutForm() {
   const { updateUser } = useAboutDispatch();
   const { error, success } = useAboutCtx();
 
-  const clearUpdatedUser = () => {
-    setUpdatedUser({
-      id: "",
-      name: "",
-      username: "",
-      password: "",
-      email: "",
-    });
-  };
-
   const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
@@ -43,7 +33,6 @@ export default function AboutForm() {
 
   const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    clearUpdatedUser();
     updateUser(updatedUser);
   };
 

@@ -37,14 +37,6 @@ export default function LoginForm() {
   const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     signInUser(credentials);
-    clearCredentials();
-  };
-
-  const clearCredentials = () => {
-    setCredentials({
-      username: "",
-      password: "",
-    });
   };
 
   const handleSignUp = () => {
