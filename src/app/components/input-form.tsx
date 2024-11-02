@@ -2,6 +2,7 @@ import React, { ChangeEvent, InputHTMLAttributes } from "react";
 
 export interface InputFormProps extends InputHTMLAttributes<HTMLInputElement> {
   handleOnChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  label: string;
 }
 
 export default function InputForm({
@@ -10,12 +11,13 @@ export default function InputForm({
   id,
   handleOnChange,
   name,
+  label,
   ...rest
 }: InputFormProps) {
   return (
     <div className="mb-4">
       <label className="block text-gray-700 text-sm font-bold mb-2">
-        {placeholder}
+        {label}
       </label>
 
       <input

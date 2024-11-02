@@ -64,7 +64,8 @@ export default function LoginForm() {
     <div className="w-full max-w-xs">
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <InputForm
-          placeholder="User"
+          label="User"
+          placeholder="User username"
           id="username"
           type="text"
           handleOnChange={handleFormChange}
@@ -72,6 +73,7 @@ export default function LoginForm() {
           value={credentials.username}
         />
         <InputForm
+          label="User Password"
           placeholder="Password"
           id="password"
           type="password"

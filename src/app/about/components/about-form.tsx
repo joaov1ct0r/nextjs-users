@@ -52,40 +52,45 @@ export default function AboutForm() {
     <div className="w-full max-w-xs">
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <InputForm
-          placeholder="User id"
+          label="User id"
+          placeholder={user?.id}
           id="id"
           type="text"
           handleOnChange={handleFormChange}
           name="id"
-          value={user?.id}
+          value={updatedUser.id}
           disabled
         />
         <InputForm
-          placeholder="User name"
+          label="User name"
+          placeholder={user?.name}
           id="name"
           type="text"
           handleOnChange={handleFormChange}
           name="name"
-          value={user?.name}
+          value={updatedUser.name}
         />
         <InputForm
-          placeholder="User email"
+          label="User email"
+          placeholder={user?.email}
           id="email"
           type="email"
           handleOnChange={handleFormChange}
           name="email"
-          value={user?.email}
+          value={updatedUser.email}
         />
         <InputForm
-          placeholder="User username"
+          label="User username"
+          placeholder={user?.username}
           id="username"
           type="text"
           handleOnChange={handleFormChange}
           name="username"
-          value={user?.username}
+          value={updatedUser.username}
         />
         <InputForm
-          placeholder="User password"
+          label="User password"
+          placeholder="**********"
           id="password"
           type="password"
           handleOnChange={handleFormChange}

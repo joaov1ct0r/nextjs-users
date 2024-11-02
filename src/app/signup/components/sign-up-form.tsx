@@ -63,7 +63,8 @@ export default function SignUpForm() {
     <div className="w-full max-w-xs">
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <InputForm
-          placeholder="Name"
+          label="User name"
+          placeholder="User name"
           id="name"
           type="text"
           handleOnChange={handleFormChange}
@@ -71,7 +72,8 @@ export default function SignUpForm() {
           name="name"
         />
         <InputForm
-          placeholder="Email"
+          label="User email"
+          placeholder="User email"
           id="email"
           type="email"
           handleOnChange={handleFormChange}
@@ -79,7 +81,8 @@ export default function SignUpForm() {
           name="email"
         />
         <InputForm
-          placeholder="Username"
+          label="User username"
+          placeholder="User username"
           id="username"
           type="text"
           handleOnChange={handleFormChange}
@@ -87,7 +90,8 @@ export default function SignUpForm() {
           name="username"
         />
         <InputForm
-          placeholder="Password"
+          label="User password"
+          placeholder="User password"
           id="password"
           type="password"
           name="password"
