@@ -4,7 +4,7 @@ import { createContext, useReducer, ReactNode, Dispatch } from "react";
 import { User } from "@/app/about/interfaces/user";
 import { Action } from "@/app/about/interfaces/action";
 import { State } from "@/app/about/interfaces/state";
-import { updateUser } from "@/app/about/api/update-user";
+//import { updateUser } from "@/app/about/api/update-user";
 import { useApi } from "@/app/hooks/use-api";
 
 interface UserData {
