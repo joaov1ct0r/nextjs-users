@@ -1,5 +1,3 @@
-import { Dispatch } from "react";
-import { Action } from "@/app/about/interfaces/action";
 import { User } from "@/app/about/interfaces/user";
 import { api } from "@/app/lib/axios";
 
@@ -11,7 +9,7 @@ interface UserData {
   password: string | undefined;
 }
 
-export async function updateUser(dispatch: Dispatch<Action>, user: User) {
+export async function updateUser(user: User) {
   const data: UserData = {
     name: user.name,
     username: user.username,
@@ -24,17 +22,10 @@ export async function updateUser(dispatch: Dispatch<Action>, user: User) {
     data.password = user.password;
   }
 
-  dispatch({ type: "fetch_start" });
   try {
     const response = await api.put("/user/", data);
-
-    if (response.status !== 204) {
-      dispatch({ type: "fetch_error", error: "Failed to update user" });
-    }
-
-    dispatch({ type: "fetch_success", user: response.data.resource });
+    return response;
   } catch (error) {
     console.error(error);
-    dispatch({ type: "fetch_error", error: "Failed to update user" });
   }
 }

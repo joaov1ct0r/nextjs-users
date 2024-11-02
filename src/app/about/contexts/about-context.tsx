@@ -5,6 +5,15 @@ import { User } from "@/app/about/interfaces/user";
 import { Action } from "@/app/about/interfaces/action";
 import { State } from "@/app/about/interfaces/state";
 import { updateUser } from "@/app/about/api/update-user";
+import { useApi } from "@/app/hooks/use-api";
+
+interface UserData {
+  name: string;
+  username: string;
+  email: string;
+  id: string;
+  password: string | undefined;
+}
 
 const initialState: State = {
   success: null,
@@ -47,8 +56,34 @@ interface AboutProviderProps {
 
 export function AboutProvider({ children }: AboutProviderProps) {
   const [state, dispatch] = useReducer(aboutReducer, initialState);
+  const api = useApi();
 
-  const handleUpdateUser = (user: User) => updateUser(dispatch, user);
+  const handleUpdateUser = async (user: User) => {
+    dispatch({ type: "fetch_start" });
+
+    const data: UserData = {
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      id: user.id,
+      password: undefined,
+    };
+
+    if (user.password) {
+      data.password = user.password;
+    }
+
+    try {
+      const response = await api.put("/user/", data);
+
+      if (response?.status === 204) {
+        dispatch({ type: "fetch_success", user: response?.data.resource });
+      }
+    } catch (error) {
+      console.error(error);
+      dispatch({ type: "fetch_error", error: "Failed to update user" });
+    }
+  };
 
   return (
     <AboutContext.Provider value={state}>
