@@ -34,9 +34,13 @@ jobs:
     needs: build
     runs-on: self-hosted
     steps:
+      - name: Remove all stopped containers
+        run: docker container prune -f
+      - name: Remove unused images
+        run: docker image prune -a -f
+      - name: Remove unused volumes
+        run: docker volume prune -f
       - name: Pull image docker hub
         run: docker pull joaov1ct0r/nextjs_users:latest
-      - name: Remove container
-        run: docker rm -f nextjs_users
       - name: Run docker container
         run: docker run -d -p 3000:3000 --shm-size=1g -e NEXT_PUBLIC_API_URL=${{secrets.API_URL}}  --name nextjs_users joaov1ct0r/nextjs_users
