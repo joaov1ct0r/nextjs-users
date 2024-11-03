@@ -48,7 +48,7 @@ export default function AboutForm() {
     }
   }, [error, success]);
 
-  useEffect(() => getUser);
+  useEffect(() => getUser());
 
   return (
     <div className="w-full max-w-xs">
