@@ -19,7 +19,7 @@ export default function AboutForm() {
     email: "",
   });
 
-  const { updateUser } = useAboutDispatch();
+  const { updateUser, getUser } = useAboutDispatch();
   const { error, success } = useAboutCtx();
 
   const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +47,8 @@ export default function AboutForm() {
       toast.success("User updated with success!");
     }
   }, [error, success]);
+
+  useEffect(() => getUser);
 
   return (
     <div className="w-full max-w-xs">
