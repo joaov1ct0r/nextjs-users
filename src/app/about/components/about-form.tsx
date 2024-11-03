@@ -5,7 +5,6 @@ import InputForm from "@/app/components/input-form";
 import ButtonForm from "@/app/components/button-form";
 import { useAboutCtx } from "@/app/about/hooks/use-about";
 import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
-import { toast } from "react-toastify";
 import { User } from "@/app/about/interfaces/user";
 
 export default function AboutForm() {
@@ -33,18 +32,6 @@ export default function AboutForm() {
     event.preventDefault();
     updateUser(updatedUser);
   };
-
-  useEffect(() => {
-    if (error !== null) {
-      toast.error(error);
-    }
-  }, [error]);
-
-  useEffect(() => {
-    if (success !== null && success === true && error === null) {
-      toast.success("User updated with success!");
-    }
-  }, [error, success]);
 
   useEffect(() => {
     if (
