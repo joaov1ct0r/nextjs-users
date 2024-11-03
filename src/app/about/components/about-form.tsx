@@ -5,12 +5,10 @@ import InputForm from "@/app/components/input-form";
 import ButtonForm from "@/app/components/button-form";
 import { useAboutCtx } from "@/app/about/hooks/use-about";
 import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
-import { useSignInCtx } from "@/app/signin/hooks/use-sign-in";
 import { toast } from "react-toastify";
 import { User } from "@/app/about/interfaces/user";
 
 export default function AboutForm() {
-  const { user } = useSignInCtx();
   const [updatedUser, setUpdatedUser] = useState<User>({
     id: "",
     name: "",
@@ -20,7 +18,7 @@ export default function AboutForm() {
   });
 
   const { updateUser, getUser } = useAboutDispatch();
-  const { error, success } = useAboutCtx();
+  const { error, success, loading, user } = useAboutCtx();
 
   const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -48,7 +46,18 @@ export default function AboutForm() {
     }
   }, [error, success]);
 
-  useEffect(() => getUser());
+  useEffect(() => {
+    if (
+      error === null &&
+      success === null &&
+      loading === false &&
+      user === null
+    ) {
+      (async () => {
+        getUser();
+      })();
+    }
+  });
 
   return (
     <div className="w-full max-w-xs">
