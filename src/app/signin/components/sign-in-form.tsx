@@ -12,7 +12,6 @@ import ButtonForm from "@/app/components/button-form";
 import SignInUser from "@/app/signin/interfaces/sign-in-user";
 import { useSignInCtx } from "@/app/signin/hooks/use-sign-in";
 import { useSignInDispatch } from "@/app/signin/hooks/use-sign-in-dispatch";
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
@@ -48,17 +47,10 @@ export default function LoginForm() {
   }, [router]);
 
   useEffect(() => {
-    if (error !== null) {
-      toast.error(error);
-    }
-  }, [error]);
-
-  useEffect(() => {
     if (success !== null && success === true && error === null) {
-      toast.success("User signed in with success!");
       memoizedHandleSignIn();
     }
-  }, [router, memoizedHandleSignIn, error, success]);
+  }, [memoizedHandleSignIn, error, success]);
 
   return (
     <div className="w-full max-w-xs">

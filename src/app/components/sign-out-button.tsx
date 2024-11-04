@@ -16,8 +16,10 @@ export default function SignOutButton() {
   };
 
   useEffect(() => {
-    (async () => await checkAuth())();
-  });
+    if (authenticated === false) {
+      (async () => await checkAuth())();
+    }
+  }, [authenticated, checkAuth]);
 
   return (
     <button

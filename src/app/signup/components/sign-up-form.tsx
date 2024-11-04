@@ -48,12 +48,6 @@ export default function SignUpForm() {
   };
 
   useEffect(() => {
-    if (error !== null) {
-      toast.error(error);
-    }
-  }, [error]);
-
-  useEffect(() => {
     if (success !== null && success === true && error === null) {
       toast.success("User signed up with success!");
     }

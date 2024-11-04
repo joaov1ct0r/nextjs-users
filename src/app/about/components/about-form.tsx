@@ -44,7 +44,7 @@ export default function AboutForm() {
         getUser();
       })();
     }
-  });
+  }, [error, getUser, success, user, loading]);
 
   return (
     <div className="w-full max-w-xs">
