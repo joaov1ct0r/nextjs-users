@@ -4,7 +4,6 @@ import { useSignInCtx } from "@/app/signin/hooks/use-sign-in";
 import { useSignInDispatch } from "@/app/signin/hooks/use-sign-in-dispatch";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
-import Link from "next/link";
 
 export default function SignOutButton() {
   const router = useRouter();
@@ -13,7 +12,6 @@ export default function SignOutButton() {
 
   const onSignOut = async () => {
     handleSignOut();
-    router.push("/");
   };
 
   const memoizedHandleSignOut = useCallback(() => {
@@ -31,16 +29,7 @@ export default function SignOutButton() {
   }, [authenticated, memoizedHandleSignOut]);
 
   return (
-    //<button
-    //onClick={onSignOut}
-    //className={
-    //authenticated === true
-    //? "justify-end items-center bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white px-2 border border-red-500 hover:border-transparent rounded"
-    //: "hidden"
-    //}
-    //>
-    <Link
-      href="/"
+    <button
       onClick={onSignOut}
       className={
         authenticated === true
@@ -49,7 +38,6 @@ export default function SignOutButton() {
       }
     >
       Sign out
-    </Link>
-    //</button>
+    </button>
   );
 }
