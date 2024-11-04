@@ -76,7 +76,7 @@ export function SignInProvider({ children }: SignInProviderProps) {
     try {
       await api.get("/signout/");
       await clearCookies();
-      dispatch({ type: "fetch_success" });
+      dispatch({ type: "fetch_reset" });
     } catch (error) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to sign out user" });
