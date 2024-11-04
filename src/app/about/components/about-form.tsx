@@ -6,8 +6,10 @@ import ButtonForm from "@/app/components/button-form";
 import { useAboutCtx } from "@/app/about/hooks/use-about";
 import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
 import { User } from "@/app/about/interfaces/user";
+import { useRouter } from "next/navigation";
 
 export default function AboutForm() {
+  const router = useRouter();
   const [updatedUser, setUpdatedUser] = useState<User>({
     id: "",
     name: "",
@@ -30,6 +32,7 @@ export default function AboutForm() {
 
   const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    router.push("/");
     updateUser(updatedUser);
   };
 
