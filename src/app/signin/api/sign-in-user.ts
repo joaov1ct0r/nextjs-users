@@ -11,8 +11,9 @@ export async function signInUser(dispatch: Dispatch<Action>, user: SignInUser) {
     const authenticatedUser = response.data.resource;
 
     console.log("before setting userObj");
+    console.log(authenticatedUser);
 
-    setCookie({
+    await setCookie({
       user: JSON.stringify(authenticatedUser),
     });
 
