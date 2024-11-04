@@ -6,6 +6,7 @@ import { State } from "@/app/signin/interfaces/state";
 import { Action } from "@/app/signin/interfaces/action";
 import { signInUser } from "@/app/signin/api/sign-in-user";
 import { signOutUser } from "@/app/signin/api/sign-out-user";
+import { getCookie } from "@/app/utils/cookies";
 
 const initialState: State = {
   authenticated: false,
@@ -53,6 +54,7 @@ const SignInDispatchContext = createContext<
       dispatch: Dispatch<Action>;
       signInUser: (user: SignInUser) => void;
       handleSignOut: () => void;
+      checkAuth: () => Promise<void>;
     }
   | undefined
 >(undefined);
@@ -66,6 +68,15 @@ export function SignInProvider({ children }: SignInProviderProps) {
 
   const handleSignInUser = (user: SignInUser) => signInUser(dispatch, user);
   const handleSignOut = () => signOutUser(dispatch);
+  const handleCheckAuth = async () => {
+    const userObjCookie = await getCookie({ name: "userObj" });
+
+    if (userObjCookie === undefined) {
+      dispatch({ type: "fetch_success", authenticated: false });
+    }
+
+    dispatch({ type: "fetch_success", authenticated: true });
+  };
 
   return (
     <SignInContext.Provider value={state}>
@@ -74,6 +85,7 @@ export function SignInProvider({ children }: SignInProviderProps) {
           dispatch,
           signInUser: handleSignInUser,
           handleSignOut,
+          checkAuth: handleCheckAuth,
         }}
       >
         {children}

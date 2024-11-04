@@ -3,16 +3,21 @@
 import { useSignInCtx } from "@/app/signin/hooks/use-sign-in";
 import { useSignInDispatch } from "@/app/signin/hooks/use-sign-in-dispatch";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function SignOutButton() {
   const router = useRouter();
   const { authenticated } = useSignInCtx();
-  const { handleSignOut } = useSignInDispatch();
+  const { handleSignOut, checkAuth } = useSignInDispatch();
 
   const onSignOut = () => {
     handleSignOut();
     router.push("/");
   };
+
+  useEffect(() => {
+    (async () => await checkAuth())();
+  });
 
   return (
     <button
