@@ -15,10 +15,24 @@ export default function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/about", request.url));
   }
 
-  const cookieNotFound = !authorization || !user || !userObj;
+  if (
+    !authorization &&
+    request.nextUrl.pathname !== "/" &&
+    request.nextUrl.pathname !== "/signup"
+  ) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
   if (
-    cookieNotFound &&
+    !user &&
+    request.nextUrl.pathname !== "/" &&
+    request.nextUrl.pathname !== "/signup"
+  ) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  if (
+    !userObj &&
     request.nextUrl.pathname !== "/" &&
     request.nextUrl.pathname !== "/signup"
   ) {
@@ -29,6 +43,5 @@ export default function middleware(request: NextRequest) {
 }
 
 export const config = {
-  //matcher: ["/about", "/", "/signup", "/signin", "/(.*)"], // Garante que o middleware funcione nessas rotas
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
