@@ -10,19 +10,12 @@ export async function signOutUser(dispatch: Dispatch<Action>) {
     await api.get("/signout/");
     await clearCookies();
 
-    dispatch({
-      type: "fetch_reset",
-      error: null,
-      loading: false,
-      success: null,
-      authenticated: false,
-    });
+    dispatch({ type: "fetch_reset" });
   } catch (error) {
     console.error(error);
     dispatch({
       type: "fetch_error",
       error: "Failed to sign out user",
-      authenticated: false,
     });
   }
 }

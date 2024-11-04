@@ -14,13 +14,12 @@ export async function signInUser(dispatch: Dispatch<Action>, user: SignInUser) {
       user: JSON.stringify(authenticatedUser),
     });
 
-    dispatch({ type: "fetch_success", authenticated: true });
+    dispatch({ type: "fetch_success" });
   } catch (error) {
     console.error(error);
     dispatch({
       type: "fetch_error",
       error: "Failed to sign in user",
-      authenticated: false,
     });
   }
 }

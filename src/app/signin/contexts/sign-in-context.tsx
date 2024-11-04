@@ -72,10 +72,11 @@ export function SignInProvider({ children }: SignInProviderProps) {
     const userObjCookie = await getCookie({ name: "userObj" });
 
     if (userObjCookie === undefined) {
-      dispatch({ type: "fetch_success", authenticated: false });
+      dispatch({ type: "fetch_reset" });
+      return;
     }
 
-    dispatch({ type: "fetch_success", authenticated: true });
+    dispatch({ type: "fetch_success" });
   };
 
   return (
