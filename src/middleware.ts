@@ -16,7 +16,7 @@ export default function middleware(request: NextRequest) {
     request.nextUrl.pathname !== "/about"
   ) {
     console.log("send to /about");
-    return NextResponse.redirect(new URL("/about", request.url));
+    //return NextResponse.redirect(new URL("/about", request.url));
   }
 
   const cookiesNotFound = !authorization || !user;
@@ -28,7 +28,7 @@ export default function middleware(request: NextRequest) {
     request.nextUrl.pathname !== "/signup"
   ) {
     console.log("send to /");
-    return NextResponse.redirect(new URL("/", request.url));
+    //return NextResponse.redirect(new URL("/", request.url));
   }
 
   console.log("send to next req");
