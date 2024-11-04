@@ -13,6 +13,7 @@ export default function SignOutButton() {
   const onSignOut = () => {
     handleSignOut();
     router.push("/");
+    router.refresh();
   };
 
   useEffect(() => {
