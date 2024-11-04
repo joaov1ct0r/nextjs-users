@@ -11,9 +11,9 @@ export default function SignOutButton() {
   const { authenticated } = useSignInCtx();
   const { handleSignOut, checkAuth } = useSignInDispatch();
 
-  const onSignOut = () => {
+  const onSignOut = async () => {
     handleSignOut();
-    router.push("/about");
+    router.push("/");
     router.refresh();
   };
 
@@ -33,7 +33,7 @@ export default function SignOutButton() {
     //}
     //>
     <Link
-      href="/about"
+      href="/"
       onClick={onSignOut}
       className={
         authenticated === true
