@@ -20,7 +20,7 @@ export default function SignOutButton() {
       className={
         authenticated === true
           ? "justify-end items-center bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white px-2 border border-red-500 hover:border-transparent rounded"
-          : ""
+          : "hidden"
       }
     >
       Sign out
