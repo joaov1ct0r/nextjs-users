@@ -10,9 +10,13 @@ export async function signInUser(dispatch: Dispatch<Action>, user: SignInUser) {
     const response = await api.post("/signin/", user);
     const authenticatedUser = response.data.resource;
 
+    console.log("before setting userObj");
+
     setCookie({
       user: JSON.stringify(authenticatedUser),
     });
+
+    console.log("after setting userObj");
 
     dispatch({ type: "fetch_success" });
   } catch (error) {

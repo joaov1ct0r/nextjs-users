@@ -15,7 +15,7 @@ export default function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/about", request.url));
   }
 
-  const cookieNotFound = !authorization || !user;
+  const cookieNotFound = !authorization || !user || !userObj;
 
   if (
     cookieNotFound &&
