@@ -4,6 +4,7 @@ import { useSignInCtx } from "@/app/signin/hooks/use-sign-in";
 import { useSignInDispatch } from "@/app/signin/hooks/use-sign-in-dispatch";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import Link from "next/link";
 
 export default function SignOutButton() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function SignOutButton() {
           : "hidden"
       }
     >
-      Sign out
+      <Link href="/">Sign out</Link>
     </button>
   );
 }
