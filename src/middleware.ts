@@ -6,15 +6,6 @@ export default function middleware(request: NextRequest) {
   const user = request.cookies.get("user");
   const userObj = request.cookies.get("userObj");
 
-  if (
-    authorization &&
-    user &&
-    userObj &&
-    request.nextUrl.pathname !== "/about"
-  ) {
-    return NextResponse.redirect(new URL("/about", request.url));
-  }
-
   const cookiesNotFound = !authorization || !user || !userObj;
 
   if (
@@ -23,6 +14,15 @@ export default function middleware(request: NextRequest) {
     request.nextUrl.pathname !== "/signup"
   ) {
     return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  if (
+    authorization &&
+    user &&
+    userObj &&
+    request.nextUrl.pathname !== "/about"
+  ) {
+    return NextResponse.redirect(new URL("/about", request.url));
   }
 
   return NextResponse.next();
