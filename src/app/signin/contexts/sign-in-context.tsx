@@ -6,7 +6,8 @@ import { State } from "@/app/signin/interfaces/state";
 import { Action } from "@/app/signin/interfaces/action";
 import { signInUser } from "@/app/signin/api/sign-in-user";
 import { signOutUser } from "@/app/signin/api/sign-out-user";
-import { getCookie } from "@/app/utils/cookies";
+import { clearCookies, getCookie } from "@/app/utils/cookies";
+import { useApi } from "@/app/hooks/use-api";
 
 const initialState: State = {
   authenticated: false,
@@ -65,9 +66,22 @@ interface SignInProviderProps {
 
 export function SignInProvider({ children }: SignInProviderProps) {
   const [state, dispatch] = useReducer(signInReducer, initialState);
+  const api = useApi();
 
   const handleSignInUser = (user: SignInUser) => signInUser(dispatch, user);
-  const handleSignOut = () => signOutUser(dispatch);
+  //const handleSignOut = () => signOutUser(dispatch);
+  const handleSignOut = async () => {
+    dispatch({ type: "fetch_start" });
+
+    try {
+      await api.get("/signout/");
+      await clearCookies();
+      dispatch({ type: "fetch_success" });
+    } catch (error) {
+      console.error(error);
+      dispatch({ type: "fetch_error", error: "Failed to sign out user" });
+    }
+  };
   const handleCheckAuth = async () => {
     const userObjCookie = await getCookie({ name: "userObj" });
 
