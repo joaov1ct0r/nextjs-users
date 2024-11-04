@@ -5,7 +5,7 @@ import SignInUser from "@/app/signin/interfaces/sign-in-user";
 import { State } from "@/app/signin/interfaces/state";
 import { Action } from "@/app/signin/interfaces/action";
 import { signInUser } from "@/app/signin/api/sign-in-user";
-import { signOutUser } from "@/app/signin/api/sign-out-user";
+//import { signOutUser } from "@/app/signin/api/sign-out-user";
 import { clearCookies, getCookie } from "@/app/utils/cookies";
 import { useApi } from "@/app/hooks/use-api";
 
