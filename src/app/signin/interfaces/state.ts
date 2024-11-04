@@ -1,8 +1,6 @@
-import User from "@/app/interfaces/user";
-
 export interface State {
+  authenticated: boolean;
   success: boolean | null;
   loading: boolean;
   error: string | null;
-  user: User | null;
 }

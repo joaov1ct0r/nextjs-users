@@ -6,10 +6,9 @@ import { State } from "@/app/signin/interfaces/state";
 import { Action } from "@/app/signin/interfaces/action";
 import { signInUser } from "@/app/signin/api/sign-in-user";
 import { signOutUser } from "@/app/signin/api/sign-out-user";
-import User from "@/app/interfaces/user";
 
 const initialState: State = {
-  user: null,
+  authenticated: false,
   success: null,
   error: null,
   loading: false,
@@ -25,17 +24,23 @@ function signInReducer(state: State, action: Action): State {
         loading: false,
         success: true,
         error: null,
-        user: action.user,
+        authenticated: true,
       };
     case "fetch_error":
-      return { ...state, loading: false, error: action.error, success: false };
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+        success: false,
+        authenticated: false,
+      };
     case "fetch_reset":
       return {
         ...state,
         loading: false,
         success: null,
         error: null,
-        user: null,
+        authenticated: false,
       };
     default:
       throw new Error("Unknown action type");
@@ -54,12 +59,10 @@ const SignInDispatchContext = createContext<
 
 interface SignInProviderProps {
   children: ReactNode;
-  user: User | null;
 }
 
-export function SignInProvider({ children, user }: SignInProviderProps) {
+export function SignInProvider({ children }: SignInProviderProps) {
   const [state, dispatch] = useReducer(signInReducer, initialState);
-  state.user = user;
 
   const handleSignInUser = (user: SignInUser) => signInUser(dispatch, user);
   const handleSignOut = () => signOutUser(dispatch);
@@ -67,7 +70,11 @@ export function SignInProvider({ children, user }: SignInProviderProps) {
   return (
     <SignInContext.Provider value={state}>
       <SignInDispatchContext.Provider
-        value={{ dispatch, signInUser: handleSignInUser, handleSignOut }}
+        value={{
+          dispatch,
+          signInUser: handleSignInUser,
+          handleSignOut,
+        }}
       >
         {children}
       </SignInDispatchContext.Provider>

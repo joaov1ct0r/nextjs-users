@@ -8,19 +8,19 @@ export async function signInUser(dispatch: Dispatch<Action>, user: SignInUser) {
   dispatch({ type: "fetch_start" });
   try {
     const response = await api.post("/signin/", user);
-
-    if (response.status !== 200) {
-      dispatch({ type: "fetch_error", error: "Failed to sign in user" });
-    }
-
     const authenticatedUser = response.data.resource;
 
     setCookie({
       user: JSON.stringify(authenticatedUser),
     });
-    dispatch({ type: "fetch_success", user: authenticatedUser });
+
+    dispatch({ type: "fetch_success", authenticated: true });
   } catch (error) {
     console.error(error);
-    dispatch({ type: "fetch_error", error: "Failed to sign in user" });
+    dispatch({
+      type: "fetch_error",
+      error: "Failed to sign in user",
+      authenticated: false,
+    });
   }
 }

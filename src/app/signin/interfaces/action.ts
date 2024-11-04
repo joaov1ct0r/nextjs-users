@@ -1,12 +1,10 @@
-import User from "@/app/interfaces/user";
-
 export type Action =
   | { type: "fetch_start" }
-  | { type: "fetch_success"; user: User }
-  | { type: "fetch_error"; error: string }
+  | { type: "fetch_success"; authenticated: boolean }
+  | { type: "fetch_error"; error: string; authenticated: boolean }
   | {
       type: "fetch_reset";
-      user: null;
+      authenticated: boolean;
       error: null;
       success: null;
       loading: boolean;

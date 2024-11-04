@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 export default function SignOutButton() {
   const router = useRouter();
-  const { user } = useSignInCtx();
+  const { authenticated } = useSignInCtx();
   const { handleSignOut } = useSignInDispatch();
 
   const onSignOut = () => {
@@ -18,7 +18,7 @@ export default function SignOutButton() {
     <button
       onClick={onSignOut}
       className={
-        user !== null
+        authenticated === true
           ? "justify-end items-center bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white px-2 border border-red-500 hover:border-transparent rounded"
           : ""
       }
