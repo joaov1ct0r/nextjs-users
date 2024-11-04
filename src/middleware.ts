@@ -15,24 +15,10 @@ export default function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/about", request.url));
   }
 
-  if (
-    !authorization &&
-    request.nextUrl.pathname !== "/" &&
-    request.nextUrl.pathname !== "/signup"
-  ) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
+  const cookiesNotFound = !authorization || !user;
 
   if (
-    !user &&
-    request.nextUrl.pathname !== "/" &&
-    request.nextUrl.pathname !== "/signup"
-  ) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
-
-  if (
-    !userObj &&
+    cookiesNotFound &&
     request.nextUrl.pathname !== "/" &&
     request.nextUrl.pathname !== "/signup"
   ) {
