@@ -13,6 +13,7 @@ import SignInUser from "@/app/signin/interfaces/sign-in-user";
 import { useSignInCtx } from "@/app/signin/hooks/use-sign-in";
 import { useSignInDispatch } from "@/app/signin/hooks/use-sign-in-dispatch";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -23,6 +24,20 @@ export default function LoginForm() {
 
   const { error, success } = useSignInCtx();
   const { signInUser } = useSignInDispatch();
+
+  const handleValidateFields = (user: SignInUser) => {
+    if (!user.username) {
+      toast.error("Field 'username' is obrigatory");
+      return false;
+    }
+
+    if (!user.password) {
+      toast.error("Field 'password' is obrigatory");
+      return false;
+    }
+
+    return true;
+  };
 
   const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -35,7 +50,8 @@ export default function LoginForm() {
 
   const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    signInUser(credentials);
+    const isAbleToSignInUser = handleValidateFields(credentials);
+    if (isAbleToSignInUser) signInUser(credentials);
   };
 
   const handleSignUp = () => {

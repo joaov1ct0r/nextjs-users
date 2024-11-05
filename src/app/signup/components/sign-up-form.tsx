@@ -19,6 +19,30 @@ export default function SignUpForm() {
   const { error, success } = useSignUpCtx();
   const { signUpUser } = useSignUpDispatch();
 
+  const handleValidateFields = (user: User) => {
+    if (!user.name) {
+      toast.error("Field 'name' is obrigatory");
+      return false;
+    }
+
+    if (!user.username) {
+      toast.error("Field 'username' is obrigatory");
+      return false;
+    }
+
+    if (!user.email) {
+      toast.error("Field 'email' is obrigatory");
+      return false;
+    }
+
+    if (!user.password) {
+      toast.error("Field 'password' is obrigatory");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
@@ -38,8 +62,8 @@ export default function SignUpForm() {
 
   const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    signUpUser(user);
-    clearUser();
+    const isAbleToSignUpUser = handleValidateFields(user);
+    if (isAbleToSignUpUser) signUpUser(user);
   };
 
   const handleCancelSignUp = (event: MouseEvent<HTMLButtonElement>) => {

@@ -7,18 +7,28 @@ import { useAboutCtx } from "@/app/about/hooks/use-about";
 import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
 import { User } from "@/app/about/interfaces/user";
 import { toast } from "react-toastify";
+import DeleteAccountModal from "@/app/about/components/delete-account-modal";
 
 export default function AboutForm() {
+  const [shouldShowDeleteAccountModal, setShouldShowDeleteAccountModal] =
+    useState<boolean>(false);
+  const { updateUser, getUser } = useAboutDispatch();
+  const { error, success, loading, user } = useAboutCtx();
+
   const [updatedUser, setUpdatedUser] = useState<User>({
-    id: "",
+    id: user?.id || "",
     name: "",
     username: "",
     password: "",
     email: "",
   });
 
-  const { updateUser, getUser } = useAboutDispatch();
-  const { error, success, loading, user } = useAboutCtx();
+  const handleSetShouldShowDeleteAccountModal = (
+    e: MouseEvent<HTMLButtonElement>,
+  ) => {
+    e.preventDefault();
+    setShouldShowDeleteAccountModal((prev) => !prev);
+  };
 
   const handleValidateFields = (user: User) => {
     if (!user.name) {
@@ -69,6 +79,9 @@ export default function AboutForm() {
 
   return (
     <div className="w-full max-w-xs">
+      {shouldShowDeleteAccountModal && (
+        <DeleteAccountModal shouldBeOpen={shouldShowDeleteAccountModal} />
+      )}
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <InputForm
           label="User id"
@@ -77,7 +90,7 @@ export default function AboutForm() {
           type="text"
           handleOnChange={handleFormChange}
           name="id"
-          value={updatedUser.id}
+          value={user?.id}
           disabled
         />
         <InputForm
@@ -123,6 +136,12 @@ export default function AboutForm() {
             model="success"
             placeholder="Update"
             handleOnClick={handleFormSubmit}
+          />
+          <ButtonForm
+            type="submit"
+            model="danger"
+            placeholder="Deactivate"
+            handleOnClick={handleSetShouldShowDeleteAccountModal}
           />
         </div>
       </form>

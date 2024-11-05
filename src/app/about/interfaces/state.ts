@@ -5,4 +5,5 @@ export interface State {
   loading: boolean;
   error: string | null;
   user: User | null;
+  shouldOpenDeleteAccountModal: boolean;
 }
