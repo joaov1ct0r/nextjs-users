@@ -6,6 +6,7 @@ import ButtonForm from "@/app/components/button-form";
 import { useAboutCtx } from "@/app/about/hooks/use-about";
 import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
 import { User } from "@/app/about/interfaces/user";
+import { toast } from "react-toastify";
 
 export default function AboutForm() {
   const [updatedUser, setUpdatedUser] = useState<User>({
@@ -19,6 +20,25 @@ export default function AboutForm() {
   const { updateUser, getUser } = useAboutDispatch();
   const { error, success, loading, user } = useAboutCtx();
 
+  const handleValidateFields = (user: User) => {
+    if (!user.name) {
+      toast.error("Field 'name' is obrigatory");
+      return false;
+    }
+
+    if (!user.username) {
+      toast.error("Field 'username' is obrigatory");
+      return false;
+    }
+
+    if (!user.email) {
+      toast.error("Field 'email' is obrigatory");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
@@ -30,7 +50,8 @@ export default function AboutForm() {
 
   const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    updateUser(updatedUser);
+    const isAbleToUpdateUser = handleValidateFields(updatedUser);
+    if (isAbleToUpdateUser) updateUser(updatedUser);
   };
 
   useEffect(() => {
