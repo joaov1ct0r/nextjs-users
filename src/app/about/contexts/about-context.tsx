@@ -84,6 +84,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
   const [shouldOpenDeleteAccountModal, setShouldOpenDeleteAccountModal] =
     useState<boolean>(false);
   const [state, dispatch] = useReducer(aboutReducer, initialState);
+  state.shouldOpenDeleteAccountModal = shouldOpenDeleteAccountModal;
   const api = useApi();
   const { dispatch: signInDispatch } = useSignInDispatch();
 
