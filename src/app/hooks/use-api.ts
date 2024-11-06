@@ -1,20 +1,16 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import { api } from "@/app/lib/axios";
+import { api, controller } from "@/app/lib/axios";
 import { clearCookies } from "@/app/utils/cookies";
 
 export const useApi = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const controller = new AbortController();
-    const { signal } = controller;
-
     api.interceptors.request.use(
       (config) => {
         if (config.method?.toUpperCase() === "OPTIONS") {
-          config.signal = signal;
           controller.abort();
         }
 
@@ -27,7 +23,10 @@ export const useApi = () => {
 
     const interceptor = api.interceptors.response.use(
       (response) => {
-        if (response.data.message) {
+        if (
+          response.data.message &&
+          response.config.method?.toUpperCase() !== "OPTIONS"
+        ) {
           toast.success(response.data.message);
           return response;
         }
