@@ -150,11 +150,17 @@ export function AboutProvider({ children }: AboutProviderProps) {
   const handleUpdateUser = async (user: User) => {
     dispatch({ type: "fetch_start" });
 
+    let userObj: User | null = null;
+    const userCookie = await getCookie({ name: "userObj" });
+
+    if (userCookie !== undefined) userObj = JSON.parse(userCookie.value);
+    if (userObj === null) return;
+
     const data: UserData = {
+      id: userObj.id,
       name: user.name,
       username: user.username,
       email: user.email,
-      id: user.id,
       password: undefined,
     };
 

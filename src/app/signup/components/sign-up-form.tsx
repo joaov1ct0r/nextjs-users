@@ -1,14 +1,22 @@
 "use client";
 
-import React, { ChangeEvent, useState, MouseEvent, useEffect } from "react";
+import React, {
+  ChangeEvent,
+  useState,
+  MouseEvent,
+  useEffect,
+  useCallback,
+} from "react";
 import InputForm from "@/app/components/input-form";
 import ButtonForm from "@/app/components/button-form";
 import { useSignUpCtx } from "@/app/signup/hooks/use-sign-up";
 import { useSignUpDispatch } from "@/app/signup/hooks/use-sign-up-dispatch";
 import User from "@/app/signup/interfaces/user";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function SignUpForm() {
+  const router = useRouter();
   const [user, setUser] = useState<User>({
     name: "",
     email: "",
@@ -18,6 +26,10 @@ export default function SignUpForm() {
 
   const { error, success } = useSignUpCtx();
   const { signUpUser } = useSignUpDispatch();
+
+  const memoizedHandleAfterSignUp = useCallback(() => {
+    router.push("/");
+  }, [router]);
 
   const handleValidateFields = (user: User) => {
     if (!user.name) {
@@ -74,8 +86,9 @@ export default function SignUpForm() {
   useEffect(() => {
     if (success !== null && success === true && error === null) {
       toast.success("User signed up with success!");
+      memoizedHandleAfterSignUp();
     }
-  }, [error, success]);
+  }, [error, success, memoizedHandleAfterSignUp]);
 
   return (
     <div className="w-full max-w-xs">
