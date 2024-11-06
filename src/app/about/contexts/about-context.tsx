@@ -105,7 +105,6 @@ export function AboutProvider({ children }: AboutProviderProps) {
     console.log("parsed userObj cookie");
 
     try {
-    } catch (error) {
       const response = await api.delete("/user/", {
         data: { userId: user?.id },
       });
@@ -121,6 +120,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
         dispatch({ type: "fetch_reset" });
         signInDispatch({ type: "fetch_reset" });
       }
+    } catch (error) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to deactivate user" });
     }
