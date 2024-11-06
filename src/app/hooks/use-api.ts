@@ -8,6 +8,23 @@ export const useApi = () => {
   const router = useRouter();
 
   useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    api.interceptors.request.use(
+      (config) => {
+        if (config.method?.toUpperCase() === "OPTIONS") {
+          config.signal = signal;
+          controller.abort();
+        }
+
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      },
+    );
+
     const interceptor = api.interceptors.response.use(
       (response) => {
         if (response.data.message) {
