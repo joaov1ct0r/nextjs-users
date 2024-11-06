@@ -181,11 +181,15 @@ export function AboutProvider({ children }: AboutProviderProps) {
       const response = await api.put("/user/", data);
 
       if (response?.status === 204) {
-        const updatedUser = response.data.resource;
+        const updatedUser: User = {
+          id: userObj.id,
+          name: data.name,
+          username: data.username,
+          email: data.email,
+          password: String(data.password),
+        };
 
-        setCookie({
-          user: JSON.stringify(updatedUser),
-        });
+        setCookie({ user: JSON.stringify(updatedUser) });
         dispatch({ type: "fetch_success", user: updatedUser });
       }
     } catch (error) {
