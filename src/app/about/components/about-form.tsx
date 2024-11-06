@@ -10,10 +10,9 @@ import { toast } from "react-toastify";
 import DeleteAccountModal from "@/app/about/components/delete-account-modal";
 
 export default function AboutForm() {
-  const [shouldShowDeleteAccountModal, setShouldShowDeleteAccountModal] =
-    useState<boolean>(false);
-  const { updateUser, getUser } = useAboutDispatch();
-  const { error, success, loading, user } = useAboutCtx();
+  const { updateUser, getUser, setOpenAccountModal } = useAboutDispatch();
+  const { error, success, loading, user, shouldOpenDeleteAccountModal } =
+    useAboutCtx();
 
   const [updatedUser, setUpdatedUser] = useState<User>({
     id: user?.id || "",
@@ -27,7 +26,7 @@ export default function AboutForm() {
     e: MouseEvent<HTMLButtonElement>,
   ) => {
     e.preventDefault();
-    setShouldShowDeleteAccountModal((prev) => !prev);
+    setOpenAccountModal();
   };
 
   const handleValidateFields = (user: User) => {
@@ -79,9 +78,7 @@ export default function AboutForm() {
 
   return (
     <div className="w-full max-w-xs">
-      {shouldShowDeleteAccountModal && (
-        <DeleteAccountModal shouldBeOpen={shouldShowDeleteAccountModal} />
-      )}
+      {shouldOpenDeleteAccountModal && <DeleteAccountModal />}
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <InputForm
           label="User id"
