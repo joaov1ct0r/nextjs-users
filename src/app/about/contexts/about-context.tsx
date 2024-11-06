@@ -51,6 +51,7 @@ function aboutReducer(state: State, action: Action): State {
         loading: false,
         error: null,
         user: null,
+        shouldOpenDeleteAccountModal: false,
       };
 
     default:
