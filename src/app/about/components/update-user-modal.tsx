@@ -18,10 +18,10 @@ export default function UpdateUserModal() {
   const { shouldOpenUpdateUserModal, user } = useAboutCtx();
   const [updatedUser, setUpdatedUser] = useState<User>({
     id: user?.id || "",
-    name: "",
-    username: "",
-    password: "",
-    email: "",
+    name: user?.name || "",
+    username: user?.username || "",
+    password: user?.password || "",
+    email: user?.email || "",
   });
 
   const { updateUser, setOpenUpdateUserModal } = useAboutDispatch();
