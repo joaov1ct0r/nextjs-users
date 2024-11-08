@@ -28,6 +28,7 @@ const initialState: State = {
   error: null,
   user: null,
   shouldOpenDeleteAccountModal: false,
+  shouldOpenUpdateUserModal: false,
 };
 
 function aboutReducer(state: State, action: Action): State {
@@ -52,6 +53,7 @@ function aboutReducer(state: State, action: Action): State {
         error: null,
         user: null,
         shouldOpenDeleteAccountModal: false,
+        shouldOpenUpdateUserModal: false,
       };
 
     default:
@@ -67,6 +69,7 @@ const AboutDispatchContext = createContext<
       getUser: () => void;
       deleteUser: () => void;
       setOpenAccountModal: () => void;
+      setOpenUpdateUserModal: () => void;
     }
   | undefined
 >(undefined);
@@ -84,13 +87,19 @@ interface IGetUserData {
 export function AboutProvider({ children }: AboutProviderProps) {
   const [shouldOpenDeleteAccountModal, setShouldOpenDeleteAccountModal] =
     useState<boolean>(false);
+  const [shouldOpenUpdateUserModal, setShouldOpenUpdateUserModal] =
+    useState<boolean>(false);
   const [state, dispatch] = useReducer(aboutReducer, initialState);
   state.shouldOpenDeleteAccountModal = shouldOpenDeleteAccountModal;
+  state.shouldOpenUpdateUserModal = shouldOpenUpdateUserModal;
   const api = useApi();
   const { dispatch: signInDispatch } = useSignInDispatch();
 
   const handleSetShouldOpenDeleteAccountModal = () =>
     setShouldOpenDeleteAccountModal(!shouldOpenDeleteAccountModal);
+
+  const handleSetShouldOpenUpdateUserModal = () =>
+    setShouldOpenUpdateUserModal(!shouldOpenUpdateUserModal);
 
   const handleDeleteUser = async () => {
     console.log("start delete");
@@ -207,6 +216,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
           getUser: handleGetUser,
           deleteUser: handleDeleteUser,
           setOpenAccountModal: handleSetShouldOpenDeleteAccountModal,
+          setOpenUpdateUserModal: handleSetShouldOpenUpdateUserModal,
         }}
       >
         {children}

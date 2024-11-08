@@ -6,4 +6,5 @@ export interface State {
   error: string | null;
   user: User | null;
   shouldOpenDeleteAccountModal: boolean;
+  shouldOpenUpdateUserModal: boolean;
 }
