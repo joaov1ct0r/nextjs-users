@@ -24,11 +24,21 @@ export default function UpdateUserModal() {
     email: user?.email || "",
   });
 
+  const handleClearUpdatedUser = () =>
+    setUpdatedUser({
+      id: user?.id || "",
+      name: "",
+      username: "",
+      email: "",
+      password: "",
+    });
+
   const { updateUser, setOpenUpdateUserModal } = useAboutDispatch();
 
   const handleOnCancelUpdateUserModal = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setOpenUpdateUserModal();
+    handleClearUpdatedUser();
   };
 
   const handleValidateFields = (user: User) => {
@@ -62,7 +72,11 @@ export default function UpdateUserModal() {
   const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const isAbleToUpdateUser = handleValidateFields(updatedUser);
-    if (isAbleToUpdateUser) updateUser(updatedUser);
+    if (isAbleToUpdateUser) {
+      updateUser(updatedUser);
+      setOpenUpdateUserModal();
+      handleClearUpdatedUser();
+    }
   };
 
   return (
