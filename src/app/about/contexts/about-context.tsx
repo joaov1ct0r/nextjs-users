@@ -102,30 +102,22 @@ export function AboutProvider({ children }: AboutProviderProps) {
     setShouldOpenUpdateUserModal(!shouldOpenUpdateUserModal);
 
   const handleDeleteUser = async () => {
-    console.log("start delete");
     dispatch({ type: "fetch_start" });
 
     let user: User | null = null;
     const userCookie = await getCookie({ name: "userObj" });
 
-    console.log("get userObj cookie");
-
     if (userCookie !== undefined) user = JSON.parse(userCookie.value);
-    console.log("parsed userObj cookie");
 
     try {
       const response = await api.delete("/user/", {
         data: { userId: user?.id },
       });
-      console.log("made delete request");
 
       if (response?.status === 204) {
         await api.get("/signout/");
-
-        console.log("made signout request");
         await clearCookies();
 
-        console.log("made clearCookies");
         dispatch({ type: "fetch_reset" });
         signInDispatch({ type: "fetch_reset" });
       }
@@ -200,6 +192,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
 
         setCookie({ user: JSON.stringify(updatedUser) });
         dispatch({ type: "fetch_success", user: updatedUser });
+        handleSetShouldOpenUpdateUserModal();
       }
     } catch (error) {
       console.error(error);

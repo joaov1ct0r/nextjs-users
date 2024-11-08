@@ -74,8 +74,6 @@ export default function UpdateUserModal() {
     const isAbleToUpdateUser = handleValidateFields(updatedUser);
     if (isAbleToUpdateUser) {
       updateUser(updatedUser);
-      setOpenUpdateUserModal();
-      handleClearUpdatedUser();
     }
   };
 
