@@ -51,76 +51,79 @@ export default function AboutForm() {
 
   return (
     <div className="w-full max-w-xs">
-      {showLoading && <Loading />}
       {shouldOpenUpdateUserModal && <UpdateUserModal />}
       {shouldOpenDeleteAccountModal && <DeleteAccountModal />}
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <InputForm
-          label="User id"
-          placeholder={user?.id}
-          disabled
-          id="id"
-          type="text"
-          handleOnChange={() => null}
-          name="id"
-          value={user?.id}
-        />
-        <InputForm
-          disabled
-          label="User name"
-          placeholder={user?.name}
-          id="name"
-          type="text"
-          handleOnChange={() => null}
-          name="name"
-          value={user?.name}
-        />
-        <InputForm
-          disabled
-          label="User email"
-          placeholder={user?.email}
-          id="email"
-          type="email"
-          handleOnChange={() => null}
-          name="email"
-          value={user?.email}
-        />
-        <InputForm
-          disabled
-          label="User username"
-          placeholder={user?.username}
-          id="username"
-          type="text"
-          handleOnChange={() => null}
-          name="username"
-          value={user?.username}
-        />
-        <InputForm
-          disabled
-          label="User password"
-          placeholder="**********"
-          id="password"
-          type="password"
-          handleOnChange={() => null}
-          name="password"
-          value={user?.password}
-        />
+      {showLoading ? (
+        <Loading />
+      ) : (
+        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <InputForm
+            label="User id"
+            placeholder={user?.id}
+            disabled
+            id="id"
+            type="text"
+            handleOnChange={() => null}
+            name="id"
+            value={user?.id}
+          />
+          <InputForm
+            disabled
+            label="User name"
+            placeholder={user?.name}
+            id="name"
+            type="text"
+            handleOnChange={() => null}
+            name="name"
+            value={user?.name}
+          />
+          <InputForm
+            disabled
+            label="User email"
+            placeholder={user?.email}
+            id="email"
+            type="email"
+            handleOnChange={() => null}
+            name="email"
+            value={user?.email}
+          />
+          <InputForm
+            disabled
+            label="User username"
+            placeholder={user?.username}
+            id="username"
+            type="text"
+            handleOnChange={() => null}
+            name="username"
+            value={user?.username}
+          />
+          <InputForm
+            disabled
+            label="User password"
+            placeholder="**********"
+            id="password"
+            type="password"
+            handleOnChange={() => null}
+            name="password"
+            value={user?.password}
+          />
 
-        <div className="flex flex-row items-center justify-around">
-          <ButtonForm
-            type="submit"
-            model="success"
-            placeholder="Update"
-            handleOnClick={handleSetShouldOpenUpdateUserModal}
-          />
-          <ButtonForm
-            type="submit"
-            model="danger"
-            placeholder="Deactivate"
-            handleOnClick={handleSetShouldShowDeleteAccountModal}
-          />
-        </div>
-      </form>
+          <div className="flex flex-row items-center justify-around">
+            <ButtonForm
+              type="submit"
+              model="success"
+              placeholder="Update"
+              handleOnClick={handleSetShouldOpenUpdateUserModal}
+            />
+            <ButtonForm
+              type="submit"
+              model="danger"
+              placeholder="Deactivate"
+              handleOnClick={handleSetShouldShowDeleteAccountModal}
+            />
+          </div>
+        </form>
+      )}
     </div>
   );
 }
