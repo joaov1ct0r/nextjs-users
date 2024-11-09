@@ -139,7 +139,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
 
   const handleGetUser = async () => {
     dispatch({ type: "fetch_start" });
-    handleSetShowLoading();
+    setShowLoading(true);
 
     let user: IGetUserData | null = null;
     const userCookie = await getCookie({ name: "userObj" });
@@ -165,7 +165,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to get user" });
     } finally {
-      handleSetShowLoading();
+      setShowLoading(false);
     }
   };
 
