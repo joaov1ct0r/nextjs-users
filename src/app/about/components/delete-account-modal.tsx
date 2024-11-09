@@ -11,10 +11,11 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
 import { useAboutCtx } from "@/app/about/hooks/use-about";
 import ButtonForm from "@/app/components/button-form";
+import Loading from "@/app/about/components/loading";
 
 export default function DeleteAccountModal() {
   const { setOpenAccountModal, deleteUser } = useAboutDispatch();
-  const { shouldOpenDeleteAccountModal } = useAboutCtx();
+  const { shouldOpenDeleteAccountModal, showLoading } = useAboutCtx();
 
   const handleOnDeleteUser = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -69,18 +70,24 @@ export default function DeleteAccountModal() {
               </div>
             </div>
             <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-              <ButtonForm
-                type="submit"
-                model="danger"
-                placeholder="Deactivate"
-                handleOnClick={handleOnDeleteUser}
-              />
-              <ButtonForm
-                type="submit"
-                model="warning"
-                placeholder="Cancel"
-                handleOnClick={handleOnCancelDeleteUser}
-              />
+              {showLoading ? (
+                <Loading />
+              ) : (
+                <>
+                  <ButtonForm
+                    type="submit"
+                    model="danger"
+                    placeholder="Deactivate"
+                    handleOnClick={handleOnDeleteUser}
+                  />
+                  <ButtonForm
+                    type="submit"
+                    model="warning"
+                    placeholder="Cancel"
+                    handleOnClick={handleOnCancelDeleteUser}
+                  />
+                </>
+              )}
             </div>
           </DialogPanel>
         </div>

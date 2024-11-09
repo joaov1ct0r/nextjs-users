@@ -110,7 +110,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
 
   const handleDeleteUser = async () => {
     dispatch({ type: "fetch_start" });
-    handleSetShowLoading();
+    setShowLoading(true);
 
     let user: User | null = null;
     const userCookie = await getCookie({ name: "userObj" });
@@ -128,12 +128,12 @@ export function AboutProvider({ children }: AboutProviderProps) {
 
         dispatch({ type: "fetch_reset" });
         signInDispatch({ type: "fetch_reset" });
-        handleSetShowLoading();
       }
     } catch (error) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to deactivate user" });
-      handleSetShowLoading();
+    } finally {
+      setShowLoading(false);
     }
   };
 
@@ -171,7 +171,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
 
   const handleUpdateUser = async (user: User) => {
     dispatch({ type: "fetch_start" });
-    handleSetShowLoading();
+    setShowLoading(true);
 
     let userObj: User | null = null;
     const userCookie = await getCookie({ name: "userObj" });
@@ -205,13 +205,13 @@ export function AboutProvider({ children }: AboutProviderProps) {
 
         setCookie({ user: JSON.stringify(updatedUser) });
         dispatch({ type: "fetch_success", user: updatedUser });
-        handleSetShowLoading();
         handleSetShouldOpenUpdateUserModal();
       }
     } catch (error) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to update user" });
-      handleSetShowLoading();
+    } finally {
+      setShowLoading(false);
     }
   };
 
