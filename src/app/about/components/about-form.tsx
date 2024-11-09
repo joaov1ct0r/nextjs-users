@@ -7,6 +7,7 @@ import { useAboutCtx } from "@/app/about/hooks/use-about";
 import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
 import DeleteAccountModal from "@/app/about/components/delete-account-modal";
 import UpdateUserModal from "@/app/about/components/update-user-modal";
+import Loading from "@/app/about/components/loading";
 
 export default function AboutForm() {
   const { getUser, setOpenAccountModal, setOpenUpdateUserModal } =
@@ -18,6 +19,7 @@ export default function AboutForm() {
     user,
     shouldOpenDeleteAccountModal,
     shouldOpenUpdateUserModal,
+    showLoading,
   } = useAboutCtx();
 
   const handleSetShouldOpenUpdateUserModal = (
@@ -49,6 +51,7 @@ export default function AboutForm() {
 
   return (
     <div className="w-full max-w-xs">
+      {showLoading && <Loading />}
       {shouldOpenUpdateUserModal && <UpdateUserModal />}
       {shouldOpenDeleteAccountModal && <DeleteAccountModal />}
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">

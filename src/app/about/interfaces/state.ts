@@ -7,4 +7,5 @@ export interface State {
   user: User | null;
   shouldOpenDeleteAccountModal: boolean;
   shouldOpenUpdateUserModal: boolean;
+  showLoading: boolean;
 }

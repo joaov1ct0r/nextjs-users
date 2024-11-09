@@ -29,6 +29,7 @@ const initialState: State = {
   user: null,
   shouldOpenDeleteAccountModal: false,
   shouldOpenUpdateUserModal: false,
+  showLoading: false,
 };
 
 function aboutReducer(state: State, action: Action): State {
@@ -54,6 +55,7 @@ function aboutReducer(state: State, action: Action): State {
         user: null,
         shouldOpenDeleteAccountModal: false,
         shouldOpenUpdateUserModal: false,
+        showLoading: false,
       };
 
     default:
@@ -70,6 +72,7 @@ const AboutDispatchContext = createContext<
       deleteUser: () => void;
       setOpenAccountModal: () => void;
       setOpenUpdateUserModal: () => void;
+      setShowLoading: () => void;
     }
   | undefined
 >(undefined);
@@ -89,11 +92,15 @@ export function AboutProvider({ children }: AboutProviderProps) {
     useState<boolean>(false);
   const [shouldOpenUpdateUserModal, setShouldOpenUpdateUserModal] =
     useState<boolean>(false);
+  const [showLoading, setShowLoading] = useState<boolean>(false);
   const [state, dispatch] = useReducer(aboutReducer, initialState);
   state.shouldOpenDeleteAccountModal = shouldOpenDeleteAccountModal;
   state.shouldOpenUpdateUserModal = shouldOpenUpdateUserModal;
+  state.showLoading = showLoading;
   const api = useApi();
   const { dispatch: signInDispatch } = useSignInDispatch();
+
+  const handleSetShowLoading = () => setShowLoading(!showLoading);
 
   const handleSetShouldOpenDeleteAccountModal = () =>
     setShouldOpenDeleteAccountModal(!shouldOpenDeleteAccountModal);
@@ -103,6 +110,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
 
   const handleDeleteUser = async () => {
     dispatch({ type: "fetch_start" });
+    handleSetShowLoading();
 
     let user: User | null = null;
     const userCookie = await getCookie({ name: "userObj" });
@@ -120,15 +128,18 @@ export function AboutProvider({ children }: AboutProviderProps) {
 
         dispatch({ type: "fetch_reset" });
         signInDispatch({ type: "fetch_reset" });
+        handleSetShowLoading();
       }
     } catch (error) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to deactivate user" });
+      handleSetShowLoading();
     }
   };
 
   const handleGetUser = async () => {
     dispatch({ type: "fetch_start" });
+    handleSetShowLoading();
 
     let user: IGetUserData | null = null;
     const userCookie = await getCookie({ name: "userObj" });
@@ -148,17 +159,19 @@ export function AboutProvider({ children }: AboutProviderProps) {
 
       if (response?.status === 200) {
         const user = response.data.resource[0];
-
         dispatch({ type: "fetch_success", user });
       }
     } catch (error) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to get user" });
+    } finally {
+      handleSetShowLoading();
     }
   };
 
   const handleUpdateUser = async (user: User) => {
     dispatch({ type: "fetch_start" });
+    handleSetShowLoading();
 
     let userObj: User | null = null;
     const userCookie = await getCookie({ name: "userObj" });
@@ -192,11 +205,13 @@ export function AboutProvider({ children }: AboutProviderProps) {
 
         setCookie({ user: JSON.stringify(updatedUser) });
         dispatch({ type: "fetch_success", user: updatedUser });
+        handleSetShowLoading();
         handleSetShouldOpenUpdateUserModal();
       }
     } catch (error) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to update user" });
+      handleSetShowLoading();
     }
   };
 
@@ -210,6 +225,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
           deleteUser: handleDeleteUser,
           setOpenAccountModal: handleSetShouldOpenDeleteAccountModal,
           setOpenUpdateUserModal: handleSetShouldOpenUpdateUserModal,
+          setShowLoading: handleSetShowLoading,
         }}
       >
         {children}
