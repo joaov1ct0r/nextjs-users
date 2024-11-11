@@ -14,32 +14,32 @@ export const useApi = () => {
           response.data.message &&
           response.config.method?.toUpperCase() !== "OPTIONS"
         ) {
-          toast.success(response.data.message);
+          toast.success(response.data.message, { toastId: "success1" });
           return Promise.resolve(response);
         }
 
-        toast.success("Success");
+        toast.success("Success", { toastId: "success1" });
         return Promise.resolve(response);
       },
       async (error) => {
         if (error?.response?.status === 401) {
-          toast.error("Unauthorized");
+          toast.error("Unauthorized", { toastId: "error1" });
           return Promise.reject(error);
         }
 
         if (error?.response?.status === 403) {
-          toast.error("Forbidden");
+          toast.error("Forbidden", { toastId: "error1" });
           await clearCookies();
           router.push("/");
           return Promise.reject(error);
         }
 
         if (error?.response?.data?.message) {
-          toast.error(error.response.data.message);
+          toast.error(error.response.data.message, { toastId: "error1" });
           return Promise.reject(error);
         }
 
-        toast.error("Failed");
+        toast.error("Failed", { toastId: "error1" });
         return Promise.reject(error);
       },
     );
