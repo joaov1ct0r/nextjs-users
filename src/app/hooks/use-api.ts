@@ -10,6 +10,7 @@ export const useApi = () => {
   useEffect(() => {
     api.interceptors.request.use(
       (config) => {
+        console.log("config", config);
         if (config.method?.toUpperCase() === "OPTIONS") {
           controller.abort();
         }
@@ -17,12 +18,14 @@ export const useApi = () => {
         return config;
       },
       (error) => {
+        console.log("config error", error);
         return Promise.reject(error);
       },
     );
 
     const interceptor = api.interceptors.response.use(
       (response) => {
+        console.log("response", response);
         if (
           response.data.message &&
           response.config.method?.toUpperCase() !== "OPTIONS"
@@ -35,6 +38,7 @@ export const useApi = () => {
         return response;
       },
       async (error) => {
+        console.log("response error", error);
         if (error?.response?.status === 401) {
           toast.error("Unauthorized");
           return;
