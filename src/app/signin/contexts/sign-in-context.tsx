@@ -1,12 +1,17 @@
 "use client";
 
-import { createContext, useReducer, ReactNode, Dispatch } from "react";
+import {
+  createContext,
+  useReducer,
+  ReactNode,
+  Dispatch,
+  useState,
+} from "react";
 import SignInUser from "@/app/signin/interfaces/sign-in-user";
 import { State } from "@/app/signin/interfaces/state";
 import { Action } from "@/app/signin/interfaces/action";
-import { signInUser } from "@/app/signin/api/sign-in-user";
-//import { signOutUser } from "@/app/signin/api/sign-out-user";
-import { clearCookies, getCookie } from "@/app/utils/cookies";
+//import { signInUser } from "@/app/signin/api/sign-in-user";
+import { clearCookies, getCookie, setCookie } from "@/app/utils/cookies";
 import { useApi } from "@/app/hooks/use-api";
 
 const initialState: State = {
@@ -14,6 +19,7 @@ const initialState: State = {
   success: null,
   error: null,
   loading: false,
+  showLoading: false,
 };
 
 function signInReducer(state: State, action: Action): State {
@@ -43,6 +49,7 @@ function signInReducer(state: State, action: Action): State {
         success: null,
         error: null,
         authenticated: false,
+        showLoading: false,
       };
     default:
       throw new Error("Unknown action type");
@@ -56,6 +63,8 @@ const SignInDispatchContext = createContext<
       signInUser: (user: SignInUser) => void;
       handleSignOut: () => void;
       checkAuth: () => Promise<void>;
+      resetPassword: (email: string) => Promise<void>;
+      setShowLoading: () => void;
     }
   | undefined
 >(undefined);
@@ -65,11 +74,37 @@ interface SignInProviderProps {
 }
 
 export function SignInProvider({ children }: SignInProviderProps) {
+  const [showLoading, setShowLoading] = useState<boolean>(false);
   const [state, dispatch] = useReducer(signInReducer, initialState);
   const api = useApi();
+  state.showLoading = showLoading;
 
-  const handleSignInUser = (user: SignInUser) => signInUser(dispatch, user);
-  //const handleSignOut = () => signOutUser(dispatch);
+  const handleSignInUser = async (user: SignInUser) => {
+    setShowLoading(true);
+    dispatch({ type: "fetch_start" });
+
+    try {
+      const response = await api.post("/signin/", user);
+      const authenticatedUser = response.data.resource;
+
+      await setCookie({
+        user: JSON.stringify(authenticatedUser),
+      });
+
+      dispatch({ type: "fetch_success" });
+    } catch (error) {
+      console.error(error);
+      dispatch({
+        type: "fetch_error",
+        error: "Failed to sign in user",
+      });
+    } finally {
+      setShowLoading(false);
+    }
+
+    //signInUser(dispatch, user);
+  };
+
   const handleSignOut = async () => {
     dispatch({ type: "fetch_start" });
 
@@ -82,6 +117,24 @@ export function SignInProvider({ children }: SignInProviderProps) {
       dispatch({ type: "fetch_error", error: "Failed to sign out user" });
     }
   };
+
+  const handleResetPassword = async (email: string) => {
+    setShowLoading(true);
+    dispatch({ type: "fetch_start" });
+
+    try {
+      await api.put("/reset_password/", { email });
+      dispatch({ type: "fetch_success" });
+    } catch (error) {
+      console.error(error);
+      dispatch({ type: "fetch_error", error: "Failed to reset password" });
+    } finally {
+      setShowLoading(false);
+    }
+  };
+
+  const handleSetShowLoading = () => setShowLoading(!showLoading);
+
   const handleCheckAuth = async () => {
     const userObjCookie = await getCookie({ name: "userObj" });
 
@@ -96,10 +149,12 @@ export function SignInProvider({ children }: SignInProviderProps) {
     <SignInContext.Provider value={state}>
       <SignInDispatchContext.Provider
         value={{
+          setShowLoading: handleSetShowLoading,
           dispatch,
           signInUser: handleSignInUser,
           handleSignOut,
           checkAuth: handleCheckAuth,
+          resetPassword: handleResetPassword,
         }}
       >
         {children}
