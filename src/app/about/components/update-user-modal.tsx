@@ -13,7 +13,6 @@ import { useAboutCtx } from "@/app/about/hooks/use-about";
 import ButtonForm from "@/app/components/button-form";
 import InputForm from "@/app/components/input-form";
 import { toast } from "react-toastify";
-import Loading from "@/app/about/components/loading";
 
 export default function UpdateUserModal() {
   const { shouldOpenUpdateUserModal, user, showLoading } = useAboutCtx();
@@ -156,24 +155,22 @@ export default function UpdateUserModal() {
               </div>
             </div>
             <div className="flex flex-row justify-around items-center bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-              {showLoading ? (
-                <Loading />
-              ) : (
-                <>
-                  <ButtonForm
-                    type="submit"
-                    model="success"
-                    placeholder="Update"
-                    handleOnClick={handleFormSubmit}
-                  />
-                  <ButtonForm
-                    type="submit"
-                    model="warning"
-                    placeholder="Cancel"
-                    handleOnClick={handleOnCancelUpdateUserModal}
-                  />
-                </>
-              )}
+              <>
+                <ButtonForm
+                  disabled={showLoading}
+                  type="submit"
+                  model={showLoading ? "disabled" : "success"}
+                  placeholder="Update"
+                  handleOnClick={handleFormSubmit}
+                />
+                <ButtonForm
+                  disabled={showLoading}
+                  type="submit"
+                  model={showLoading ? "disabled" : "warning"}
+                  placeholder="Cancel"
+                  handleOnClick={handleOnCancelUpdateUserModal}
+                />
+              </>
             </div>
           </DialogPanel>
         </div>

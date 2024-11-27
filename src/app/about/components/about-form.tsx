@@ -110,14 +110,16 @@ export default function AboutForm() {
 
           <div className="flex flex-row items-center justify-around">
             <ButtonForm
+              disabled={showLoading}
               type="submit"
-              model="success"
+              model={showLoading ? "disabled" : "success"}
               placeholder="Update"
               handleOnClick={handleSetShouldOpenUpdateUserModal}
             />
             <ButtonForm
+              disabled={showLoading}
               type="submit"
-              model="danger"
+              model={showLoading ? "disabled" : "danger"}
               placeholder="Deactivate"
               handleOnClick={handleSetShouldShowDeleteAccountModal}
             />

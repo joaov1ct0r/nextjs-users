@@ -1,7 +1,7 @@
 import React, { ButtonHTMLAttributes, MouseEvent } from "react";
 
 interface ButtonLinkProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  model: "danger" | "warning" | "success";
+  model: "danger" | "warning" | "success" | "disabled";
   placeholder: string;
   handleOnClick: (event: MouseEvent<HTMLButtonElement>) => void;
 }
@@ -18,6 +18,10 @@ const buttonTypeClass = {
   success: {
     color: "bg-green-500",
     hover: "hover:bg-green-700",
+  },
+  disabled: {
+    color: "bg-gray-500",
+    hover: "hover: bg-gray-700",
   },
 };
 

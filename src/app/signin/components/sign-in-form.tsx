@@ -14,7 +14,6 @@ import { useSignInCtx } from "@/app/signin/hooks/use-sign-in";
 import { useSignInDispatch } from "@/app/signin/hooks/use-sign-in-dispatch";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import Loading from "@/app/components/loading";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -71,45 +70,43 @@ export default function LoginForm() {
 
   return (
     <div className="w-full max-w-xs">
-      {showLoading ? (
-        <Loading />
-      ) : (
-        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <InputForm
-            label="User username"
-            placeholder="User username"
-            id="username"
-            type="text"
-            handleOnChange={handleFormChange}
-            name="username"
-            value={credentials.username}
-          />
-          <InputForm
-            label="User Password"
-            placeholder="User password"
-            id="password"
-            type="password"
-            handleOnChange={handleFormChange}
-            name="password"
-            value={credentials.password}
-          />
+      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <InputForm
+          label="User username"
+          placeholder="User username"
+          id="username"
+          type="text"
+          handleOnChange={handleFormChange}
+          name="username"
+          value={credentials.username}
+        />
+        <InputForm
+          label="User Password"
+          placeholder="User password"
+          id="password"
+          type="password"
+          handleOnChange={handleFormChange}
+          name="password"
+          value={credentials.password}
+        />
 
-          <div className="flex items-center justify-between">
-            <ButtonForm
-              model="success"
-              placeholder="Sign in"
-              type="button"
-              handleOnClick={handleFormSubmit}
-            />
-            <ButtonForm
-              type="button"
-              model="warning"
-              placeholder="Sign up"
-              handleOnClick={handleSignUp}
-            />
-          </div>
-        </form>
-      )}
+        <div className="flex items-center justify-between">
+          <ButtonForm
+            disabled={showLoading}
+            model={showLoading ? "disabled" : "success"}
+            placeholder="Sign in"
+            type="button"
+            handleOnClick={handleFormSubmit}
+          />
+          <ButtonForm
+            disabled={showLoading}
+            type="button"
+            model={showLoading ? "disabled" : "warning"}
+            placeholder="Sign up"
+            handleOnClick={handleSignUp}
+          />
+        </div>
+      </form>
     </div>
   );
 }
