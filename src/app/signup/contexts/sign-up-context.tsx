@@ -1,15 +1,22 @@
 "use client";
 
-import { createContext, useReducer, ReactNode, Dispatch } from "react";
+import {
+  createContext,
+  useReducer,
+  ReactNode,
+  Dispatch,
+  useState,
+} from "react";
 import User from "@/app/signup/interfaces/user";
 import State from "@/app/signup/interfaces/state";
 import { Action } from "@/app/signup/interfaces/action";
-import signUpUser from "@/app/signup/api/sign-up-user";
+import { useApi } from "@/app/hooks/use-api";
 
 const initialState: State = {
   success: null,
   loading: false,
   error: null,
+  showLoading: false,
 };
 
 function signUpReducer(state: State, action: Action): State {
@@ -39,9 +46,26 @@ interface SignUpProviderProps {
 }
 
 export function SignUpProvider({ children }: SignUpProviderProps) {
+  const [showLoading, setShowLoading] = useState<boolean>(false);
   const [state, dispatch] = useReducer(signUpReducer, initialState);
+  const api = useApi();
+  state.showLoading = showLoading;
 
-  const handleSignUpUser = (user: User) => signUpUser(dispatch, user);
+  const handleSignUpUser = async (user: User) => {
+    setShowLoading(true);
+    dispatch({ type: "fetch_start" });
+
+    try {
+      await api.post("/signup/", user);
+
+      dispatch({ type: "fetch_success" });
+    } catch (e) {
+      console.error(e);
+      dispatch({ type: "fetch_error", error: "Failed to sign up user" });
+    } finally {
+      setShowLoading(false);
+    }
+  };
 
   return (
     <SignUpContext.Provider value={state}>

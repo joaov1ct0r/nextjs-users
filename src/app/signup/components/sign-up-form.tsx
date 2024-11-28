@@ -24,7 +24,7 @@ export default function SignUpForm() {
     username: "",
   });
 
-  const { error, success } = useSignUpCtx();
+  const { error, success, showLoading } = useSignUpCtx();
   const { signUpUser } = useSignUpDispatch();
 
   const memoizedHandleAfterSignUp = useCallback(() => {
@@ -132,15 +132,17 @@ export default function SignUpForm() {
 
         <div className="flex items-center justify-between">
           <ButtonForm
+            disabled={showLoading}
             handleOnClick={handleFormSubmit}
             type="button"
-            model="success"
+            model={showLoading ? "disabled" : "success"}
             placeholder="Sign up"
           />
           <ButtonForm
+            disabled={showLoading}
             handleOnClick={handleCancelSignUp}
             type="button"
-            model="danger"
+            model={showLoading ? "disabled" : "danger"}
             placeholder="Cancel"
           />
         </div>
