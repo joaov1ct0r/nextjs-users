@@ -73,9 +73,9 @@ export default function LoginForm() {
   //<form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
 
   return (
-    <div className="w-full max-w-xs">
+    <div className="w-full h-full flex justify-center items-center">
       {shouldOpenForgetPasswordModal && <ForgetPasswordModal />}
-      <form className="bg-white shadow-md rounded w-1/2 h-1/2">
+      <form className="w-1/3 h-1/4 bg-white shadow-md rounded px-8 pt-6 pb-8">
         <InputForm
           label="User username"
           placeholder="User username"
