@@ -1,3 +1,5 @@
+"use client";
+
 import { useAboutCtx } from "@/app/about/hooks/use-about";
 import ButtonForm from "@/app/components/button-form";
 
