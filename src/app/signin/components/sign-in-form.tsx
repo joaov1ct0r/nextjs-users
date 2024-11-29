@@ -70,10 +70,12 @@ export default function LoginForm() {
     }
   }, [memoizedHandleSignIn, error, success]);
 
+  //<form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+
   return (
     <div className="w-full max-w-xs">
       {shouldOpenForgetPasswordModal && <ForgetPasswordModal />}
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <form className="bg-white shadow-md rounded w-1/2 h-1/2">
         <InputForm
           label="User username"
           placeholder="User username"
