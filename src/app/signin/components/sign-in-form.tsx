@@ -93,7 +93,7 @@ export default function LoginForm() {
           value={credentials.password}
         />
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-evenly">
           <ButtonForm
             disabled={showLoading}
             model={showLoading ? "disabled" : "success"}

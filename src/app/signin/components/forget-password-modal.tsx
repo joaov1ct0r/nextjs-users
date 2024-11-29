@@ -38,6 +38,8 @@ export default function ForgetPasswordModal() {
 
     if (isAbleToResetPassword) {
       resetPassword(email);
+      setOpenForgetPasswordModal();
+      handleClearEmail();
     }
   };
 
