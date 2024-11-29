@@ -20,6 +20,7 @@ const initialState: State = {
   error: null,
   loading: false,
   showLoading: false,
+  shouldOpenForgetPasswordModal: false,
 };
 
 function signInReducer(state: State, action: Action): State {
@@ -50,6 +51,7 @@ function signInReducer(state: State, action: Action): State {
         error: null,
         authenticated: false,
         showLoading: false,
+        shouldOpenForgetPasswordModal: false,
       };
     default:
       throw new Error("Unknown action type");
@@ -65,6 +67,7 @@ const SignInDispatchContext = createContext<
       checkAuth: () => Promise<void>;
       resetPassword: (email: string) => Promise<void>;
       setShowLoading: () => void;
+      setOpenForgetPasswordModal: () => void;
     }
   | undefined
 >(undefined);
@@ -75,9 +78,15 @@ interface SignInProviderProps {
 
 export function SignInProvider({ children }: SignInProviderProps) {
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  const [shouldOpenForgetPasswordModal, setShouldOpenForgetPasswordModal] =
+    useState<boolean>(false);
   const [state, dispatch] = useReducer(signInReducer, initialState);
   const api = useApi();
   state.showLoading = showLoading;
+  state.shouldOpenForgetPasswordModal = shouldOpenForgetPasswordModal;
+
+  const handleSetShouldOpenForgetPasswordModal = () =>
+    setShouldOpenForgetPasswordModal(!shouldOpenForgetPasswordModal);
 
   const handleSignInUser = async (user: SignInUser) => {
     setShowLoading(true);
@@ -155,6 +164,7 @@ export function SignInProvider({ children }: SignInProviderProps) {
           handleSignOut,
           checkAuth: handleCheckAuth,
           resetPassword: handleResetPassword,
+          setOpenForgetPasswordModal: handleSetShouldOpenForgetPasswordModal,
         }}
       >
         {children}

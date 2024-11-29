@@ -14,6 +14,7 @@ import { useSignInCtx } from "@/app/signin/hooks/use-sign-in";
 import { useSignInDispatch } from "@/app/signin/hooks/use-sign-in-dispatch";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import ForgetPasswordModal from "@/app/signin/components/forget-password-modal";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -22,8 +23,9 @@ export default function LoginForm() {
     password: "",
   });
 
-  const { error, success, showLoading } = useSignInCtx();
-  const { signInUser } = useSignInDispatch();
+  const { error, success, showLoading, shouldOpenForgetPasswordModal } =
+    useSignInCtx();
+  const { signInUser, setOpenForgetPasswordModal } = useSignInDispatch();
 
   const handleValidateFields = (user: SignInUser) => {
     if (!user.username) {
@@ -70,6 +72,7 @@ export default function LoginForm() {
 
   return (
     <div className="w-full max-w-xs">
+      {shouldOpenForgetPasswordModal && <ForgetPasswordModal />}
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <InputForm
           label="User username"
@@ -104,6 +107,13 @@ export default function LoginForm() {
             model={showLoading ? "disabled" : "warning"}
             placeholder="Sign up"
             handleOnClick={handleSignUp}
+          />
+          <ButtonForm
+            disabled={showLoading}
+            type="button"
+            model={showLoading ? "disabled" : "warning"}
+            placeholder="Forget password"
+            handleOnClick={setOpenForgetPasswordModal}
           />
         </div>
       </form>
