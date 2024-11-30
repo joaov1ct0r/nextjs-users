@@ -71,11 +71,22 @@ export function SignUpProvider({ children }: SignUpProviderProps) {
         formData.append("file", user.file);
       }
 
-      await api.post("/signup/", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      await api.post(
+        "/signup/",
+        {
+          user: {
+            email: user.email,
+            username: user.username,
+            name: user.name,
+            password: user.password,
+          },
         },
-      });
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
 
       dispatch({ type: "fetch_success" });
     } catch (e) {
