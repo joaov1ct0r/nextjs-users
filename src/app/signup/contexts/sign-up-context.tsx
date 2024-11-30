@@ -56,10 +56,18 @@ export function SignUpProvider({ children }: SignUpProviderProps) {
     dispatch({ type: "fetch_start" });
 
     try {
-      await api.postForm("/signup/", {
-        user: user,
-        file: user.file,
-      });
+      await api.postForm(
+        "/signup/",
+        {
+          user: user,
+          file: user.file,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
 
       dispatch({ type: "fetch_success" });
     } catch (e) {
