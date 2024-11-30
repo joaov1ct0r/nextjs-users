@@ -14,14 +14,17 @@ import { useSignUpDispatch } from "@/app/signup/hooks/use-sign-up-dispatch";
 import User from "@/app/signup/interfaces/user";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function SignUpForm() {
   const router = useRouter();
+  const [, setImgSrc] = useState<string>("");
   const [user, setUser] = useState<User>({
     name: "",
     email: "",
     password: "",
     username: "",
+    file: null,
   });
 
   const { error, success, showLoading } = useSignUpCtx();
@@ -70,6 +73,7 @@ export default function SignUpForm() {
       username: "",
       email: "",
       password: "",
+      file: null,
     });
 
   const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
@@ -83,6 +87,17 @@ export default function SignUpForm() {
     clearUser();
   };
 
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const url = URL.createObjectURL(event.target.files[0]);
+      setImgSrc(url);
+      setUser({
+        ...user,
+        ["file"]: event.target.files[0],
+      });
+    }
+  };
+
   useEffect(() => {
     if (success !== null && success === true && error === null) {
       toast.success("User signed up with success!");
@@ -93,6 +108,29 @@ export default function SignUpForm() {
   return (
     <div className="w-full max-w-xs">
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <Image
+          alt="User profile image"
+          src={(() => {
+            if (user && user.file) {
+              const url = URL.createObjectURL(user.file);
+              return url;
+            }
+
+            return "/images/default_avatar.png";
+          })()}
+          quality={100}
+          width={200}
+          height={200}
+          crossOrigin="use-credentials"
+        />
+        <InputForm
+          label="User profile image"
+          placeholder="User profile image"
+          id="file"
+          type="file"
+          handleOnChange={handleFileChange}
+          name="file"
+        />
         <InputForm
           label="User name"
           placeholder="User name"

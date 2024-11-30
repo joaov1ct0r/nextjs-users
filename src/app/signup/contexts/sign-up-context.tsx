@@ -56,7 +56,14 @@ export function SignUpProvider({ children }: SignUpProviderProps) {
     dispatch({ type: "fetch_start" });
 
     try {
-      await api.post("/signup/", user);
+      const formData = new FormData();
+      formData.append("user", JSON.stringify(user));
+
+      if (user.file) {
+        formData.append("file", user.file);
+      }
+
+      await api.post("/signup/", formData);
 
       dispatch({ type: "fetch_success" });
     } catch (e) {
