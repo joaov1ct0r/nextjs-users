@@ -56,8 +56,8 @@ export function SignUpProvider({ children }: SignUpProviderProps) {
     dispatch({ type: "fetch_start" });
 
     try {
-      const formData = new FormData();
-      formData.append(
+      const form = new FormData();
+      form.append(
         "user",
         JSON.stringify({
           email: user.email,
@@ -68,25 +68,14 @@ export function SignUpProvider({ children }: SignUpProviderProps) {
       );
 
       if (user.file) {
-        formData.append("file", user.file);
+        form.append("file", user.file);
       }
 
-      await api.post(
-        "/signup/",
-        {
-          user: {
-            email: user.email,
-            username: user.username,
-            name: user.name,
-            password: user.password,
-          },
+      await api.post("/signup/", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        },
-      );
+      });
 
       dispatch({ type: "fetch_success" });
     } catch (e) {
