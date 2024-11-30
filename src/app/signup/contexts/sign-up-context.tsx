@@ -57,7 +57,15 @@ export function SignUpProvider({ children }: SignUpProviderProps) {
 
     try {
       const formData = new FormData();
-      formData.append("user", JSON.stringify(user));
+      formData.append(
+        "user",
+        JSON.stringify({
+          email: user.email,
+          username: user.username,
+          name: user.name,
+          password: user.password,
+        }),
+      );
 
       if (user.file) {
         formData.append("file", user.file);
