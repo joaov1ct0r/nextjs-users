@@ -61,7 +61,6 @@ export default function AboutForm() {
           <Image
             alt="User profile image"
             src={(() => {
-              console.log(user);
               if (user && user.photoUrl) {
                 return user.photoUrl;
               }
@@ -112,16 +111,6 @@ export default function AboutForm() {
             handleOnChange={() => null}
             name="username"
             value={user?.username}
-          />
-          <InputForm
-            disabled
-            label="User password"
-            placeholder="**********"
-            id="password"
-            type="password"
-            handleOnChange={() => null}
-            name="password"
-            value={user?.password}
           />
 
           <div className="flex flex-row items-center justify-around">
