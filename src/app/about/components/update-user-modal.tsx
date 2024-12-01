@@ -22,6 +22,7 @@ export default function UpdateUserModal() {
     username: user?.username || "",
     password: user?.password || "",
     email: user?.email || "",
+    photoUrl: user?.photoUrl || null,
   });
 
   const handleClearUpdatedUser = () =>
@@ -31,6 +32,7 @@ export default function UpdateUserModal() {
       username: "",
       email: "",
       password: "",
+      photoUrl: null,
     });
 
   const { updateUser, setOpenUpdateUserModal } = useAboutDispatch();

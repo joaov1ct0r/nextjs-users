@@ -20,6 +20,7 @@ interface UserData {
   email: string;
   id: string;
   password: string | undefined;
+  photoUrl: string | null;
 }
 
 const initialState: State = {
@@ -185,6 +186,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
       username: user.username,
       email: user.email,
       password: undefined,
+      photoUrl: user.photoUrl,
     };
 
     if (user.password) {
@@ -201,6 +203,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
           username: data.username,
           email: data.email,
           password: String(data.password),
+          photoUrl: data.photoUrl,
         };
 
         setCookie({ user: JSON.stringify(updatedUser) });
