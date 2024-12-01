@@ -8,6 +8,7 @@ import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
 import DeleteAccountModal from "@/app/about/components/delete-account-modal";
 import UpdateUserModal from "@/app/about/components/update-user-modal";
 import Loading from "@/app/components/loading";
+import Image from "next/image";
 
 export default function AboutForm() {
   const { getUser, setOpenAccountModal, setOpenUpdateUserModal } =
@@ -57,6 +58,20 @@ export default function AboutForm() {
         <Loading />
       ) : (
         <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <Image
+            alt="User profile image"
+            src={(() => {
+              if (user && user.photoUrl) {
+                return user.photoUrl;
+              }
+
+              return "/images/default_user.png";
+            })()}
+            quality={100}
+            width={200}
+            height={200}
+            crossOrigin="use-credentials"
+          />
           <InputForm
             label="User id"
             placeholder={user?.id}
