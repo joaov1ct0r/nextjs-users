@@ -68,7 +68,7 @@ const AboutContext = createContext<State | undefined>(undefined);
 const AboutDispatchContext = createContext<
   | {
       dispatch: Dispatch<Action>;
-      updateUser: (user: User) => void;
+      updateUser: (user: User, file: File | null) => void;
       getUser: () => void;
       deleteUser: () => void;
       setOpenAccountModal: () => void;
@@ -170,7 +170,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
     }
   };
 
-  const handleUpdateUser = async (user: User) => {
+  const handleUpdateUser = async (user: User, file: File | null) => {
     dispatch({ type: "fetch_start" });
     setShowLoading(true);
 
@@ -194,7 +194,21 @@ export function AboutProvider({ children }: AboutProviderProps) {
     }
 
     try {
-      const response = await api.put("/user/", data);
+      const form = new FormData();
+      const userBlob = new Blob([JSON.stringify(data)], {
+        type: "application/json",
+      });
+      form.append("user", userBlob);
+
+      if (file !== null) {
+        form.append("file", file);
+      }
+
+      const response = await api.put("/user/", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (response?.status === 204) {
         const updatedUser: User = {
