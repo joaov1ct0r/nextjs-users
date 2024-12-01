@@ -161,6 +161,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
       if (response?.status === 200) {
         const user = response.data.resource[0];
         dispatch({ type: "fetch_success", user });
+        setCookie({ user: JSON.stringify(user) });
       }
     } catch (error) {
       console.error(error);
@@ -222,6 +223,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
 
         setCookie({ user: JSON.stringify(updatedUser) });
         dispatch({ type: "fetch_success", user: updatedUser });
+        await handleGetUser();
         handleSetShouldOpenUpdateUserModal();
       }
     } catch (error) {
