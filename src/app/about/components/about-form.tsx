@@ -61,11 +61,12 @@ export default function AboutForm() {
           <Image
             alt="User profile image"
             src={(() => {
+              console.log(user);
               if (user && user.photoUrl) {
                 return user.photoUrl;
               }
 
-              return "/images/default_user.png";
+              return "/images/default_avatar.png";
             })()}
             quality={100}
             width={200}
