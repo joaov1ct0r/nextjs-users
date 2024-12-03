@@ -26,11 +26,11 @@ export default function UpdateUserModal() {
     photoUrl: user?.photoUrl || null,
   });
 
-  const [shouldUpdatePassword, setShouldUpdatePassword] =
+  const [shouldHideUpdatePassword, setShouldHideUpdatePassword] =
     useState<boolean>(true);
 
   const handleSetShouldUpdatePassword = () =>
-    setShouldUpdatePassword(!shouldUpdatePassword);
+    setShouldHideUpdatePassword(!shouldHideUpdatePassword);
 
   const [, setImgSrc] = useState("");
 
@@ -198,7 +198,7 @@ export default function UpdateUserModal() {
                       handleOnClick={handleSetShouldUpdatePassword}
                     />
                     <InputForm
-                      hidden={shouldUpdatePassword}
+                      hidden={shouldHideUpdatePassword}
                       label="User password"
                       placeholder="**********"
                       id="password"

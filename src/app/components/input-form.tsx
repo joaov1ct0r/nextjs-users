@@ -16,11 +16,8 @@ export default function InputForm({
   ...rest
 }: InputFormProps) {
   return (
-    <div className="mb-4">
-      <label
-        hidden={hidden}
-        className="block text-gray-700 text-sm font-bold mb-2"
-      >
+    <div className="mb-2">
+      <label hidden={hidden} className="block text-gray-700 text-sm font-bold">
         {label}
       </label>
 
