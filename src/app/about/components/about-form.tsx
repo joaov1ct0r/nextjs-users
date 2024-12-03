@@ -51,13 +51,13 @@ export default function AboutForm() {
   }, [error, getUser, success, user, loading]);
 
   return (
-    <div className="w-full max-w-xs">
+    <div className="w-full h-full">
       {shouldOpenUpdateUserModal && <UpdateUserModal />}
       {shouldOpenDeleteAccountModal && <DeleteAccountModal />}
       {showLoading ? (
         <Loading />
       ) : (
-        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form className="w-full h-1/4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <Image
             alt="User profile image"
             src={(() => {

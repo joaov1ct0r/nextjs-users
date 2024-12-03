@@ -118,7 +118,7 @@ export default function UpdateUserModal() {
                   >
                     Update user
                   </DialogTitle>
-                  <form className="bg-white shadow-md rounded px-8 pt-6 pb-8">
+                  <form className="w-full h-1/4 bg-white shadow-md rounded px-8 pt-6 pb-8">
                     <Image
                       alt="User profile image"
                       src={(() => {

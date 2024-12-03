@@ -106,8 +106,8 @@ export default function SignUpForm() {
   }, [error, success, memoizedHandleAfterSignUp]);
 
   return (
-    <div className="w-full max-w-xs">
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div className="w-full h-full">
+      <form className="w-full h-1/4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <Image
           alt="User profile image"
           src={(() => {
@@ -168,7 +168,7 @@ export default function SignUpForm() {
           value={user.password}
         />
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-evenly">
           <ButtonForm
             disabled={showLoading}
             handleOnClick={handleFormSubmit}
