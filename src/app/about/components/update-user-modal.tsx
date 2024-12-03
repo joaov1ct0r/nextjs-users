@@ -26,6 +26,12 @@ export default function UpdateUserModal() {
     photoUrl: user?.photoUrl || null,
   });
 
+  const [shouldUpdatePassword, setShouldUpdatePassword] =
+    useState<boolean>(false);
+
+  const handleSetShouldUpdatePassword = () =>
+    setShouldUpdatePassword(!shouldUpdatePassword);
+
   const [, setImgSrc] = useState("");
 
   const [file, setFile] = useState<File | null>(null);
@@ -184,7 +190,15 @@ export default function UpdateUserModal() {
                       name="username"
                       value={updatedUser.username}
                     />
+                    <ButtonForm
+                      disabled={showLoading}
+                      type="button"
+                      model={showLoading ? "disabled" : "warning"}
+                      placeholder="Update password"
+                      handleOnClick={handleSetShouldUpdatePassword}
+                    />
                     <InputForm
+                      hidden={shouldUpdatePassword}
                       label="User password"
                       placeholder="**********"
                       id="password"
