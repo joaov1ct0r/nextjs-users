@@ -199,7 +199,7 @@ export default function UpdateUserModal() {
                     />
                     <InputForm
                       hidden={shouldHideUpdatePassword}
-                      label="User password"
+                      label={shouldHideUpdatePassword ? "" : "User password"}
                       placeholder="**********"
                       id="password"
                       type="password"
