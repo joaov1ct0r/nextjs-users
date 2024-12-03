@@ -85,6 +85,7 @@ export default function SignUpForm() {
   const handleCancelSignUp = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     clearUser();
+    memoizedHandleAfterSignUp();
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
