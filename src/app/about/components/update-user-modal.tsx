@@ -27,7 +27,7 @@ export default function UpdateUserModal() {
   });
 
   const [shouldUpdatePassword, setShouldUpdatePassword] =
-    useState<boolean>(false);
+    useState<boolean>(true);
 
   const handleSetShouldUpdatePassword = () =>
     setShouldUpdatePassword(!shouldUpdatePassword);
