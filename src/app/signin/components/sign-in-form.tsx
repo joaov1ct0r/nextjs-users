@@ -1,59 +1,30 @@
 "use client";
 
 import React, {
-  ChangeEvent,
-  useState,
-  MouseEvent,
   useEffect,
   useCallback,
 } from "react";
 import InputForm from "@/app/components/input-form";
 import ButtonForm from "@/app/components/button-form";
-import SignInUser from "@/app/signin/interfaces/sign-in-user";
 import { useSignInCtx } from "@/app/signin/hooks/use-sign-in";
 import { useSignInDispatch } from "@/app/signin/hooks/use-sign-in-dispatch";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import ForgetPasswordModal from "@/app/signin/components/forget-password-modal";
+import {useForm} from 'react-hook-form'
+import {Inputs} from "@/app/signin/interfaces/inputs"
 
 export default function LoginForm() {
   const router = useRouter();
-  const [credentials, setCredentials] = useState<SignInUser>({
-    username: "",
-    password: "",
-  });
 
   const { error, success, showLoading, shouldOpenForgetPasswordModal } =
     useSignInCtx();
   const { signInUser, setOpenForgetPasswordModal } = useSignInDispatch();
 
-  const handleValidateFields = (user: SignInUser) => {
-    if (!user.username) {
-      toast.error("Field 'username' is obrigatory");
-      return false;
-    }
+  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
 
-    if (!user.password) {
-      toast.error("Field 'password' is obrigatory");
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-
-    setCredentials({
-      ...credentials,
-      [name]: value,
-    });
-  };
-
-  const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    const isAbleToSignInUser = handleValidateFields(credentials);
-    if (isAbleToSignInUser) signInUser(credentials);
+  const handleFormSubmit = (data: Inputs) => {
+    signInUser(data);
   };
 
   const handleSignUp = () => {
@@ -70,27 +41,33 @@ export default function LoginForm() {
     }
   }, [memoizedHandleSignIn, error, success]);
 
+  useEffect(() => {
+    if (errors) {
+      const fields = Object.keys(errors)
+
+      fields.map((field) => toast.error(`field: ${field} is required`))
+    }
+  }, [errors])
+
   return (
     <div className="w-full h-full flex justify-center items-center">
       {shouldOpenForgetPasswordModal && <ForgetPasswordModal />}
-      <form className="w-full h-1/4 px-4 pt-3 pb-4 m-2 bg-white shadow-md rounded sm:w-1/3 sm:h-1/4 sm:px-8 sm:pt-6 sm:pb-8">
+      <form className="w-full h-1/4 px-4 pt-3 pb-4 m-2 bg-white shadow-md rounded sm:w-1/3 sm:h-1/4 sm:px-8 sm:pt-6 sm:pb-8" onSubmit={handleSubmit(handleFormSubmit)}>
         <InputForm
+          register={register("username", { required: true })}
           label="User username"
           placeholder="User username"
           id="username"
           type="text"
-          handleOnChange={handleFormChange}
           name="username"
-          value={credentials.username}
         />
         <InputForm
+          register={register("password", { required: true })}
           label="User Password"
           placeholder="User password"
           id="password"
           type="password"
-          handleOnChange={handleFormChange}
           name="password"
-          value={credentials.password}
         />
 
         <div className="flex items-center justify-evenly">
@@ -98,8 +75,8 @@ export default function LoginForm() {
             disabled={showLoading}
             model={showLoading ? "disabled" : "success"}
             placeholder="Sign in"
-            type="button"
-            handleOnClick={handleFormSubmit}
+            type="submit"
+            handleOnClick={() => null}
           />
           <ButtonForm
             disabled={showLoading}

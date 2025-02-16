@@ -1,17 +1,18 @@
-import React, { ChangeEvent, InputHTMLAttributes } from "react";
+import React, { InputHTMLAttributes } from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 export interface InputFormProps extends InputHTMLAttributes<HTMLInputElement> {
-  handleOnChange: (event: ChangeEvent<HTMLInputElement>) => void;
   label: string;
+  register: UseFormRegisterReturn
 }
 
 export default function InputForm({
   placeholder,
   type,
   id,
-  handleOnChange,
   name,
   label,
+  register,
   hidden = false,
   ...rest
 }: InputFormProps) {
@@ -23,8 +24,8 @@ export default function InputForm({
 
       <input
         {...rest}
+        {...register}
         hidden={hidden}
-        onChange={handleOnChange}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id={id}
         type={type}
