@@ -1,21 +1,9 @@
-import { Dispatch } from "react";
-import { Action } from "@/app/signin/interfaces/action";
-import { api } from "@/app/lib/axios";
-import { clearCookies } from "@/app/utils/cookies";
+import { AxiosInstance } from "axios";
 
-export async function signOutUser(dispatch: Dispatch<Action>) {
-  dispatch({ type: "fetch_start" });
-
+export async function signOutUser(api: AxiosInstance) {
   try {
     await api.get("/signout/");
-    await clearCookies();
-
-    dispatch({ type: "fetch_reset" });
   } catch (error) {
-    console.error(error);
-    dispatch({
-      type: "fetch_error",
-      error: "Failed to sign out user",
-    });
+    throw new Error('Failed to sign out user ' + String(error))
   }
 }

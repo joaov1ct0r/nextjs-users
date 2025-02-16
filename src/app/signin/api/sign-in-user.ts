@@ -1,25 +1,12 @@
-import { Dispatch } from "react";
-import { Action } from "@/app/signin/interfaces/action";
 import SignInUser from "@/app/signin/interfaces/sign-in-user";
-import { api } from "@/app/lib/axios";
-import { setCookie } from "@/app/utils/cookies";
+import { AxiosInstance } from "axios";
 
-export async function signInUser(dispatch: Dispatch<Action>, user: SignInUser) {
-  dispatch({ type: "fetch_start" });
+export async function signInUser(api: AxiosInstance, user: SignInUser) {
   try {
     const response = await api.post("/signin/", user);
     const authenticatedUser = response.data.resource;
-
-    await setCookie({
-      user: JSON.stringify(authenticatedUser),
-    });
-
-    dispatch({ type: "fetch_success" });
+    return authenticatedUser
   } catch (error) {
-    console.error(error);
-    dispatch({
-      type: "fetch_error",
-      error: "Failed to sign in user",
-    });
+    throw new Error('Failed to sign in user ' + String(error))
   }
 }
