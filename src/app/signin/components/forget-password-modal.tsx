@@ -1,11 +1,15 @@
 "use client";
 
-import { ChangeEvent, MouseEvent, useState } from "react";
+import { MouseEvent, useEffect } from "react";
 import { useSignInCtx } from "@/app/signin/hooks/use-sign-in";
 import { useSignInDispatch } from "@/app/signin/hooks/use-sign-in-dispatch";
 import ButtonForm from "@/app/components/button-form";
 import InputForm from "@/app/components/input-form";
-import { toast } from "react-toastify";
+import { useForm } from 'react-hook-form'
+import {ResetPasswordSchema} from "@/app/signin/schemas/reset-password-schema"
+import {zodResolver} from "@hookform/resolvers/zod"
+import { getObjectErrors } from "@/app/utils/get-object-errors";
+import { ResetPasswordFormSchema } from "@/app/signin/interfaces/reset-password-form-schema";
 import {
   Dialog,
   DialogBackdrop,
@@ -14,42 +18,31 @@ import {
 } from "@headlessui/react";
 
 export default function ForgetPasswordModal() {
-  const [email, setEmail] = useState<string>("");
+  const { register, handleSubmit, formState: { errors } } = useForm<ResetPasswordFormSchema>({
+    resolver: zodResolver(ResetPasswordSchema)
+  });
   const { shouldOpenForgetPasswordModal, showLoading } = useSignInCtx();
   const { setOpenForgetPasswordModal, resetPassword } = useSignInDispatch();
 
-  const handleValidateFields = (email: string) => {
-    if (!email) {
-      toast.error("Field 'email' is obrigatory");
-      return false;
-    }
+  const handleFormSubmit = (data: ResetPasswordFormSchema) => {
+    const { success } = ResetPasswordSchema.safeParse(data)
 
-    return true;
-  };
-
-  const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setEmail(value);
-  };
-
-  const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    const isAbleToResetPassword = handleValidateFields(email);
-
-    if (isAbleToResetPassword) {
-      resetPassword(email);
+    if (success) {
+      resetPassword(data);
       setOpenForgetPasswordModal();
-      handleClearEmail();
     }
   };
-
-  const handleClearEmail = () => setEmail("");
 
   const handleOnCancelForgetPassword = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setOpenForgetPasswordModal();
-    handleClearEmail();
   };
+
+  useEffect(() => {
+    if (errors) {
+      getObjectErrors(errors)
+    }
+  }, [errors])
 
   return (
     <Dialog
@@ -77,15 +70,14 @@ export default function ForgetPasswordModal() {
                   >
                     Forget password
                   </DialogTitle>
-                  <form className="bg-white shadow-md rounded px-8 pt-6 pb-8">
+                  <form className="bg-white shadow-md rounded px-8 pt-6 pb-8" onSubmit={handleSubmit(handleFormSubmit)}>
                     <InputForm
+                      register={register("email", { required: true })}
                       label="User email to reset password"
                       placeholder="Email to reset password"
                       id="email"
                       type="email"
-                      handleOnChange={handleFormChange}
                       name="id"
-                      value={email}
                     />
                   </form>
                 </div>
@@ -98,7 +90,7 @@ export default function ForgetPasswordModal() {
                   type="submit"
                   model={showLoading ? "disabled" : "success"}
                   placeholder="Update password"
-                  handleOnClick={handleFormSubmit}
+                  handleOnClick={() => null}
                 />
                 <ButtonForm
                   disabled={showLoading}

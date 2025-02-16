@@ -16,6 +16,7 @@ import { clearCookies, getCookie, setCookie } from "@/app/utils/cookies";
 import { useApi } from "@/app/hooks/use-api";
 import signInReducer from "@/app/signin/reducers/sign-in-reducer";
 import {SignInFormSchema} from "@/app/signin/interfaces/sign-in-form-schema"
+import { ResetPasswordFormSchema } from "@/app/signin/interfaces/reset-password-form-schema";
 
 const initialState: State = {
   authenticated: false,
@@ -33,7 +34,7 @@ const SignInDispatchContext = createContext<
       signInUser: (user: SignInFormSchema) => void;
       handleSignOut: () => void;
       checkAuth: () => Promise<void>;
-      resetPassword: (email: string) => Promise<void>;
+      resetPassword: (data: ResetPasswordFormSchema) => Promise<void>;
       setShowLoading: () => void;
       setOpenForgetPasswordModal: () => void;
     }
@@ -107,12 +108,12 @@ export function SignInProvider({ children }: SignInProviderProps) {
     }
   };
 
-  const handleResetPassword = async (email: string) => {
+  const handleResetPassword = async (data: ResetPasswordFormSchema) => {
     setShowLoading(true);
     dispatch({ type: "fetch_start" });
 
     try {
-      resetPassword(api, email)
+      resetPassword(api, data.email)
       dispatch({ type: "fetch_success" });
     } catch (error) {
       console.error(error);
