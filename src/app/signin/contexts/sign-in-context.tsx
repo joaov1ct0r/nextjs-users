@@ -7,7 +7,6 @@ import {
   Dispatch,
   useState,
 } from "react";
-import SignInUser from "@/app/signin/interfaces/sign-in-user";
 import { State } from "@/app/signin/interfaces/state";
 import { Action } from "@/app/signin/interfaces/action";
 import { signInUser } from "@/app/signin/api/sign-in-user";
@@ -16,6 +15,7 @@ import {resetPassword} from "@/app/signin/api/reset-password"
 import { clearCookies, getCookie, setCookie } from "@/app/utils/cookies";
 import { useApi } from "@/app/hooks/use-api";
 import signInReducer from "@/app/signin/reducers/sign-in-reducer";
+import {SignInFormSchema} from "@/app/signin/interfaces/sign-in-form-schema"
 
 const initialState: State = {
   authenticated: false,
@@ -30,7 +30,7 @@ const SignInContext = createContext<State | undefined>(undefined);
 const SignInDispatchContext = createContext<
   | {
       dispatch: Dispatch<Action>;
-      signInUser: (user: SignInUser) => void;
+      signInUser: (user: SignInFormSchema) => void;
       handleSignOut: () => void;
       checkAuth: () => Promise<void>;
       resetPassword: (email: string) => Promise<void>;
@@ -71,7 +71,7 @@ export function SignInProvider({ children }: SignInProviderProps) {
     dispatch({ type: "fetch_success" });
   };
 
-  const handleSignInUser = async (user: SignInUser) => {
+  const handleSignInUser = async (user: SignInFormSchema) => {
     setShowLoading(true);
     dispatch({ type: "fetch_start" });
 
