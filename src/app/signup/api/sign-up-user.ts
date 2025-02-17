@@ -1,23 +1,38 @@
-import { Dispatch } from "react";
 import User from "@/app/signup/interfaces/user";
-import { api } from "@/app/lib/axios";
-import { Action } from "@/app/signup/interfaces/action";
+import { AxiosInstance } from "axios";
 
-export default async function signUpUser(
-  dispatch: Dispatch<Action>,
+export async function signUpUser(
+  api: AxiosInstance,
   user: User,
 ) {
-  dispatch({ type: "fetch_start" });
   try {
-    const response = await api.post("/signup/", user);
+    const form = new FormData();
+    const userBlob = new Blob(
+      [
+        JSON.stringify({
+          email: user.email,
+          username: user.username,
+          name: user.name,
+          password: user.password,
+        }),
+      ],
+      { type: "application/json" },
+    );
 
-    if (response.status !== 201) {
-      dispatch({ type: "fetch_error", error: "Failed to sign up user" });
+    form.append("user", userBlob);
+
+    if (user.file) {
+      form.append("file", user.file);
     }
 
-    dispatch({ type: "fetch_success" });
+    await api.post("/signup/", form, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return { success: true }
   } catch (e) {
-    console.error(e);
-    dispatch({ type: "fetch_error", error: "Failed to sign up user" });
+    throw new Error('Failed to sign up user ' + String(e))
   }
 }

@@ -7,10 +7,12 @@ import {
   Dispatch,
   useState,
 } from "react";
-import User from "@/app/signup/interfaces/user";
 import State from "@/app/signup/interfaces/state";
 import { Action } from "@/app/signup/interfaces/action";
 import { useApi } from "@/app/hooks/use-api";
+import { signUpReducer } from "@/app/signup/reducers/sign-up-reducer"
+import { signUpUser } from "@/app/signup/api/sign-up-user";
+import {SignUpFormSchema} from "@/app/signup/interfaces/sign-up-form-schema"
 
 const initialState: State = {
   success: null,
@@ -19,24 +21,11 @@ const initialState: State = {
   showLoading: false,
 };
 
-function signUpReducer(state: State, action: Action): State {
-  switch (action.type) {
-    case "fetch_start":
-      return { ...state, loading: true, error: null, success: null };
-    case "fetch_success":
-      return { ...state, loading: false, success: true, error: null };
-    case "fetch_error":
-      return { ...state, loading: false, error: action.error, success: false };
-    default:
-      throw new Error("Unknown action type");
-  }
-}
-
 const SignUpContext = createContext<State | undefined>(undefined);
 const SignUpDispatchContext = createContext<
   | {
       dispatch: Dispatch<Action>;
-      signUpUser: (user: User) => void;
+      signUpUser: (user: SignUpFormSchema) => void;
     }
   | undefined
 >(undefined);
@@ -47,40 +36,18 @@ interface SignUpProviderProps {
 
 export function SignUpProvider({ children }: SignUpProviderProps) {
   const [showLoading, setShowLoading] = useState<boolean>(false);
+
   const [state, dispatch] = useReducer(signUpReducer, initialState);
-  const api = useApi();
   state.showLoading = showLoading;
 
-  const handleSignUpUser = async (user: User) => {
+  const api = useApi();
+
+  const handleSignUpUser = async (user: SignUpFormSchema) => {
     setShowLoading(true);
     dispatch({ type: "fetch_start" });
 
     try {
-      const form = new FormData();
-      const userBlob = new Blob(
-        [
-          JSON.stringify({
-            email: user.email,
-            username: user.username,
-            name: user.name,
-            password: user.password,
-          }),
-        ],
-        { type: "application/json" },
-      );
-
-      form.append("user", userBlob);
-
-      if (user.file) {
-        form.append("file", user.file);
-      }
-
-      await api.post("/signup/", form, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
+      signUpUser(api, user)
       dispatch({ type: "fetch_success" });
     } catch (e) {
       console.error(e);
