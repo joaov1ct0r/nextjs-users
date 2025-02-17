@@ -1,9 +1,9 @@
-import User from "@/app/signup/interfaces/user";
 import { AxiosInstance } from "axios";
+import { SignUpFormSchema } from "../interfaces/sign-up-form-schema";
 
 export async function signUpUser(
   api: AxiosInstance,
-  user: User,
+  user: SignUpFormSchema,
 ) {
   try {
     const form = new FormData();
@@ -21,8 +21,8 @@ export async function signUpUser(
 
     form.append("user", userBlob);
 
-    if (user.file) {
-      form.append("file", user.file);
+    if (user.file?.length !== undefined && user.file?.length > 0) {
+      form.append("file", user.file[0]);
     }
 
     await api.post("/signup/", form, {

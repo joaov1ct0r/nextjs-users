@@ -6,6 +6,7 @@ import Providers from "@/app/providers";
 import "react-toastify/dist/ReactToastify.css";
 import { Suspense } from "react";
 import Loading from "@/app/components/loading";
+import { ToastContainer, Bounce } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "App",
@@ -23,6 +24,20 @@ export default function RootLayout({
         <Providers>
           <Container>
             <Header />
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              limit={0}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss={false}
+              draggable
+              pauseOnHover
+              theme="dark"
+              transition={Bounce}
+            />
             <Suspense fallback={<Loading />}>{children}</Suspense>
           </Container>
         </Providers>

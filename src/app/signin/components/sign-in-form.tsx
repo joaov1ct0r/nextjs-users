@@ -25,7 +25,7 @@ export default function LoginForm() {
   const { signInUser, setOpenForgetPasswordModal } = useSignInDispatch();
 
   const { register, handleSubmit, formState: { errors } } = useForm<SignInFormSchema>({
-	resolver: zodResolver(SignInSchema)
+	  resolver: zodResolver(SignInSchema)
   });
 
   const handleFormSubmit = (data: SignInFormSchema) => {
