@@ -13,15 +13,11 @@ import { State } from "@/app/about/interfaces/state";
 import { useApi } from "@/app/hooks/use-api";
 import { setCookie, getCookie, clearCookies } from "@/app/utils/cookies";
 import { useSignInDispatch } from "@/app/signin/hooks/use-sign-in-dispatch";
-
-interface UserData {
-  name: string;
-  username: string;
-  email: string;
-  id: string;
-  password: string | undefined;
-  photoUrl: string | null;
-}
+import {aboutReducer} from "@/app/about/reducers/about-reducer"
+import {deleteUser} from "@/app/about/api/delete-user"
+import {getUser, GetUserParams} from "@/app/about/api/get-user"
+import {updateUser} from "@/app/about/api/update-user"
+import { UpdateUserFormSchema } from "@/app/about/interfaces/update-user-form-schema";
 
 const initialState: State = {
   success: null,
@@ -33,42 +29,11 @@ const initialState: State = {
   showLoading: false,
 };
 
-function aboutReducer(state: State, action: Action): State {
-  switch (action.type) {
-    case "fetch_start":
-      return { ...state, loading: true, error: null, success: null };
-    case "fetch_success":
-      return {
-        ...state,
-        loading: false,
-        success: true,
-        error: null,
-        user: action.user,
-      };
-    case "fetch_error":
-      return { ...state, loading: false, error: action.error, success: false };
-    case "fetch_reset":
-      return {
-        ...state,
-        success: null,
-        loading: false,
-        error: null,
-        user: null,
-        shouldOpenDeleteAccountModal: false,
-        shouldOpenUpdateUserModal: false,
-        showLoading: false,
-      };
-
-    default:
-      throw new Error("Unknown action type");
-  }
-}
-
 const AboutContext = createContext<State | undefined>(undefined);
 const AboutDispatchContext = createContext<
   | {
       dispatch: Dispatch<Action>;
-      updateUser: (user: User, file: File | null) => void;
+      updateUser: (user: UpdateUserFormSchema) => void;
       getUser: () => void;
       deleteUser: () => void;
       setOpenAccountModal: () => void;
@@ -82,23 +47,22 @@ interface AboutProviderProps {
   children: ReactNode;
 }
 
-interface IGetUserData {
-  email: string | undefined;
-  username: string | undefined;
-  name: string | undefined;
-}
-
 export function AboutProvider({ children }: AboutProviderProps) {
   const [shouldOpenDeleteAccountModal, setShouldOpenDeleteAccountModal] =
     useState<boolean>(false);
+
   const [shouldOpenUpdateUserModal, setShouldOpenUpdateUserModal] =
     useState<boolean>(false);
+
   const [showLoading, setShowLoading] = useState<boolean>(false);
+
   const [state, dispatch] = useReducer(aboutReducer, initialState);
   state.shouldOpenDeleteAccountModal = shouldOpenDeleteAccountModal;
   state.shouldOpenUpdateUserModal = shouldOpenUpdateUserModal;
   state.showLoading = showLoading;
+
   const api = useApi();
+
   const { dispatch: signInDispatch } = useSignInDispatch();
 
   const handleSetShowLoading = () => setShowLoading(!showLoading);
@@ -119,14 +83,10 @@ export function AboutProvider({ children }: AboutProviderProps) {
     if (userCookie !== undefined) user = JSON.parse(userCookie.value);
 
     try {
-      const response = await api.delete("/user/", {
-        data: { userId: user?.id },
-      });
+      const { success } = await deleteUser(api, String(user?.id))
 
-      if (response?.status === 204) {
-        await api.get("/signout/");
+      if (success) {
         await clearCookies();
-
         dispatch({ type: "fetch_reset" });
         signInDispatch({ type: "fetch_reset" });
       }
@@ -142,26 +102,23 @@ export function AboutProvider({ children }: AboutProviderProps) {
     dispatch({ type: "fetch_start" });
     setShowLoading(true);
 
-    let user: IGetUserData | null = null;
+    let user: GetUserParams | null = null;
     const userCookie = await getCookie({ name: "userObj" });
 
     if (userCookie !== undefined) user = JSON.parse(userCookie.value);
 
-    const params = new URLSearchParams();
-
-    if (user?.name) params.set("name", user.name);
-    if (user?.email) params.set("email", user.email);
-    if (user?.username) params.set("username", user.username);
-
-    const urlParams = params.toString();
+    const opts = {
+      name: user?.name,
+      email: user?.email,
+      username: user?.username
+    }
 
     try {
-      const response = await api.get(`/user/?${urlParams}`);
+      const { user: returnedUser, success } = await getUser(api, opts)
 
-      if (response?.status === 200) {
-        const user = response.data.resource[0];
-        dispatch({ type: "fetch_success", user });
-        setCookie({ user: JSON.stringify(user) });
+      if (success) {
+        dispatch({ type: "fetch_success", user: returnedUser });
+        setCookie({ user: JSON.stringify(returnedUser) });
       }
     } catch (error) {
       console.error(error);
@@ -171,7 +128,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
     }
   };
 
-  const handleUpdateUser = async (user: User, file: File | null) => {
+  const handleUpdateUser = async (user: UpdateUserFormSchema) => {
     dispatch({ type: "fetch_start" });
     setShowLoading(true);
 
@@ -181,44 +138,40 @@ export function AboutProvider({ children }: AboutProviderProps) {
     if (userCookie !== undefined) userObj = JSON.parse(userCookie.value);
     if (userObj === null) return;
 
-    const data: UserData = {
+    const data: UpdateUserFormSchema = {
       id: userObj.id,
       name: user.name,
       username: user.username,
       email: user.email,
       password: undefined,
-      photoUrl: user.photoUrl,
+      file: null
     };
 
     if (user.password) {
       data.password = user.password;
     }
 
+    if (user.file && user.file.length > 0) {
+      data.file = user.file
+    }
+
     try {
-      const form = new FormData();
-      const userBlob = new Blob([JSON.stringify(data)], {
-        type: "application/json",
-      });
-      form.append("user", userBlob);
+      const { success } = await updateUser(api, data)
 
-      if (file !== null) {
-        form.append("file", file);
-      }
+      if (success) {
+        let photoUrl = userObj.photoUrl
 
-      const response = await api.put("/user/", form, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+        if (data.file && data.file.length > 0) {
+          photoUrl = URL.createObjectURL(data.file[0])
+        }
 
-      if (response?.status === 204) {
         const updatedUser: User = {
           id: userObj.id,
           name: data.name,
           username: data.username,
           email: data.email,
           password: String(data.password),
-          photoUrl: data.photoUrl,
+          photoUrl,
         };
 
         setCookie({ user: JSON.stringify(updatedUser) });
