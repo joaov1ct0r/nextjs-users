@@ -1,30 +1,33 @@
 "use client";
 
-import { ChangeEvent, MouseEvent, useState } from "react";
-import { User } from "@/app/about/interfaces/user";
+import React, { MouseEvent, useEffect, useState } from "react";
+import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
+import { useAboutCtx } from "@/app/about/hooks/use-about";
+import ButtonForm from "@/app/components/button-form";
+import InputForm from "@/app/components/input-form";
+import Image from "next/image";
+import { useForm } from 'react-hook-form'
+import { UpdateUserFormSchema } from "@/app/about/interfaces/update-user-form-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { UpdateUserSchema } from "@/app/about/schemas/update-user-schema";
+import { getObjectErrors } from "@/app/utils/get-object-errors";
 import {
   DialogTitle,
   Dialog,
   DialogBackdrop,
   DialogPanel,
 } from "@headlessui/react";
-import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
-import { useAboutCtx } from "@/app/about/hooks/use-about";
-import ButtonForm from "@/app/components/button-form";
-import InputForm from "@/app/components/input-form";
-import { toast } from "react-toastify";
-import Image from "next/image";
 
 export default function UpdateUserModal() {
   const { shouldOpenUpdateUserModal, user, showLoading } = useAboutCtx();
-  const [updatedUser, setUpdatedUser] = useState<User>({
-    id: user?.id || "",
-    name: user?.name || "",
-    username: user?.username || "",
-    password: user?.password || "",
-    email: user?.email || "",
-    photoUrl: user?.photoUrl || null,
+
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<UpdateUserFormSchema>({
+	  resolver: zodResolver(UpdateUserSchema)
   });
+
+  const file = watch("file")
+
+  const { updateUser, setOpenUpdateUserModal } = useAboutDispatch();
 
   const [shouldHideUpdatePassword, setShouldHideUpdatePassword] =
     useState<boolean>(true);
@@ -32,71 +35,22 @@ export default function UpdateUserModal() {
   const handleSetShouldUpdatePassword = () =>
     setShouldHideUpdatePassword(!shouldHideUpdatePassword);
 
-  const [, setImgSrc] = useState("");
-
-  const [file, setFile] = useState<File | null>(null);
-
-  const handleClearUpdatedUser = () =>
-    setUpdatedUser({
-      id: user?.id || "",
-      name: "",
-      username: "",
-      email: "",
-      password: "",
-      photoUrl: null,
-    });
-
-  const { updateUser, setOpenUpdateUserModal } = useAboutDispatch();
 
   const handleOnCancelUpdateUserModal = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setOpenUpdateUserModal();
-    handleClearUpdatedUser();
   };
 
-  const handleValidateFields = (user: User) => {
-    if (!user.name) {
-      toast.error("Field 'name' is obrigatory");
-      return false;
-    }
-
-    if (!user.username) {
-      toast.error("Field 'username' is obrigatory");
-      return false;
-    }
-
-    if (!user.email) {
-      toast.error("Field 'email' is obrigatory");
-      return false;
-    }
-
-    return true;
+  const handleFormSubmit = (data: UpdateUserFormSchema) => {
+    const { success } = UpdateUserSchema.safeParse(data);
+    if (success) updateUser(data);
   };
 
-  const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-
-    setUpdatedUser({
-      ...updatedUser,
-      [name]: value,
-    });
-  };
-
-  const handleFormSubmit = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    const isAbleToUpdateUser = handleValidateFields(updatedUser);
-    if (isAbleToUpdateUser) {
-      updateUser(updatedUser, file);
+  useEffect(() => {
+    if (errors) {
+      getObjectErrors(errors)
     }
-  };
-
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const url = URL.createObjectURL(event.target.files[0]);
-      setImgSrc(url);
-      setFile(event.target.files[0]);
-    }
-  };
+  }, [errors])
 
   return (
     <Dialog
@@ -124,7 +78,7 @@ export default function UpdateUserModal() {
                   >
                     Update user
                   </DialogTitle>
-                  <form className="w-full h-1/4 bg-white shadow-md rounded px-8 pt-6 pb-8">
+                  <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full h-1/4 bg-white shadow-md rounded px-8 pt-6 pb-8">
                     <Image
                       alt="User profile image"
                       src={(() => {
@@ -132,8 +86,8 @@ export default function UpdateUserModal() {
                           return user.photoUrl;
                         }
 
-                        if (file !== null) {
-                          const url = URL.createObjectURL(file);
+                        if (file && file.length > 0) {
+                          const url = URL.createObjectURL(file[0]);
                           return url;
                         }
 
@@ -149,8 +103,8 @@ export default function UpdateUserModal() {
                       placeholder="User profile image"
                       id="file"
                       type="file"
-                      handleOnChange={handleFileChange}
                       name="file"
+                      register={register("file", { required: false })}
                     />
 
                     <InputForm
@@ -158,37 +112,33 @@ export default function UpdateUserModal() {
                       placeholder={user?.id}
                       id="id"
                       type="text"
-                      handleOnChange={handleFormChange}
                       name="id"
-                      value={user?.id}
                       disabled
+                      register={register("id", { required: true, value: user?.id })}
                     />
                     <InputForm
                       label="User name"
                       placeholder={user?.name}
                       id="name"
                       type="text"
-                      handleOnChange={handleFormChange}
                       name="name"
-                      value={updatedUser.name}
+                      register={register("name", { required: true, value: user?.name })}
                     />
                     <InputForm
                       label="User email"
                       placeholder={user?.email}
                       id="email"
                       type="email"
-                      handleOnChange={handleFormChange}
                       name="email"
-                      value={updatedUser.email}
+                      register={register("email", { required: true, value: user?.email })}
                     />
                     <InputForm
                       label="User username"
                       placeholder={user?.username}
                       id="username"
                       type="text"
-                      handleOnChange={handleFormChange}
                       name="username"
-                      value={updatedUser.username}
+                      register={register("username", { required: true, value: user?.username })}
                     />
                     <ButtonForm
                       disabled={showLoading}
@@ -203,9 +153,8 @@ export default function UpdateUserModal() {
                       placeholder="**********"
                       id="password"
                       type="password"
-                      handleOnChange={handleFormChange}
                       name="password"
-                      value={updatedUser.password}
+                      register={register("password", { required: false, value: user?.password })}
                     />
                   </form>
                 </div>
@@ -218,7 +167,7 @@ export default function UpdateUserModal() {
                   type="submit"
                   model={showLoading ? "disabled" : "success"}
                   placeholder="Update"
-                  handleOnClick={handleFormSubmit}
+                  handleOnClick={() => null}
                 />
                 <ButtonForm
                   disabled={showLoading}
