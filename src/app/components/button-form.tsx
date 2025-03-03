@@ -1,9 +1,8 @@
-import React, { ButtonHTMLAttributes, MouseEvent } from "react";
+import { ButtonHTMLAttributes } from "react";
 
-interface ButtonLinkProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   model: "danger" | "warning" | "success" | "disabled";
-  placeholder: string;
-  handleOnClick: (event: MouseEvent<HTMLButtonElement>) => void;
+  children: string;
 }
 
 const buttonTypeClass = {
@@ -25,33 +24,31 @@ const buttonTypeClass = {
   },
 };
 
-export default function ButtonForm({
+export function ButtonForm({
   model,
-  placeholder,
-  type,
-  handleOnClick,
+  children,
+  type = "button",
   ...rest
-}: ButtonLinkProps) {
+}: ButtonProps) {
   const color = buttonTypeClass[model];
 
   return (
     <button
-      {...rest}
-      onClick={handleOnClick}
       type={type}
       className={`
-            ${color.color} 
-            ${color.hover} 
-            text-white 
-            font-bold 
-            py-2 
-            px-4 
-            rounded 
-            focus:outline-none 
-            focus:shadow-outline
-          `}
+        ${color.color} 
+        ${color.hover} 
+        text-white 
+        font-bold 
+        py-2 
+        px-4 
+        rounded 
+        focus:outline-none 
+        focus:shadow-outline
+      `}
+      {...rest}
     >
-      {placeholder}
+      {children}
     </button>
   );
 }
