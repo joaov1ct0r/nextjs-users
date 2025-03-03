@@ -4,7 +4,6 @@ import { useEffect, useCallback } from "react";
 import { useSignInCtx } from "@/app/signin/hooks/use-sign-in";
 import { useSignInDispatch } from "@/app/signin/hooks/use-sign-in-dispatch";
 import { useRouter } from "next/navigation";
-import ForgetPasswordModal from "@/app/signin/components/forget-password-modal";
 import { useForm } from "react-hook-form";
 import { SignInSchema } from "@/app/signin/schemas/sign-in-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -56,49 +55,49 @@ export function SignInForm() {
 
   return (
     <SignIn.Root>
-      {shouldOpenForgetPasswordModal && <ForgetPasswordModal />}
+      {shouldOpenForgetPasswordModal && <SignIn.ForgetPasswordModal />}
       <SignIn.Content>
         <SignIn.Form onSubmit={handleSubmit(handleFormSubmit)}>
-          <SignIn.Input
-            register={register("username", { required: true })}
-            label="User username"
-            placeholder="User username"
-            id="username"
-            type="text"
-            name="username"
-          />
-          <SignIn.Input
-            register={register("password", { required: true })}
-            label="User Password"
-            placeholder="User password"
-            id="password"
-            type="password"
-            name="password"
-          />
+          <SignIn.InputWrapper>
+            <SignIn.Label id={"username"}>Username</SignIn.Label>
+            <SignIn.Input
+              register={register("username", { required: true })}
+              id="username"
+            />
+          </SignIn.InputWrapper>
 
-          <SignIn.ActionsButton>
-            <SignIn.ActionButton
+          <SignIn.InputWrapper>
+            <SignIn.Label id={"password"}>Password</SignIn.Label>
+            <SignIn.Input
+              register={register("password", { required: true })}
+              id="password"
+              type="password"
+            />
+          </SignIn.InputWrapper>
+
+          <SignIn.ButtonWrapper>
+            <SignIn.Button
               disabled={showLoading}
               model={showLoading ? "disabled" : "success"}
-              placeholder="Sign in"
               type="submit"
-              handleOnClick={() => null}
-            />
-            <SignIn.ActionButton
+            >
+              Sign in
+            </SignIn.Button>
+            <SignIn.Button
               disabled={showLoading}
-              type="button"
               model={showLoading ? "disabled" : "warning"}
-              placeholder="Sign up"
-              handleOnClick={handleSignUp}
-            />
-            <SignIn.ActionButton
+              onClick={handleSignUp}
+            >
+              Sign up
+            </SignIn.Button>
+            <SignIn.Button
               disabled={showLoading}
-              type="button"
               model={showLoading ? "disabled" : "warning"}
-              placeholder="Forget password"
-              handleOnClick={setOpenForgetPasswordModal}
-            />
-          </SignIn.ActionsButton>
+              onClick={setOpenForgetPasswordModal}
+            >
+              Forget password
+            </SignIn.Button>
+          </SignIn.ButtonWrapper>
         </SignIn.Form>
       </SignIn.Content>
     </SignIn.Root>
