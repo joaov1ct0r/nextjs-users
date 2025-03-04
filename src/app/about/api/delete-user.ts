@@ -7,7 +7,7 @@ export async function deleteUser(api: AxiosInstance, userId: string) {
 
         return { success: true }
     } catch (error) {
-        throw new Error('Failed to delete user ' + String(error))
+        console.error('Failed to delete user ' + String(error))
     }
 
 }

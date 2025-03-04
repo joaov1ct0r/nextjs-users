@@ -33,6 +33,6 @@ export async function signUpUser(
 
     return { success: true }
   } catch (e) {
-    throw new Error('Failed to sign up user ' + String(e))
+    console.error('Failed to sign up user ' + String(e))
   }
 }

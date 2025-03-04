@@ -22,6 +22,6 @@ export async function getUser(api: AxiosInstance, opts: GetUserParams) {
 
         return { user, success: true }
     } catch (error) {
-        throw new Error('Failed to get user ' + String(error))
+        console.error('Failed to get user ' + String(error))
     }
 }

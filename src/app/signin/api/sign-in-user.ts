@@ -7,6 +7,6 @@ export async function signInUser(api: AxiosInstance, user: SignInFormSchema) {
     const authenticatedUser = response.data.resource;
     return authenticatedUser
   } catch (error) {
-    throw new Error('Failed to sign in user ' + String(error))
+    console.error('Failed to sign in user ' + String(error))
   }
 }

@@ -23,6 +23,6 @@ export async function updateUser(api: AxiosInstance, data: UpdateUserFormSchema)
         return { success: true }
 
     } catch (error) {
-        throw new Error("Failed to update user " + String(error))
+        console.error("Failed to update user " + String(error))
     }
 }
