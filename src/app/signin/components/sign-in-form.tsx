@@ -12,12 +12,11 @@ export function SignInForm() {
     handleFormSubmit,
     memoizedHandleSignIn,
     handleSignUp,
-    setOpenForgetPasswordModal,
+    memoizedHandleForgetPassword,
     getObjectErrors,
     error,
     success,
     showLoading,
-    shouldOpenForgetPasswordModal,
   } = useSignInForm();
 
   useEffect(() => {
@@ -34,7 +33,6 @@ export function SignInForm() {
 
   return (
     <SignIn.Root>
-      {shouldOpenForgetPasswordModal && <SignIn.ForgetPasswordModal />}
       <SignIn.Content>
         <SignIn.Form onSubmit={handleSubmit(handleFormSubmit)}>
           <SignIn.InputWrapper>
@@ -72,7 +70,7 @@ export function SignInForm() {
             <SignIn.Button
               disabled={showLoading}
               model={showLoading ? "disabled" : "warning"}
-              onClick={setOpenForgetPasswordModal}
+              onClick={memoizedHandleForgetPassword}
             >
               Forget password
             </SignIn.Button>

@@ -4,5 +4,4 @@ export interface State {
   loading: boolean;
   error: string | null;
   showLoading: boolean;
-  shouldOpenForgetPasswordModal: boolean;
 }

@@ -10,13 +10,11 @@ import {
 import { State } from "@/app/signin/interfaces/state";
 import { Action } from "@/app/signin/interfaces/action";
 import { signInUser } from "@/app/signin/api/sign-in-user";
-import { signOutUser } from "@/app/signin/api/sign-out-user"
-import {resetPassword} from "@/app/signin/api/reset-password"
+import { signOutUser } from "@/app/signin/api/sign-out-user";
 import { clearCookies, getCookie, setCookie } from "@/app/utils/cookies";
 import { useApi } from "@/app/hooks/use-api";
 import signInReducer from "@/app/signin/reducers/sign-in-reducer";
-import {SignInFormSchema} from "@/app/signin/interfaces/sign-in-form-schema"
-import { ResetPasswordFormSchema } from "@/app/signin/interfaces/reset-password-form-schema";
+import { SignInFormSchema } from "@/app/signin/interfaces/sign-in-form-schema";
 
 const initialState: State = {
   authenticated: false,
@@ -24,7 +22,6 @@ const initialState: State = {
   error: null,
   loading: false,
   showLoading: false,
-  shouldOpenForgetPasswordModal: false,
 };
 
 const SignInContext = createContext<State | undefined>(undefined);
@@ -34,9 +31,7 @@ const SignInDispatchContext = createContext<
       signInUser: (user: SignInFormSchema) => void;
       handleSignOut: () => void;
       checkAuth: () => Promise<void>;
-      resetPassword: (data: ResetPasswordFormSchema) => Promise<void>;
       setShowLoading: () => void;
-      setOpenForgetPasswordModal: () => void;
     }
   | undefined
 >(undefined);
@@ -48,17 +43,10 @@ interface SignInProviderProps {
 export function SignInProvider({ children }: SignInProviderProps) {
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
-  const [shouldOpenForgetPasswordModal, setShouldOpenForgetPasswordModal] =
-    useState<boolean>(false);
-
   const [state, dispatch] = useReducer(signInReducer, initialState);
   state.showLoading = showLoading;
-  state.shouldOpenForgetPasswordModal = shouldOpenForgetPasswordModal;
 
   const api = useApi();
-  
-  const handleSetShouldOpenForgetPasswordModal = () =>
-    setShouldOpenForgetPasswordModal(!shouldOpenForgetPasswordModal);
 
   const handleSetShowLoading = () => setShowLoading(!showLoading);
 
@@ -77,7 +65,7 @@ export function SignInProvider({ children }: SignInProviderProps) {
     dispatch({ type: "fetch_start" });
 
     try {
-      const authenticatedUser = signInUser(api, user)
+      const authenticatedUser = signInUser(api, user);
 
       await setCookie({
         user: JSON.stringify(authenticatedUser),
@@ -99,27 +87,12 @@ export function SignInProvider({ children }: SignInProviderProps) {
     dispatch({ type: "fetch_start" });
 
     try {
-      signOutUser(api)
+      signOutUser(api);
       await clearCookies();
       dispatch({ type: "fetch_reset" });
     } catch (error) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to sign out user" });
-    }
-  };
-
-  const handleResetPassword = async (data: ResetPasswordFormSchema) => {
-    setShowLoading(true);
-    dispatch({ type: "fetch_start" });
-
-    try {
-      resetPassword(api, data.email)
-      dispatch({ type: "fetch_success" });
-    } catch (error) {
-      console.error(error);
-      dispatch({ type: "fetch_error", error: "Failed to reset password" });
-    } finally {
-      setShowLoading(false);
     }
   };
 
@@ -132,8 +105,6 @@ export function SignInProvider({ children }: SignInProviderProps) {
           signInUser: handleSignInUser,
           handleSignOut,
           checkAuth: handleCheckAuth,
-          resetPassword: handleResetPassword,
-          setOpenForgetPasswordModal: handleSetShouldOpenForgetPasswordModal,
         }}
       >
         {children}

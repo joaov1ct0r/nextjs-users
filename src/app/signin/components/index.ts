@@ -6,7 +6,6 @@ import { InputWrapper } from "@/app/components/input-wrapper/input-wrapper"
 import { SignInRoot } from "@/app/signin/components/root/root";
 import { SignInForm } from "@/app/signin/components/form/form"
 import { SignInContent } from "@/app/signin/components/content/content"
-import { ForgetPasswordModal } from "@/app/signin/components/forget-password-modal/forget-password-modal";
 
 export const SignIn = {
   Root: SignInRoot,
@@ -17,5 +16,4 @@ export const SignIn = {
   Input: InputForm,
   ButtonWrapper,
   Button: ButtonForm,
-  ForgetPasswordModal
 };

@@ -11,8 +11,8 @@ import { getObjectErrors } from "@/app/utils/get-object-errors";
 import { useSignInCtx } from "@/app/signin/hooks/use-sign-in"
 
 export function useSignInForm() {
-    const { signInUser, setOpenForgetPasswordModal } = useSignInDispatch()
-    const { error, success, showLoading, shouldOpenForgetPasswordModal } = useSignInCtx()
+    const { signInUser } = useSignInDispatch()
+    const { error, success, showLoading } = useSignInCtx()
     const router = useRouter();
 
     const {
@@ -37,6 +37,10 @@ export function useSignInForm() {
         router.push("/about");
       }, [router]);
 
+      const memoizedHandleForgetPassword = useCallback(() => {
+        router.push("/forget-password")
+      }, [router])
+
       return { 
         register, 
         handleSubmit, 
@@ -44,11 +48,10 @@ export function useSignInForm() {
         handleFormSubmit, 
         handleSignUp, 
         memoizedHandleSignIn,
-        setOpenForgetPasswordModal,
+        memoizedHandleForgetPassword,
         getObjectErrors,
         error,
         success,
         showLoading,
-        shouldOpenForgetPasswordModal
     }
 }

@@ -29,7 +29,6 @@ export default function signInReducer(state: State, action: Action): State {
                 error: null,
                 authenticated: false,
                 showLoading: false,
-                shouldOpenForgetPasswordModal: false,
             };
         default:
             throw new Error("Unknown action type");
