@@ -1,6 +1,5 @@
 "use client";
 
-import { MouseEvent } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -8,23 +7,16 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
-import { useAboutCtx } from "@/app/about/hooks/use-about";
-import ButtonForm from "@/app/components/button-form";
+import { About } from "@/app/about/components/index";
+import { useDeleteAccountModal } from "@/app/about/hooks/use-delete-account-modal";
 
-export default function DeleteAccountModal() {
-  const { setOpenAccountModal, deleteUser } = useAboutDispatch();
-  const { shouldOpenDeleteAccountModal, showLoading } = useAboutCtx();
-
-  const handleOnDeleteUser = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    deleteUser();
-  };
-
-  const handleOnCancelDeleteUser = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setOpenAccountModal();
-  };
+export function DeleteAccountModal() {
+  const {
+    shouldOpenDeleteAccountModal,
+    showLoading,
+    handleOnDeleteUser,
+    handleOnCancelDeleteUser,
+  } = useDeleteAccountModal();
 
   return (
     <Dialog
@@ -68,24 +60,22 @@ export default function DeleteAccountModal() {
                 </div>
               </div>
             </div>
-            <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-              <>
-                <ButtonForm
-                  disabled={showLoading}
-                  type="submit"
-                  model={showLoading ? "disabled" : "danger"}
-                  placeholder="Deactivate"
-                  handleOnClick={handleOnDeleteUser}
-                />
-                <ButtonForm
-                  disabled={showLoading}
-                  type="submit"
-                  model={showLoading ? "disabled" : "warning"}
-                  placeholder="Cancel"
-                  handleOnClick={handleOnCancelDeleteUser}
-                />
-              </>
-            </div>
+            <About.ButtonWrapper>
+              <About.Button
+                disabled={showLoading}
+                model={showLoading ? "disabled" : "danger"}
+                onClick={handleOnDeleteUser}
+              >
+                Deactivate
+              </About.Button>
+              <About.Button
+                disabled={showLoading}
+                model={showLoading ? "disabled" : "warning"}
+                onClick={handleOnCancelDeleteUser}
+              >
+                Cancel
+              </About.Button>
+            </About.ButtonWrapper>
           </DialogPanel>
         </div>
       </div>

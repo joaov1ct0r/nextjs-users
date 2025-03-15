@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect } from "react";
-import DeleteAccountModal from "@/app/about/components/delete-account-modal";
 import UpdateUserModal from "@/app/about/components/update-user-modal";
 import Loading from "@/app/components/loading";
 import Image from "next/image";
@@ -39,7 +38,7 @@ export default function AboutForm() {
     <About.Root>
       <About.Content>
         {shouldOpenUpdateUserModal && <UpdateUserModal />}
-        {shouldOpenDeleteAccountModal && <DeleteAccountModal />}
+        {shouldOpenDeleteAccountModal && <About.DeleteModal />}
         {showLoading ? (
           <Loading />
         ) : (
