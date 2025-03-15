@@ -10,11 +10,11 @@ export default function middleware(request: NextRequest) {
 
   if (
     cookiesNotFound &&
-    request.nextUrl.pathname !== "/" &&
+    request.nextUrl.pathname !== "/signin" &&
     request.nextUrl.pathname !== "/signup" &&
     request.nextUrl.pathname !== "/forget-password"
   ) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/signin", request.url));
   }
 
   if (
