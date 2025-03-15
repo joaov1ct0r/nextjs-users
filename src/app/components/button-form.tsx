@@ -41,8 +41,8 @@ export function ButtonForm({
         text-white 
         font-bold
         ml-2
-        py-2 
-        px-4 
+        py-2
+        px-2
         rounded 
         focus:outline-none 
         focus:shadow-outline

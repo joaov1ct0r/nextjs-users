@@ -10,8 +10,6 @@ export function ForgetPasswordContent({
   children,
 }: ForgetPasswordContentProps) {
   return (
-    <div className="w-full h-full flex justify-center items-center">
-      {children}
-    </div>
+    <div className="h-full flex justify-center items-center">{children}</div>
   );
 }

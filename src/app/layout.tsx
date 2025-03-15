@@ -22,14 +22,14 @@ export default function RootLayout({
     <html lang="en">
       <body className={`sans-serif antialiased`}>
         <Providers>
+          <Header />
           <Container>
-            <Header />
             <ToastContainer
               position="top-right"
               autoClose={5000}
               limit={0}
               hideProgressBar={false}
-              newestOnTop={false}
+              newestOnTop={true}
               closeOnClick
               rtl={false}
               pauseOnFocusLoss={false}

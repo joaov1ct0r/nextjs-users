@@ -2,9 +2,9 @@
 
 import { useEffect } from "react";
 import { useForgetPassword } from "@/app/forget-password/hooks/use-forget-password";
-import { PasswordModal } from "@/app/forget-password/index";
+import { PasswordModal } from "@/app/forget-password/components/index";
 
-export default function ForgetPassword() {
+export default function ForgetPasswordPage() {
   const {
     errors,
     getObjectErrors,
@@ -36,20 +36,19 @@ export default function ForgetPassword() {
 
           <PasswordModal.ButtonWrapper>
             <PasswordModal.Button
+              type="submit"
+              model={showLoading ? "disabled" : "success"}
+              disabled={showLoading}
+            >
+              Reset password
+            </PasswordModal.Button>
+            <PasswordModal.Button
               type="button"
               model={showLoading ? "disabled" : "warning"}
               disabled={showLoading}
               onClick={handleOnCancelForgetPassword}
             >
               Cancel
-            </PasswordModal.Button>
-
-            <PasswordModal.Button
-              type="submit"
-              model={showLoading ? "disabled" : "success"}
-              disabled={showLoading}
-            >
-              Reset password
             </PasswordModal.Button>
           </PasswordModal.ButtonWrapper>
         </PasswordModal.Form>

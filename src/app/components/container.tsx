@@ -6,7 +6,7 @@ export interface Props {
 
 const Container: React.FC<Props> = ({ children }) => {
   return (
-    <div className="bg-gradient-to-r from-[#ff80b5] to-[#9089fc]">
+    <div className="h-screen w-screen overflow-hidden flex justify-center items-center bg-gradient-to-r from-[#ff80b5] to-[#9089fc]">
       {children}
     </div>
   );

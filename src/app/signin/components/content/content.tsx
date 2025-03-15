@@ -7,5 +7,7 @@ export interface SignInContentProps {
 }
 
 export function SignInContent({ children }: SignInContentProps) {
-  return <>{children}</>;
+  return (
+    <div className="h-full flex justify-center items-center">{children}</div>
+  );
 }
