@@ -1,40 +1,26 @@
 "use client";
 
-import React, { useEffect, MouseEvent } from "react";
-import { useAboutCtx } from "@/app/about/hooks/use-about";
-import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
+import React, { useEffect } from "react";
 import DeleteAccountModal from "@/app/about/components/delete-account-modal";
 import UpdateUserModal from "@/app/about/components/update-user-modal";
 import Loading from "@/app/components/loading";
 import Image from "next/image";
 import { About } from "@/app/about/components";
+import { useAboutForm } from "@/app/about/hooks/use-about-form";
 
 export default function AboutForm() {
-  const { getUser, setOpenAccountModal, setOpenUpdateUserModal } =
-    useAboutDispatch();
   const {
     error,
     success,
     loading,
     user,
+    getUser,
     shouldOpenDeleteAccountModal,
     shouldOpenUpdateUserModal,
     showLoading,
-  } = useAboutCtx();
-
-  const handleSetShouldOpenUpdateUserModal = (
-    e: MouseEvent<HTMLButtonElement>
-  ) => {
-    e.preventDefault();
-    setOpenUpdateUserModal();
-  };
-
-  const handleSetShouldShowDeleteAccountModal = (
-    e: MouseEvent<HTMLButtonElement>
-  ) => {
-    e.preventDefault();
-    setOpenAccountModal();
-  };
+    handleSetShouldOpenUpdateUserModal,
+    handleSetShouldShowDeleteAccountModal,
+  } = useAboutForm();
 
   useEffect(() => {
     if (
