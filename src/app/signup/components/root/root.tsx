@@ -7,9 +7,5 @@ export interface SignUpRootProps {
 }
 
 export function SignUpRoot({ children }: SignUpRootProps) {
-  return (
-    <div className="w-full h-full flex justify-center items-center">
-      {children}
-    </div>
-  );
+  return <div className="h-screen w-screen overflow-hidden">{children}</div>;
 }

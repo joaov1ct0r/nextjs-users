@@ -7,5 +7,5 @@ export interface SignUpContentProps {
 }
 
 export function SignUpContent({ children }: SignUpContentProps) {
-  return <>{children}</>;
+  return <div className="flex justify-center items-center">{children}</div>;
 }

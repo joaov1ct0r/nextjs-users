@@ -39,7 +39,8 @@ export function ButtonForm({
         ${color.color} 
         ${color.hover} 
         text-white 
-        font-bold 
+        font-bold
+        ml-2
         py-2 
         px-4 
         rounded 
