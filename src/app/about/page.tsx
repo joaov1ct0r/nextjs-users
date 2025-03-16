@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useEffect } from "react";
-import UpdateUserModal from "@/app/about/components/update-user-modal";
 import Loading from "@/app/components/loading";
 import Image from "next/image";
 import { About } from "@/app/about/components";
 import { useAboutForm } from "@/app/about/hooks/use-about-form";
 
-export default function AboutForm() {
+export default function AboutPage() {
   const {
     error,
     success,
@@ -37,7 +36,7 @@ export default function AboutForm() {
   return (
     <About.Root>
       <About.Content>
-        {shouldOpenUpdateUserModal && <UpdateUserModal />}
+        {shouldOpenUpdateUserModal && <About.UpdateModal />}
         {shouldOpenDeleteAccountModal && <About.DeleteModal />}
         {showLoading ? (
           <Loading />

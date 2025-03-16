@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
+import { LabelHTMLAttributes, ReactNode } from "react";
 
-export interface LabelFormProps {
+export interface LabelFormProps extends LabelHTMLAttributes<HTMLLabelElement> {
   children: ReactNode;
   id: string;
 }

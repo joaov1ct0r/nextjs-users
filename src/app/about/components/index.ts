@@ -7,6 +7,8 @@ import { AboutRoot } from "@/app/about/components/root/root"
 import { AboutContent } from "@/app/about/components/content/content"
 import { AboutForm } from "@/app/about/components/form/form"
 import { DeleteAccountModal } from "@/app/about/components/delete-modal/delete-account-modal"
+import { UpdateUserModal } from "@/app/about/components/update-user-modal";
+import { AboutUpdateForm } from "@/app/about/components/update-form/update-form";
 
 export const About = {
     Root: AboutRoot,
@@ -17,5 +19,7 @@ export const About = {
     Input: InputForm,
     ButtonWrapper,
     Button: ButtonForm,
-    DeleteModal: DeleteAccountModal
+    DeleteModal: DeleteAccountModal,
+    UpdateModal: UpdateUserModal,
+    UpdateForm: AboutUpdateForm
 }

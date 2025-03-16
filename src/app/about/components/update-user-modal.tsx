@@ -1,56 +1,37 @@
 "use client";
 
-import React, { MouseEvent, useEffect, useState } from "react";
-import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
-import { useAboutCtx } from "@/app/about/hooks/use-about";
-import ButtonForm from "@/app/components/button-form";
-import InputForm from "@/app/components/input-form";
+import React, { useEffect } from "react";
 import Image from "next/image";
-import { useForm } from 'react-hook-form'
-import { UpdateUserFormSchema } from "@/app/about/interfaces/update-user-form-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { UpdateUserSchema } from "@/app/about/schemas/update-user-schema";
 import { getObjectErrors } from "@/app/utils/get-object-errors";
+import { About } from "@/app/about/components/index";
 import {
   DialogTitle,
   Dialog,
   DialogBackdrop,
   DialogPanel,
 } from "@headlessui/react";
+import { useUpdateUserModal } from "@/app/about/hooks/use-update-user-modal";
 
-export default function UpdateUserModal() {
-  const { shouldOpenUpdateUserModal, user, showLoading } = useAboutCtx();
-
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<UpdateUserFormSchema>({
-	  resolver: zodResolver(UpdateUserSchema)
-  });
-
-  const file = watch("file")
-
-  const { updateUser, setOpenUpdateUserModal } = useAboutDispatch();
-
-  const [shouldHideUpdatePassword, setShouldHideUpdatePassword] =
-    useState<boolean>(true);
-
-  const handleSetShouldUpdatePassword = () =>
-    setShouldHideUpdatePassword(!shouldHideUpdatePassword);
-
-
-  const handleOnCancelUpdateUserModal = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setOpenUpdateUserModal();
-  };
-
-  const handleFormSubmit = (data: UpdateUserFormSchema) => {
-    const { success } = UpdateUserSchema.safeParse(data);
-    if (success) updateUser(data);
-  };
+export function UpdateUserModal() {
+  const {
+    errors,
+    shouldOpenUpdateUserModal,
+    handleSubmit,
+    handleFormSubmit,
+    user,
+    file,
+    register,
+    showLoading,
+    handleSetShouldUpdatePassword,
+    shouldHideUpdatePassword,
+    handleOnCancelUpdateUserModal,
+  } = useUpdateUserModal();
 
   useEffect(() => {
     if (errors) {
-      getObjectErrors(errors)
+      getObjectErrors(errors);
     }
-  }, [errors])
+  }, [errors]);
 
   return (
     <Dialog
@@ -78,7 +59,7 @@ export default function UpdateUserModal() {
                   >
                     Update user
                   </DialogTitle>
-                  <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full h-1/4 bg-white shadow-md rounded px-8 pt-6 pb-8">
+                  <About.UpdateForm onSubmit={handleSubmit(handleFormSubmit)}>
                     <Image
                       alt="User profile image"
                       src={(() => {
@@ -98,85 +79,110 @@ export default function UpdateUserModal() {
                       height={200}
                       crossOrigin="use-credentials"
                     />
-                    <InputForm
-                      label="User profile image"
-                      placeholder="User profile image"
-                      id="file"
-                      type="file"
-                      name="file"
-                      register={register("file", { required: false })}
-                    />
 
-                    <InputForm
-                      label="User id"
-                      placeholder={user?.id}
-                      id="id"
-                      type="text"
-                      name="id"
-                      disabled
-                      register={register("id", { required: true, value: user?.id })}
-                    />
-                    <InputForm
-                      label="User name"
-                      placeholder={user?.name}
-                      id="name"
-                      type="text"
-                      name="name"
-                      register={register("name", { required: true, value: user?.name })}
-                    />
-                    <InputForm
-                      label="User email"
-                      placeholder={user?.email}
-                      id="email"
-                      type="email"
-                      name="email"
-                      register={register("email", { required: true, value: user?.email })}
-                    />
-                    <InputForm
-                      label="User username"
-                      placeholder={user?.username}
-                      id="username"
-                      type="text"
-                      name="username"
-                      register={register("username", { required: true, value: user?.username })}
-                    />
-                    <ButtonForm
-                      disabled={showLoading}
-                      type="button"
-                      model={showLoading ? "disabled" : "warning"}
-                      placeholder="Update password"
-                      handleOnClick={handleSetShouldUpdatePassword}
-                    />
-                    <InputForm
-                      hidden={shouldHideUpdatePassword}
-                      label={shouldHideUpdatePassword ? "" : "User password"}
-                      placeholder="**********"
-                      id="password"
-                      type="password"
-                      name="password"
-                      register={register("password", { required: false, value: user?.password })}
-                    />
-                  </form>
+                    <About.InputWrapper>
+                      <About.Label id="file">Profile image</About.Label>
+                      <About.Input
+                        id="file"
+                        type="file"
+                        register={register("file", { required: false })}
+                      />
+                    </About.InputWrapper>
+
+                    <About.InputWrapper>
+                      <About.Label id="id">ID</About.Label>
+                      <About.Input
+                        id="id"
+                        disabled
+                        register={register("id", {
+                          required: true,
+                          value: user?.id,
+                        })}
+                      />
+                    </About.InputWrapper>
+
+                    <About.InputWrapper>
+                      <About.Label id="name">Name</About.Label>
+                      <About.Input
+                        id="name"
+                        register={register("name", {
+                          required: true,
+                          value: user?.name,
+                        })}
+                      />
+                    </About.InputWrapper>
+
+                    <About.InputWrapper>
+                      <About.Label id="email">Email</About.Label>
+                      <About.Input
+                        id="email"
+                        type="email"
+                        register={register("email", {
+                          required: true,
+                          value: user?.email,
+                        })}
+                      />
+                    </About.InputWrapper>
+
+                    <About.InputWrapper>
+                      <About.Label id="username">Username</About.Label>
+                      <About.Input
+                        id="username"
+                        register={register("username", {
+                          required: true,
+                          value: user?.username,
+                        })}
+                      />
+                    </About.InputWrapper>
+
+                    <About.ButtonWrapper>
+                      <About.Button
+                        disabled={showLoading}
+                        model={showLoading ? "disabled" : "warning"}
+                        onClick={handleSetShouldUpdatePassword}
+                      >
+                        Update password
+                      </About.Button>
+                    </About.ButtonWrapper>
+
+                    <About.InputWrapper>
+                      <About.Label
+                        id="password"
+                        hidden={shouldHideUpdatePassword}
+                      >
+                        {shouldHideUpdatePassword ? "" : "Password"}
+                      </About.Label>
+                      <About.Input
+                        hidden={shouldHideUpdatePassword}
+                        id="password"
+                        type="password"
+                        register={register("password", {
+                          required: false,
+                          value: user?.password,
+                        })}
+                      />
+                    </About.InputWrapper>
+
+                    <About.ButtonWrapper>
+                      <About.Button
+                        disabled={showLoading}
+                        type="submit"
+                        model={showLoading ? "disabled" : "success"}
+                      >
+                        Update
+                      </About.Button>
+
+                      <About.Button
+                        disabled={showLoading}
+                        model={showLoading ? "disabled" : "warning"}
+                        onClick={handleOnCancelUpdateUserModal}
+                      >
+                        Cancel
+                      </About.Button>
+                    </About.ButtonWrapper>
+                  </About.UpdateForm>
                 </div>
               </div>
-            </div>
-            <div className="flex flex-row justify-around items-center bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-              <>
-                <ButtonForm
-                  disabled={showLoading}
-                  type="submit"
-                  model={showLoading ? "disabled" : "success"}
-                  placeholder="Update"
-                  handleOnClick={() => null}
-                />
-                <ButtonForm
-                  disabled={showLoading}
-                  type="submit"
-                  model={showLoading ? "disabled" : "warning"}
-                  placeholder="Cancel"
-                  handleOnClick={handleOnCancelUpdateUserModal}
-                />
-              </>
             </div>
           </DialogPanel>
         </div>
