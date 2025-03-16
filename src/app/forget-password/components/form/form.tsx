@@ -13,7 +13,7 @@ export function ForgetPasswordForm({
 }: ForgetPasswordFormProps) {
   return (
     <form
-      className="w-1/3 h-[15%] px-4 pt-2 pb-2 bg-white shadow-md rounded"
+      className="w-1/3 h-[20%] sm:h-[15%] px-4 pt-2 pb-2 bg-white shadow-md rounded"
       onSubmit={onSubmit}
     >
       {children}

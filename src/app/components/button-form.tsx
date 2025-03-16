@@ -37,12 +37,16 @@ export function ButtonForm({
       type={type}
       className={`
         ${color.color} 
-        ${color.hover} 
+        ${color.hover}
+        w-1/2
+        mb-1
+        sm:w-1/4
+        sm:h-1/4
+        sm:ml-2
+        sm:py-2
+        sm:px-2
         text-white 
         font-bold
-        ml-2
-        py-2
-        px-2
         rounded 
         focus:outline-none 
         focus:shadow-outline

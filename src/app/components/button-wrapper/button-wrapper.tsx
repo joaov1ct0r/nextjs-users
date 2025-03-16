@@ -7,5 +7,9 @@ export interface ButtonWrapperProps {
 }
 
 export function ButtonWrapper({ children }: ButtonWrapperProps) {
-  return <div className="flex justify-end pt-5">{children}</div>;
+  return (
+    <div className="flex flex-col justify-center items-center pt-5 sm:justify-end sm:flex-row sm:pt-1">
+      {children}
+    </div>
+  );
 }
