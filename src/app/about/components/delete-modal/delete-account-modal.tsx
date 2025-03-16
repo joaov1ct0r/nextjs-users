@@ -58,24 +58,24 @@ export function DeleteAccountModal() {
                     </p>
                   </div>
                 </div>
+                <About.ButtonWrapper>
+                  <About.Button
+                    disabled={showLoading}
+                    model={showLoading ? "disabled" : "danger"}
+                    onClick={handleOnDeleteUser}
+                  >
+                    Deactivate
+                  </About.Button>
+                  <About.Button
+                    disabled={showLoading}
+                    model={showLoading ? "disabled" : "warning"}
+                    onClick={handleOnCancelDeleteUser}
+                  >
+                    Cancel
+                  </About.Button>
+                </About.ButtonWrapper>
               </div>
             </div>
-            <About.ButtonWrapper>
-              <About.Button
-                disabled={showLoading}
-                model={showLoading ? "disabled" : "danger"}
-                onClick={handleOnDeleteUser}
-              >
-                Deactivate
-              </About.Button>
-              <About.Button
-                disabled={showLoading}
-                model={showLoading ? "disabled" : "warning"}
-                onClick={handleOnCancelDeleteUser}
-              >
-                Cancel
-              </About.Button>
-            </About.ButtonWrapper>
           </DialogPanel>
         </div>
       </div>
