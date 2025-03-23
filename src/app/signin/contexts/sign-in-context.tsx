@@ -65,7 +65,7 @@ export function SignInProvider({ children }: SignInProviderProps) {
     dispatch({ type: "fetch_start" });
 
     try {
-      const authenticatedUser = signInUser(api, user);
+      const authenticatedUser = await signInUser(api, user);
 
       await setCookie({
         user: JSON.stringify(authenticatedUser),

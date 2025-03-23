@@ -19,7 +19,7 @@ export async function setCookie({ user }: setCookieProps): Promise<void> {
     httpOnly: true,
     path: "/",
     secure: true,
-    domain: "crud.shop",
+    domain: process.env.NODE_ENV === 'production' ? "https://crud.shop" : "localhost",
     sameSite: "none",
     priority: "high",
     partitioned: false,
