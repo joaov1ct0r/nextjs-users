@@ -108,10 +108,10 @@ export function AboutProvider({ children }: AboutProviderProps) {
     if (userCookie !== undefined) user = JSON.parse(userCookie.value);
 
     const opts = {
-      name: user?.name,
-      email: user?.email,
-      username: user?.username
-    }
+      name: undefined,
+      email: undefined,
+      username: user?.username,
+    };
 
     try {
       const { user: returnedUser, success } = await getUser(api, opts)
