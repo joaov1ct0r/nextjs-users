@@ -7,6 +7,11 @@ const nextConfig = {
         hostname: "java-users-rest-api-bucket.s3.us-east-1.amazonaws.com",
         pathname: "**",
       },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        pathname: "**"
+      }
     ],
   },
   redirects: async () => {
