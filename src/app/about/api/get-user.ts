@@ -1,4 +1,5 @@
 import { AxiosInstance } from "axios";
+import { User } from "../interfaces/user";
 
 export interface GetUserParams {
     name: string | undefined
@@ -6,7 +7,12 @@ export interface GetUserParams {
     username: string | undefined
 }
 
-export async function getUser(api: AxiosInstance, opts: GetUserParams) {
+export interface GetUserResponse {
+    user: User | null,
+    success: boolean
+}
+
+export async function getUser(api: AxiosInstance, opts: GetUserParams): Promise<GetUserResponse> {
     try {
         const params = new URLSearchParams();
 
@@ -23,5 +29,6 @@ export async function getUser(api: AxiosInstance, opts: GetUserParams) {
         return { user, success: true }
     } catch (error) {
         console.error('Failed to get user ' + String(error))
+        return { user: null, success: false }
     }
 }

@@ -1,7 +1,11 @@
 import { AxiosInstance } from "axios";
 import { UpdateUserFormSchema } from "@/app/about/interfaces/update-user-form-schema";
 
-export async function updateUser(api: AxiosInstance, data: UpdateUserFormSchema) {
+export interface UpdateUserResponse {
+    success: boolean
+}
+
+export async function updateUser(api: AxiosInstance, data: UpdateUserFormSchema): Promise<UpdateUserResponse> {
     try {
         const form = new FormData();
         const userBlob = new Blob([JSON.stringify(data)], {
@@ -24,5 +28,6 @@ export async function updateUser(api: AxiosInstance, data: UpdateUserFormSchema)
 
     } catch (error) {
         console.error("Failed to update user " + String(error))
+        return { success: false }
     }
 }
