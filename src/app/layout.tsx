@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Suspense } from "react";
 import Loading from "@/app/components/loading";
 import { ToastContainer, Bounce } from "react-toastify";
+import { Menu } from "@/app/components/menu/menu";
 
 export const metadata: Metadata = {
   title: "App",
@@ -24,6 +25,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           <Container>
+            <Menu />
             <ToastContainer
               position="top-right"
               autoClose={5000}
