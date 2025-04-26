@@ -7,7 +7,5 @@ export interface FeedContentProps {
 }
 
 export function FeedContent({ children }: FeedContentProps) {
-  return (
-    <div className="h-full flex justify-center items-center">{children}</div>
-  );
+  return <div className="h-full flex flex-col items-center">{children}</div>;
 }
