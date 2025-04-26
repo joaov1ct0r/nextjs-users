@@ -5,7 +5,7 @@ import { LabelForm } from "@/app/components/label-form"
 import { InputForm } from "@/app/components/input-form"
 import { ButtonWrapper } from "@/app/components/button-wrapper/button-wrapper"
 import { ButtonForm } from "@/app/components/button-form"
-import { MindWrapper } from "@/app/feed/components/mind-wrapper/mind-wrapper"
+import { MindForm } from "@/app/feed/components/mind-form/mind-form"
 
 export const Feed = {
     Root: FeedRoot,
@@ -15,5 +15,5 @@ export const Feed = {
     Input: InputForm,
     ButtonWrapper,
     Button: ButtonForm,
-    MindWrapper
+    Form: MindForm
 }
