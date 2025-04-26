@@ -1,4 +1,4 @@
-import { Post } from "@/app/about/interfaces/post";
+import { Post } from "@/app/interfaces/post";
 import { AxiosInstance } from "axios";
 
 export interface GetPostParams {
@@ -10,15 +10,9 @@ export interface GetPostResponse {
     success: boolean
 }
 
-export async function getPosts(api: AxiosInstance, opts: GetPostParams): Promise<GetPostResponse> {
+export async function getPosts(api: AxiosInstance): Promise<GetPostResponse> {
     try {
-        const params = new URLSearchParams()
-
-        if (opts.content) params.set("content", opts.content)
-
-        const urlParams = params.toString
-
-        const response = await api.get(`/post/?${urlParams}`)
+        const response = await api.get("/post/")
 
         const posts = response.data.resource
 
