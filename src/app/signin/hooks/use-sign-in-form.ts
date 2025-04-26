@@ -34,7 +34,7 @@ export function useSignInForm() {
       };
     
       const memoizedHandleSignIn = useCallback(() => {
-        router.push("/about");
+        router.push("/feed");
       }, [router]);
 
       const memoizedHandleForgetPassword = useCallback(() => {
