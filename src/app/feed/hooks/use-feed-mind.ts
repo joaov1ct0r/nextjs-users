@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { CreatePostFormSchema } from "@/app/feed/interfaces/create-post-form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreatePostSchema } from "@/app/feed/schemas/create-post-schema";
-import { useFeedCtx } from "./use-feed";
+import { useFeedCtx } from "@/app/feed/hooks/use-feed";
 
 export function useFeedMind() {
     const {
