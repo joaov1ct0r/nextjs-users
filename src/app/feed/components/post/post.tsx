@@ -1,16 +1,35 @@
+import { useAboutCtx } from "@/app/about/hooks/use-about";
+import { ButtonWrapper } from "@/app/components/button-wrapper/button-wrapper";
 import { Post as PostImp } from "@/app/interfaces/post";
 import Image from "next/image";
-import { FaCalendar } from "react-icons/fa";
+import { FaCalendar, FaEdit } from "react-icons/fa";
 import { RxUpdate } from "react-icons/rx";
+import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
+import { useEffect } from "react";
+import { MdDeleteForever } from "react-icons/md";
+import { useFeedDispatch } from "@/app/feed/hooks/use-feed-dispatch";
 
 export interface PostProps {
   post: PostImp;
 }
 
 export function Post({ post }: PostProps) {
+  const { user, error, loading, success } = useAboutCtx();
+  const { getUser } = useAboutDispatch();
+  const { shouldOpenDeletePostModal, shouldOpenEditPostModal } =
+    useFeedDispatch();
+
+  useEffect(() => {
+    if (error === null && loading === false && success === null) {
+      (async () => {
+        getUser();
+      })();
+    }
+  });
+
   return (
     <div
-      className="w-[50%] h-[20%] px-4 pt-3 pb-4 m-2 bg-white shadow-md rounded overflow-auto"
+      className="w-[50%] h-[20%] px-4 pt-3 pb-4 m-2 bg-white shadow-md rounded overflow-wrap"
       id={post.id}
     >
       <div
@@ -72,6 +91,16 @@ export function Post({ post }: PostProps) {
       <div className="text-black text-xl mt-2" id="content">
         {post.content}
       </div>
+      {post.userWhoCreatedId === user?.id && (
+        <ButtonWrapper>
+          <FaEdit color="black" size={20} onClick={shouldOpenEditPostModal} />
+          <MdDeleteForever
+            color="red"
+            size={20}
+            onClick={shouldOpenDeletePostModal}
+          />
+        </ButtonWrapper>
+      )}
     </div>
   );
 }

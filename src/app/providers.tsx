@@ -14,9 +14,9 @@ export default async function Providers({ children }: ProvidersProps) {
     <SignInProvider>
       <ForgetPasswordProvider>
         <SignUpProvider>
-          <FeedProvider>
-            <AboutProvider>{children}</AboutProvider>
-          </FeedProvider>
+          <AboutProvider>
+            <FeedProvider>{children}</FeedProvider>
+          </AboutProvider>
         </SignUpProvider>
       </ForgetPasswordProvider>
     </SignInProvider>
