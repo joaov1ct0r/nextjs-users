@@ -1,3 +1,5 @@
+import { Post } from "@/app/interfaces/post";
+
 export interface State {
     success: null | boolean;
     loading: boolean
@@ -5,4 +7,5 @@ export interface State {
     shouldOpenDeletePostModal: boolean
     shouldOpenEditPostModal: boolean
     showLoading: boolean
+    posts: Post[]
 }

@@ -10,7 +10,8 @@ export function feedReducer(state: State, action: Action): State {
                 ...state,
                 loading: false,
                 success: true,
-                error: null
+                error: null,
+                posts: action.posts
             }
         case "fetch_error":
             return { ...state, loading: false, error: action.error, success: false }

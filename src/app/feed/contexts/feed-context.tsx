@@ -9,7 +9,6 @@ import {
   useState,
 } from "react";
 import { Action } from "@/app/feed/interfaces/action";
-import { Post } from "@/app/interfaces/post";
 import { CreatePostFormSchema } from "@/app/feed/interfaces/create-post-form-schema";
 import { feedReducer } from "@/app/feed/reducers/feed-reducer";
 import { useApi } from "@/app/hooks/use-api";
@@ -23,14 +22,17 @@ const initialState: State = {
   shouldOpenDeletePostModal: false,
   shouldOpenEditPostModal: false,
   showLoading: false,
+  posts: [],
 };
 
 const FeedContext = createContext<State | undefined>(undefined);
 const FeedDispatchContext = createContext<
   | {
       dispatch: Dispatch<Action>;
-      getPosts: () => Promise<Post[]>;
-      createPost: (post: CreatePostFormSchema) => void;
+      getPosts: () => Promise<void>;
+      createPost: (post: CreatePostFormSchema) => Promise<void>;
+      shouldOpenDeletePostModal: () => void;
+      shouldOpenEditPostModal: () => void;
     }
   | undefined
 >(undefined);
@@ -67,13 +69,16 @@ export function FeedProvider({ children }: FeedProviderProps) {
 
     try {
       const { posts } = await getPosts(api);
-      dispatch({ type: "fetch_success" });
 
-      return posts;
+      posts.map((post) => {
+        post.createdAt = new Date(post.createdAt);
+        if (post.updatedAt !== null) post.updatedAt = new Date(post.updatedAt);
+      });
+
+      dispatch({ type: "fetch_success", posts });
     } catch (error) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to get posts" });
-      return [];
     } finally {
       setShowLoading(false);
     }
@@ -85,8 +90,9 @@ export function FeedProvider({ children }: FeedProviderProps) {
 
     try {
       await createPost(api, post);
+      const { posts } = await getPosts(api);
 
-      dispatch({ type: "fetch_success" });
+      dispatch({ type: "fetch_success", posts });
       await handleGetPosts();
     } catch (error) {
       console.error(error);
@@ -103,6 +109,8 @@ export function FeedProvider({ children }: FeedProviderProps) {
           createPost: handleCreatePost,
           getPosts: handleGetPosts,
           dispatch: dispatch,
+          shouldOpenDeletePostModal: handleSetShouldOpenDeletePostModal,
+          shouldOpenEditPostModal: handleSetShouldOpenEditPostModal,
         }}
       >
         {children}
