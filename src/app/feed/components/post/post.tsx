@@ -1,5 +1,6 @@
 import { Post as PostImp } from "@/app/interfaces/post";
-import { FaCalendar, FaUser } from "react-icons/fa";
+import Image from "next/image";
+import { FaCalendar } from "react-icons/fa";
 import { RxUpdate } from "react-icons/rx";
 
 export interface PostProps {
@@ -13,15 +14,33 @@ export function Post({ post }: PostProps) {
       id={post.id}
     >
       <div
-        className="text-gray-700 text-sm flex flex-row items-center"
+        className="text-gray-400 text-sm flex flex-row items-center"
         id="userInfo"
       >
-        <FaUser />
-        <p id="userId">{post.userWhoCreatedId}</p>
+        <Image
+          alt="User profile image"
+          src={(() => {
+            if (post.userWhoCreated && post.userWhoCreated.photoUrl) {
+              return post.userWhoCreated.photoUrl;
+            }
+
+            return "/images/default_avatar.png";
+          })()}
+          quality={100}
+          width={30}
+          height={50}
+          crossOrigin="use-credentials"
+        />
+        <p id="name" className="px-1">
+          {post.userWhoCreated.name}
+        </p>
+        <p id="username" className="px-2">
+          @{post.userWhoCreated.username}
+        </p>
       </div>
 
       <div
-        className="flex flex-row justify-between text-gray-700 text-sm"
+        className="flex flex-row justify-between text-gray-700 text-sm pt-2"
         id="dates"
       >
         <div

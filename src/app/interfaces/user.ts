@@ -6,4 +6,5 @@ export default interface User {
   createdAt: Date;
   updatedAt: Date | null;
   userWhoUpdatedId: string | null;
+  photoUrl: string | null
 }
