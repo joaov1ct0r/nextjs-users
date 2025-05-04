@@ -21,7 +21,6 @@ export function feedReducer(state: State, action: Action): State {
                 success: null,
                 loading: false,
                 error: null,
-                shouldOpenDeletePostModal: false,
                 shouldOpenEditPostModal: false,
                 showLoading: false
             }

@@ -1,31 +1,27 @@
+"use client";
+
 import { useAboutCtx } from "@/app/about/hooks/use-about";
 import { ButtonWrapper } from "@/app/components/button-wrapper/button-wrapper";
 import { Post as PostImp } from "@/app/interfaces/post";
 import Image from "next/image";
 import { FaCalendar, FaEdit } from "react-icons/fa";
 import { RxUpdate } from "react-icons/rx";
-import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
-import { useEffect } from "react";
 import { MdDeleteForever } from "react-icons/md";
 import { useFeedDispatch } from "@/app/feed/hooks/use-feed-dispatch";
+import { useFeedCtx } from "@/app/feed/hooks/use-feed";
 
 export interface PostProps {
   post: PostImp;
 }
 
 export function Post({ post }: PostProps) {
-  const { user, error, loading, success } = useAboutCtx();
-  const { getUser } = useAboutDispatch();
-  const { shouldOpenDeletePostModal, shouldOpenEditPostModal } =
-    useFeedDispatch();
+  const { user } = useAboutCtx();
+  const { shouldOpenEditPostModal } = useFeedCtx();
+  const { setShouldOpenEditPostModal, deletePost } = useFeedDispatch();
 
-  useEffect(() => {
-    if (error === null && loading === false && success === null) {
-      (async () => {
-        getUser();
-      })();
-    }
-  });
+  const handleOnDeletePost = async () => {
+    await deletePost(post.id);
+  };
 
   return (
     <div
@@ -93,14 +89,15 @@ export function Post({ post }: PostProps) {
       </div>
       {post.userWhoCreatedId === user?.id && (
         <ButtonWrapper>
-          <FaEdit color="black" size={20} onClick={shouldOpenEditPostModal} />
-          <MdDeleteForever
-            color="red"
+          <FaEdit
+            color="black"
             size={20}
-            onClick={shouldOpenDeletePostModal}
+            onClick={setShouldOpenEditPostModal}
           />
+          <MdDeleteForever color="red" size={20} onClick={handleOnDeletePost} />
         </ButtonWrapper>
       )}
+      {shouldOpenEditPostModal && <p>Edit modal</p>}
     </div>
   );
 }

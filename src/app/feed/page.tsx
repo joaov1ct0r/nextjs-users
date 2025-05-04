@@ -2,12 +2,25 @@
 
 import React, { useEffect } from "react";
 import { Feed } from "@/app/feed/components";
-import { useFeedMind } from "./hooks/use-feed-mind";
+import { useFeedMind } from "@/app/feed/hooks/use-feed-mind";
 import { getObjectErrors } from "@/app/utils/get-object-errors";
+import { useAboutCtx } from "@/app/about/hooks/use-about";
+import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
 
 export default function FeedPage() {
   const { handleSubmit, errors, handleFormSubmit, register, showLoading } =
     useFeedMind();
+
+  const { error, loading, success } = useAboutCtx();
+  const { getUser } = useAboutDispatch();
+
+  useEffect(() => {
+    if (error === null && loading === false && success === null) {
+      (() => {
+        getUser();
+      })();
+    }
+  });
 
   useEffect(() => {
     if (errors) {

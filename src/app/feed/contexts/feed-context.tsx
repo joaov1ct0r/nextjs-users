@@ -14,12 +14,12 @@ import { feedReducer } from "@/app/feed/reducers/feed-reducer";
 import { useApi } from "@/app/hooks/use-api";
 import { getPosts } from "@/app/feed/api/get-posts";
 import { createPost } from "@/app/feed/api/create-post";
+import { deletePost } from "../api/delete-post";
 
 const initialState: State = {
   error: null,
   loading: false,
   success: null,
-  shouldOpenDeletePostModal: false,
   shouldOpenEditPostModal: false,
   showLoading: false,
   posts: [],
@@ -31,8 +31,8 @@ const FeedDispatchContext = createContext<
       dispatch: Dispatch<Action>;
       getPosts: () => Promise<void>;
       createPost: (post: CreatePostFormSchema) => Promise<void>;
-      shouldOpenDeletePostModal: () => void;
-      shouldOpenEditPostModal: () => void;
+      deletePost: (postId: string) => Promise<void>;
+      setShouldOpenEditPostModal: () => void;
     }
   | undefined
 >(undefined);
@@ -42,23 +42,16 @@ interface FeedProviderProps {
 }
 
 export function FeedProvider({ children }: FeedProviderProps) {
-  const [shouldOpenDeletePostModal, setShouldOpenDeletePostModal] =
-    useState<boolean>(false);
-
   const [shouldOpenEditPostModal, setShouldOpenEditPostModal] =
     useState<boolean>(false);
 
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
   const [state, dispatch] = useReducer(feedReducer, initialState);
-  state.shouldOpenDeletePostModal = shouldOpenDeletePostModal;
   state.shouldOpenEditPostModal = shouldOpenEditPostModal;
   state.showLoading = showLoading;
 
   const api = useApi();
-
-  const handleSetShouldOpenDeletePostModal = () =>
-    setShouldOpenDeletePostModal(!shouldOpenDeletePostModal);
 
   const handleSetShouldOpenEditPostModal = () =>
     setShouldOpenEditPostModal(!shouldOpenEditPostModal);
@@ -102,15 +95,37 @@ export function FeedProvider({ children }: FeedProviderProps) {
     }
   };
 
+  const handleDeletePost = async (postId: string) => {
+    console.log("context postId: ", postId);
+    dispatch({ type: "fetch_start" });
+    setShowLoading(true);
+
+    try {
+      const { success } = await deletePost(api, String(postId));
+
+      if (success) {
+        const { posts } = await getPosts(api);
+        dispatch({ type: "fetch_success", posts });
+
+        await handleGetPosts();
+      }
+    } catch (error) {
+      console.error("Error deleting post: ", String(error));
+      dispatch({ type: "fetch_error", error: "Failed to delete post" });
+    } finally {
+      setShowLoading(false);
+    }
+  };
+
   return (
     <FeedContext.Provider value={state}>
       <FeedDispatchContext.Provider
         value={{
           createPost: handleCreatePost,
           getPosts: handleGetPosts,
+          deletePost: handleDeletePost,
           dispatch: dispatch,
-          shouldOpenDeletePostModal: handleSetShouldOpenDeletePostModal,
-          shouldOpenEditPostModal: handleSetShouldOpenEditPostModal,
+          setShouldOpenEditPostModal: handleSetShouldOpenEditPostModal,
         }}
       >
         {children}
