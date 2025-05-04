@@ -6,11 +6,12 @@ import { useFeedMind } from "@/app/feed/hooks/use-feed-mind";
 import { getObjectErrors } from "@/app/utils/get-object-errors";
 import { useAboutCtx } from "@/app/about/hooks/use-about";
 import { useAboutDispatch } from "@/app/about/hooks/use-about-dispatch";
+import { useFeedCtx } from "./hooks/use-feed";
 
 export default function FeedPage() {
   const { handleSubmit, errors, handleFormSubmit, register, showLoading } =
     useFeedMind();
-
+  const { shouldOpenEditPostModal } = useFeedCtx();
   const { error, loading, success } = useAboutCtx();
   const { getUser } = useAboutDispatch();
 
@@ -31,6 +32,7 @@ export default function FeedPage() {
   return (
     <Feed.Root>
       <Feed.Content>
+        {shouldOpenEditPostModal && <Feed.UpdateForm />}
         <Feed.Form onSubmit={handleSubmit(handleFormSubmit)}>
           <Feed.InputWrapper>
             <Feed.Label id="content">Express your mind</Feed.Label>

@@ -7,4 +7,5 @@ export interface State {
     shouldOpenEditPostModal: boolean
     showLoading: boolean
     posts: Post[]
+    post: Post | null
 }

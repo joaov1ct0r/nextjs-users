@@ -8,7 +8,6 @@ import { FaCalendar, FaEdit } from "react-icons/fa";
 import { RxUpdate } from "react-icons/rx";
 import { MdDeleteForever } from "react-icons/md";
 import { useFeedDispatch } from "@/app/feed/hooks/use-feed-dispatch";
-import { useFeedCtx } from "@/app/feed/hooks/use-feed";
 
 export interface PostProps {
   post: PostImp;
@@ -16,11 +15,15 @@ export interface PostProps {
 
 export function Post({ post }: PostProps) {
   const { user } = useAboutCtx();
-  const { shouldOpenEditPostModal } = useFeedCtx();
-  const { setShouldOpenEditPostModal, deletePost } = useFeedDispatch();
+  const { setShouldOpenEditPostModal, deletePost, setPost } = useFeedDispatch();
 
   const handleOnDeletePost = async () => {
     await deletePost(post.id);
+  };
+
+  const handleOnEditPost = () => {
+    setPost(post);
+    setShouldOpenEditPostModal();
   };
 
   return (
@@ -89,15 +92,10 @@ export function Post({ post }: PostProps) {
       </div>
       {post.userWhoCreatedId === user?.id && (
         <ButtonWrapper>
-          <FaEdit
-            color="black"
-            size={20}
-            onClick={setShouldOpenEditPostModal}
-          />
+          <FaEdit color="black" size={20} onClick={handleOnEditPost} />
           <MdDeleteForever color="red" size={20} onClick={handleOnDeletePost} />
         </ButtonWrapper>
       )}
-      {shouldOpenEditPostModal && <p>Edit modal</p>}
     </div>
   );
 }

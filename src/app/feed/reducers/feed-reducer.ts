@@ -11,10 +11,11 @@ export function feedReducer(state: State, action: Action): State {
                 loading: false,
                 success: true,
                 error: null,
-                posts: action.posts
+                posts: action.posts,
+                post: null
             }
         case "fetch_error":
-            return { ...state, loading: false, error: action.error, success: false }
+            return { ...state, loading: false, error: action.error, success: false, post: null }
         case "fetch_reset":
             return {
                 ...state,
@@ -22,7 +23,13 @@ export function feedReducer(state: State, action: Action): State {
                 loading: false,
                 error: null,
                 shouldOpenEditPostModal: false,
-                showLoading: false
+                showLoading: false,
+                post: null
+            }
+        case "set_post":
+            return {
+                ...state,
+                post: action.post
             }
 
         default:

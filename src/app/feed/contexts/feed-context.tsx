@@ -15,6 +15,9 @@ import { useApi } from "@/app/hooks/use-api";
 import { getPosts } from "@/app/feed/api/get-posts";
 import { createPost } from "@/app/feed/api/create-post";
 import { deletePost } from "../api/delete-post";
+import { Post } from "@/app/interfaces/post";
+import { UpdatePostFormSchema } from "../interfaces/update-post-form-schema";
+import { updatePost } from "../api/update-post";
 
 const initialState: State = {
   error: null,
@@ -23,6 +26,7 @@ const initialState: State = {
   shouldOpenEditPostModal: false,
   showLoading: false,
   posts: [],
+  post: null,
 };
 
 const FeedContext = createContext<State | undefined>(undefined);
@@ -33,6 +37,8 @@ const FeedDispatchContext = createContext<
       createPost: (post: CreatePostFormSchema) => Promise<void>;
       deletePost: (postId: string) => Promise<void>;
       setShouldOpenEditPostModal: () => void;
+      setPost: (post: Post | null) => void;
+      updatePost: (post: UpdatePostFormSchema) => Promise<void>;
     }
   | undefined
 >(undefined);
@@ -56,7 +62,7 @@ export function FeedProvider({ children }: FeedProviderProps) {
   const handleSetShouldOpenEditPostModal = () =>
     setShouldOpenEditPostModal(!shouldOpenEditPostModal);
 
-  const handleGetPosts = async () => {
+  async function handleGetPosts() {
     dispatch({ type: "fetch_start" });
     setShowLoading(true);
 
@@ -75,9 +81,9 @@ export function FeedProvider({ children }: FeedProviderProps) {
     } finally {
       setShowLoading(false);
     }
-  };
+  }
 
-  const handleCreatePost = async (post: CreatePostFormSchema) => {
+  async function handleCreatePost(post: CreatePostFormSchema) {
     dispatch({ type: "fetch_start" });
     setShowLoading(true);
 
@@ -93,10 +99,9 @@ export function FeedProvider({ children }: FeedProviderProps) {
     } finally {
       setShowLoading(false);
     }
-  };
+  }
 
-  const handleDeletePost = async (postId: string) => {
-    console.log("context postId: ", postId);
+  async function handleDeletePost(postId: string) {
     dispatch({ type: "fetch_start" });
     setShowLoading(true);
 
@@ -115,7 +120,29 @@ export function FeedProvider({ children }: FeedProviderProps) {
     } finally {
       setShowLoading(false);
     }
-  };
+  }
+
+  async function handleUpdatePost(post: UpdatePostFormSchema) {
+    dispatch({ type: "fetch_start" });
+    setShowLoading(true);
+
+    try {
+      await updatePost(api, post);
+      const { posts } = await getPosts(api);
+
+      dispatch({ type: "fetch_success", posts });
+      await handleGetPosts();
+    } catch (error) {
+      console.error("Failed to update post: ", String(error));
+      dispatch({ type: "fetch_error", error: "Failed to update post" });
+    } finally {
+      setShowLoading(false);
+    }
+  }
+
+  function handleSetPost(post: Post | null) {
+    dispatch({ type: "set_post", post });
+  }
 
   return (
     <FeedContext.Provider value={state}>
@@ -126,6 +153,8 @@ export function FeedProvider({ children }: FeedProviderProps) {
           deletePost: handleDeletePost,
           dispatch: dispatch,
           setShouldOpenEditPostModal: handleSetShouldOpenEditPostModal,
+          setPost: handleSetPost,
+          updatePost: handleUpdatePost,
         }}
       >
         {children}

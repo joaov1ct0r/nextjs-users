@@ -7,6 +7,7 @@ import { ButtonWrapper } from "@/app/components/button-wrapper/button-wrapper"
 import { ButtonForm } from "@/app/components/button-form"
 import { MindForm } from "@/app/feed/components/mind-form/mind-form"
 import { Posts } from "@/app/feed/components/posts/posts"
+import { EditPostModal } from "@/app/feed/components/edit-post-modal/edit-post-modal"
 
 export const Feed = {
     Root: FeedRoot,
@@ -17,5 +18,6 @@ export const Feed = {
     ButtonWrapper,
     Button: ButtonForm,
     Form: MindForm,
-    Posts
+    Posts,
+    UpdateForm: EditPostModal
 }
