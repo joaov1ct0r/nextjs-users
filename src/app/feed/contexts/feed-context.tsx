@@ -22,6 +22,7 @@ const initialState: State = {
   showLoading: false,
   posts: [],
   post: null,
+  nextPage: 1,
 };
 
 const FeedContext = createContext<State | undefined>(undefined);
@@ -62,14 +63,14 @@ export function FeedProvider({ children }: FeedProviderProps) {
     dispatch({ type: "fetch_start" });
 
     try {
-      const { posts } = await getPosts(api);
+      const { posts, nextPage } = await getPosts(api, state.nextPage);
 
       posts.map((post) => {
         post.createdAt = new Date(post.createdAt);
         if (post.updatedAt !== null) post.updatedAt = new Date(post.updatedAt);
       });
 
-      dispatch({ type: "fetch_success", posts });
+      dispatch({ type: "fetch_posts_success", posts, nextPage });
     } catch (error) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to get posts" });
@@ -81,9 +82,8 @@ export function FeedProvider({ children }: FeedProviderProps) {
 
     try {
       await createPost(api, post);
-      const { posts } = await getPosts(api);
 
-      dispatch({ type: "fetch_success", posts });
+      dispatch({ type: "fetch_success", posts: [], nextPage: 1 });
       await handleGetPosts();
     } catch (error) {
       console.error(error);
@@ -98,9 +98,7 @@ export function FeedProvider({ children }: FeedProviderProps) {
       const { success } = await deletePost(api, String(postId));
 
       if (success) {
-        const { posts } = await getPosts(api);
-        dispatch({ type: "fetch_success", posts });
-
+        dispatch({ type: "fetch_success", posts: [], nextPage: 1 });
         await handleGetPosts();
       }
     } catch (error) {
@@ -114,9 +112,8 @@ export function FeedProvider({ children }: FeedProviderProps) {
 
     try {
       await updatePost(api, post);
-      const { posts } = await getPosts(api);
 
-      dispatch({ type: "fetch_success", posts });
+      dispatch({ type: "fetch_success", posts: [], nextPage: 1 });
       await handleGetPosts();
     } catch (error) {
       console.error("Failed to update post: ", String(error));

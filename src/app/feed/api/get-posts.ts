@@ -8,17 +8,22 @@ export interface GetPostParams {
 export interface GetPostResponse {
     posts: Post[]
     success: boolean
+    nextPage: number
 }
 
-export async function getPosts(api: AxiosInstance): Promise<GetPostResponse> {
+export async function getPosts(api: AxiosInstance, page: number): Promise<GetPostResponse> {
     try {
-        const response = await api.get("/post/")
+        const query = new URLSearchParams()
 
-        const posts = response.data.resource
+        if (page >= 2) query.append("page", String(page))
 
-        return { posts, success: true }
+        const response = await api.get("/post/?" + query.toString())
+
+        const { resource, nextPage } = response.data
+
+        return { posts: resource, success: true, nextPage }
     } catch(error) {
         console.error("Failed to get posts: ", error)
-        return { success: false , posts: [] }
+        return { success: false , posts: [], nextPage: 1 }
     }
 }

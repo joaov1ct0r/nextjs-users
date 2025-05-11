@@ -3,6 +3,16 @@ import { Action } from "@/app/feed/interfaces/action";
 
 export function feedReducer(state: State, action: Action): State {
     switch(action.type) {
+        case "fetch_posts_success":
+            return {
+                ...state,
+                loading: false,
+                success: true,
+                error: null,
+                posts: [...state.posts, ...action.posts],
+                post: null,
+                showLoading: false
+            }
         case "fetch_start":
             return { 
                 ...state, 

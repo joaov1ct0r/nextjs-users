@@ -9,4 +9,5 @@ export interface State {
     showLoading: boolean
     posts: Post[]
     post: Post | null
+    nextPage: number
 }
