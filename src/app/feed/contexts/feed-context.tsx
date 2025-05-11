@@ -1,13 +1,7 @@
 "use client";
 
 import { State } from "@/app/feed/interfaces/state";
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  useReducer,
-  useState,
-} from "react";
+import { createContext, Dispatch, ReactNode, useReducer } from "react";
 import { Action } from "@/app/feed/interfaces/action";
 import { CreatePostFormSchema } from "@/app/feed/interfaces/create-post-form-schema";
 import { feedReducer } from "@/app/feed/reducers/feed-reducer";
@@ -16,8 +10,8 @@ import { getPosts } from "@/app/feed/api/get-posts";
 import { createPost } from "@/app/feed/api/create-post";
 import { deletePost } from "../api/delete-post";
 import { Post } from "@/app/interfaces/post";
-import { UpdatePostFormSchema } from "../interfaces/update-post-form-schema";
-import { updatePost } from "../api/update-post";
+import { UpdatePostFormSchema } from "@/app/feed/interfaces/update-post-form-schema";
+import { updatePost } from "@/app/feed/api/update-post";
 
 const initialState: State = {
   error: null,
@@ -50,30 +44,22 @@ interface FeedProviderProps {
 }
 
 export function FeedProvider({ children }: FeedProviderProps) {
-  const [shouldOpenEditPostModal, setShouldOpenEditPostModal] =
-    useState<boolean>(false);
-
-  const [shouldOpenDeletePostModal, setShouldOpenDeletePostModal] =
-    useState<boolean>(false);
-
-  const [showLoading, setShowLoading] = useState<boolean>(false);
-
   const [state, dispatch] = useReducer(feedReducer, initialState);
-  state.shouldOpenEditPostModal = shouldOpenEditPostModal;
-  state.shouldOpenDeletePostModal = shouldOpenDeletePostModal;
-  state.showLoading = showLoading;
 
   const api = useApi();
 
-  const handleSetShouldOpenEditPostModal = () =>
-    setShouldOpenEditPostModal(!shouldOpenEditPostModal);
+  const handleSetShouldOpenEditPostModal = () => {
+    dispatch({ type: "set_should_open_edit_post_modal" });
+  };
 
-  const handleSetShouldOpenDeletePostModal = () =>
-    setShouldOpenDeletePostModal(!shouldOpenDeletePostModal);
+  const handleSetShouldOpenDeletePostModal = () => {
+    dispatch({
+      type: "set_should_open_delete_post_modal",
+    });
+  };
 
   async function handleGetPosts() {
     dispatch({ type: "fetch_start" });
-    setShowLoading(true);
 
     try {
       const { posts } = await getPosts(api);
@@ -87,14 +73,11 @@ export function FeedProvider({ children }: FeedProviderProps) {
     } catch (error) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to get posts" });
-    } finally {
-      setShowLoading(false);
     }
   }
 
   async function handleCreatePost(post: CreatePostFormSchema) {
     dispatch({ type: "fetch_start" });
-    setShowLoading(true);
 
     try {
       await createPost(api, post);
@@ -105,14 +88,11 @@ export function FeedProvider({ children }: FeedProviderProps) {
     } catch (error) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to create post" });
-    } finally {
-      setShowLoading(false);
     }
   }
 
   async function handleDeletePost(postId: string) {
     dispatch({ type: "fetch_start" });
-    setShowLoading(true);
 
     try {
       const { success } = await deletePost(api, String(postId));
@@ -126,14 +106,11 @@ export function FeedProvider({ children }: FeedProviderProps) {
     } catch (error) {
       console.error("Error deleting post: ", String(error));
       dispatch({ type: "fetch_error", error: "Failed to delete post" });
-    } finally {
-      setShowLoading(false);
     }
   }
 
   async function handleUpdatePost(post: UpdatePostFormSchema) {
     dispatch({ type: "fetch_start" });
-    setShowLoading(true);
 
     try {
       await updatePost(api, post);
@@ -144,8 +121,6 @@ export function FeedProvider({ children }: FeedProviderProps) {
     } catch (error) {
       console.error("Failed to update post: ", String(error));
       dispatch({ type: "fetch_error", error: "Failed to update post" });
-    } finally {
-      setShowLoading(false);
     }
   }
 

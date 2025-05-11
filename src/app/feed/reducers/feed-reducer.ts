@@ -4,7 +4,13 @@ import { Action } from "@/app/feed/interfaces/action";
 export function feedReducer(state: State, action: Action): State {
     switch(action.type) {
         case "fetch_start":
-            return { ...state, loading: true, error: null, success: null }
+            return { 
+                ...state, 
+                loading: true, 
+                error: null, 
+                success: null, 
+                showLoading: true 
+            }
         case "fetch_success":
             return {
                 ...state,
@@ -12,10 +18,11 @@ export function feedReducer(state: State, action: Action): State {
                 success: true,
                 error: null,
                 posts: action.posts,
-                post: null
+                post: null,
+                showLoading: false
             }
         case "fetch_error":
-            return { ...state, loading: false, error: action.error, success: false, post: null }
+            return { ...state, loading: false, error: action.error, success: false, post: null, showLoading: false }
         case "fetch_reset":
             return {
                 ...state,
@@ -24,12 +31,22 @@ export function feedReducer(state: State, action: Action): State {
                 error: null,
                 shouldOpenEditPostModal: false,
                 showLoading: false,
-                post: null
+                post: null,
             }
         case "set_post":
             return {
                 ...state,
                 post: action.post
+            }
+        case "set_should_open_delete_post_modal":
+            return {
+                ...state,
+                shouldOpenDeletePostModal: !state.shouldOpenDeletePostModal
+            }
+        case "set_should_open_edit_post_modal":
+            return {
+                ...state,
+                shouldOpenEditPostModal: !state.shouldOpenEditPostModal
             }
 
         default:
