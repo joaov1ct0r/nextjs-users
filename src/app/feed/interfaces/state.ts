@@ -5,6 +5,7 @@ export interface State {
     loading: boolean
     error: string | null
     shouldOpenEditPostModal: boolean
+    shouldOpenDeletePostModal: boolean
     showLoading: boolean
     posts: Post[]
     post: Post | null

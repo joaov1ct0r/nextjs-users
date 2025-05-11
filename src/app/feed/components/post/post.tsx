@@ -15,10 +15,12 @@ export interface PostProps {
 
 export function Post({ post }: PostProps) {
   const { user } = useAboutCtx();
-  const { setShouldOpenEditPostModal, deletePost, setPost } = useFeedDispatch();
+  const { setShouldOpenEditPostModal, setShouldOpenDeletePostModal, setPost } =
+    useFeedDispatch();
 
   const handleOnDeletePost = async () => {
-    await deletePost(post.id);
+    setPost(post);
+    setShouldOpenDeletePostModal();
   };
 
   const handleOnEditPost = () => {

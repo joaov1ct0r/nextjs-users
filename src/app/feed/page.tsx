@@ -11,7 +11,7 @@ import { useFeedCtx } from "./hooks/use-feed";
 export default function FeedPage() {
   const { handleSubmit, errors, handleFormSubmit, register, showLoading } =
     useFeedMind();
-  const { shouldOpenEditPostModal } = useFeedCtx();
+  const { shouldOpenEditPostModal, shouldOpenDeletePostModal } = useFeedCtx();
   const { error, loading, success } = useAboutCtx();
   const { getUser } = useAboutDispatch();
 
@@ -33,6 +33,7 @@ export default function FeedPage() {
     <Feed.Root>
       <Feed.Content>
         {shouldOpenEditPostModal && <Feed.UpdateForm />}
+        {shouldOpenDeletePostModal && <Feed.DeleteForm />}
         <Feed.Form onSubmit={handleSubmit(handleFormSubmit)}>
           <Feed.InputWrapper>
             <Feed.Label id="content">Express your mind</Feed.Label>

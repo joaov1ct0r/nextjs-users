@@ -24,6 +24,7 @@ const initialState: State = {
   loading: false,
   success: null,
   shouldOpenEditPostModal: false,
+  shouldOpenDeletePostModal: false,
   showLoading: false,
   posts: [],
   post: null,
@@ -37,6 +38,7 @@ const FeedDispatchContext = createContext<
       createPost: (post: CreatePostFormSchema) => Promise<void>;
       deletePost: (postId: string) => Promise<void>;
       setShouldOpenEditPostModal: () => void;
+      setShouldOpenDeletePostModal: () => void;
       setPost: (post: Post | null) => void;
       updatePost: (post: UpdatePostFormSchema) => Promise<void>;
     }
@@ -51,16 +53,23 @@ export function FeedProvider({ children }: FeedProviderProps) {
   const [shouldOpenEditPostModal, setShouldOpenEditPostModal] =
     useState<boolean>(false);
 
+  const [shouldOpenDeletePostModal, setShouldOpenDeletePostModal] =
+    useState<boolean>(false);
+
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
   const [state, dispatch] = useReducer(feedReducer, initialState);
   state.shouldOpenEditPostModal = shouldOpenEditPostModal;
+  state.shouldOpenDeletePostModal = shouldOpenDeletePostModal;
   state.showLoading = showLoading;
 
   const api = useApi();
 
   const handleSetShouldOpenEditPostModal = () =>
     setShouldOpenEditPostModal(!shouldOpenEditPostModal);
+
+  const handleSetShouldOpenDeletePostModal = () =>
+    setShouldOpenDeletePostModal(!shouldOpenDeletePostModal);
 
   async function handleGetPosts() {
     dispatch({ type: "fetch_start" });
@@ -153,6 +162,7 @@ export function FeedProvider({ children }: FeedProviderProps) {
           deletePost: handleDeletePost,
           dispatch: dispatch,
           setShouldOpenEditPostModal: handleSetShouldOpenEditPostModal,
+          setShouldOpenDeletePostModal: handleSetShouldOpenDeletePostModal,
           setPost: handleSetPost,
           updatePost: handleUpdatePost,
         }}
