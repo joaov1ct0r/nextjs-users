@@ -4,7 +4,13 @@ import { Action } from "@/app/about/interfaces/action"
 export function aboutReducer(state: State, action: Action): State {
     switch (action.type) {
         case "fetch_start":
-            return { ...state, loading: true, error: null, success: null };
+            return { 
+                ...state, 
+                loading: true, 
+                error: null, 
+                success: null,
+                showLoading: true
+            };
         case "fetch_success":
             return {
                 ...state,
@@ -12,9 +18,16 @@ export function aboutReducer(state: State, action: Action): State {
                 success: true,
                 error: null,
                 user: action.user,
+                showLoading: false
             };
         case "fetch_error":
-            return { ...state, loading: false, error: action.error, success: false };
+            return { 
+                ...state, 
+                loading: false, 
+                error: action.error, 
+                success: false,
+                showLoading: false
+            };
         case "fetch_reset":
             return {
                 ...state,
@@ -26,6 +39,16 @@ export function aboutReducer(state: State, action: Action): State {
                 shouldOpenUpdateUserModal: false,
                 showLoading: false,
             };
+        case "set_should_open_delete_account_modal":
+            return {
+                ...state,
+                shouldOpenDeleteAccountModal: !state.shouldOpenDeleteAccountModal
+            }
+        case "set_should_open_edit_account_modal":
+            return {
+                ...state,
+                shouldOpenUpdateUserModal: !state.shouldOpenUpdateUserModal
+            }
 
         default:
             throw new Error("Unknown action type");

@@ -1,22 +1,16 @@
 "use client";
 
-import {
-  createContext,
-  useReducer,
-  ReactNode,
-  Dispatch,
-  useState,
-} from "react";
+import { createContext, useReducer, ReactNode, Dispatch } from "react";
 import { User } from "@/app/about/interfaces/user";
 import { Action } from "@/app/about/interfaces/action";
 import { State } from "@/app/about/interfaces/state";
 import { useApi } from "@/app/hooks/use-api";
 import { setCookie, getCookie, clearCookies } from "@/app/utils/cookies";
 import { useSignInDispatch } from "@/app/signin/hooks/use-sign-in-dispatch";
-import {aboutReducer} from "@/app/about/reducers/about-reducer"
-import {deleteUser} from "@/app/about/api/delete-user"
-import {getUser, GetUserParams} from "@/app/about/api/get-user"
-import {updateUser} from "@/app/about/api/update-user"
+import { aboutReducer } from "@/app/about/reducers/about-reducer";
+import { deleteUser } from "@/app/about/api/delete-user";
+import { getUser, GetUserParams } from "@/app/about/api/get-user";
+import { updateUser } from "@/app/about/api/update-user";
 import { UpdateUserFormSchema } from "@/app/about/interfaces/update-user-form-schema";
 
 const initialState: State = {
@@ -38,7 +32,6 @@ const AboutDispatchContext = createContext<
       deleteUser: () => void;
       setOpenAccountModal: () => void;
       setOpenUpdateUserModal: () => void;
-      setShowLoading: () => void;
     }
   | undefined
 >(undefined);
@@ -48,34 +41,22 @@ interface AboutProviderProps {
 }
 
 export function AboutProvider({ children }: AboutProviderProps) {
-  const [shouldOpenDeleteAccountModal, setShouldOpenDeleteAccountModal] =
-    useState<boolean>(false);
-
-  const [shouldOpenUpdateUserModal, setShouldOpenUpdateUserModal] =
-    useState<boolean>(false);
-
-  const [showLoading, setShowLoading] = useState<boolean>(false);
-
   const [state, dispatch] = useReducer(aboutReducer, initialState);
-  state.shouldOpenDeleteAccountModal = shouldOpenDeleteAccountModal;
-  state.shouldOpenUpdateUserModal = shouldOpenUpdateUserModal;
-  state.showLoading = showLoading;
 
   const api = useApi();
 
   const { dispatch: signInDispatch } = useSignInDispatch();
 
-  const handleSetShowLoading = () => setShowLoading(!showLoading);
+  const handleSetShouldOpenDeleteAccountModal = () => {
+    dispatch({ type: "set_should_open_delete_account_modal" });
+  };
 
-  const handleSetShouldOpenDeleteAccountModal = () =>
-    setShouldOpenDeleteAccountModal(!shouldOpenDeleteAccountModal);
-
-  const handleSetShouldOpenUpdateUserModal = () =>
-    setShouldOpenUpdateUserModal(!shouldOpenUpdateUserModal);
+  const handleSetShouldOpenUpdateUserModal = () => {
+    dispatch({ type: "set_should_open_edit_account_modal" });
+  };
 
   const handleDeleteUser = async () => {
     dispatch({ type: "fetch_start" });
-    setShowLoading(true);
 
     let user: User | null = null;
     const userCookie = await getCookie({ name: "userObj" });
@@ -83,7 +64,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
     if (userCookie !== undefined) user = JSON.parse(userCookie.value);
 
     try {
-      const { success } = await deleteUser(api, String(user?.id))
+      const { success } = await deleteUser(api, String(user?.id));
 
       if (success) {
         await clearCookies();
@@ -93,14 +74,11 @@ export function AboutProvider({ children }: AboutProviderProps) {
     } catch (error) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to deactivate user" });
-    } finally {
-      setShowLoading(false);
     }
   };
 
   const handleGetUser = async () => {
     dispatch({ type: "fetch_start" });
-    setShowLoading(true);
 
     let user: GetUserParams | null = null;
     const userCookie = await getCookie({ name: "userObj" });
@@ -114,7 +92,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
     };
 
     try {
-      const { user: returnedUser, success } = await getUser(api, opts)
+      const { user: returnedUser, success } = await getUser(api, opts);
 
       if (success) {
         dispatch({ type: "fetch_success", user: returnedUser });
@@ -123,14 +101,11 @@ export function AboutProvider({ children }: AboutProviderProps) {
     } catch (error) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to get user" });
-    } finally {
-      setShowLoading(false);
     }
   };
 
   const handleUpdateUser = async (user: UpdateUserFormSchema) => {
     dispatch({ type: "fetch_start" });
-    setShowLoading(true);
 
     let userObj: User | null = null;
     const userCookie = await getCookie({ name: "userObj" });
@@ -144,7 +119,7 @@ export function AboutProvider({ children }: AboutProviderProps) {
       username: user.username,
       email: user.email,
       password: undefined,
-      file: null
+      file: null,
     };
 
     if (user.password) {
@@ -152,17 +127,17 @@ export function AboutProvider({ children }: AboutProviderProps) {
     }
 
     if (user.file && user.file.length > 0) {
-      data.file = user.file
+      data.file = user.file;
     }
 
     try {
-      const { success } = await updateUser(api, data)
+      const { success } = await updateUser(api, data);
 
       if (success) {
-        let photoUrl = userObj.photoUrl
+        let photoUrl = userObj.photoUrl;
 
         if (data.file && data.file.length > 0) {
-          photoUrl = URL.createObjectURL(data.file[0])
+          photoUrl = URL.createObjectURL(data.file[0]);
         }
 
         const updatedUser: User = {
@@ -182,8 +157,6 @@ export function AboutProvider({ children }: AboutProviderProps) {
     } catch (error) {
       console.error(error);
       dispatch({ type: "fetch_error", error: "Failed to update user" });
-    } finally {
-      setShowLoading(false);
     }
   };
 
@@ -197,7 +170,6 @@ export function AboutProvider({ children }: AboutProviderProps) {
           deleteUser: handleDeleteUser,
           setOpenAccountModal: handleSetShouldOpenDeleteAccountModal,
           setOpenUpdateUserModal: handleSetShouldOpenUpdateUserModal,
-          setShowLoading: handleSetShowLoading,
         }}
       >
         {children}
